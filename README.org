@@ -1,0 +1,39 @@
+* flyspell-correct
+
+Package for correcting words with flyspell using custom interface.
+
+To use set the value of ~flyspell-correct-interface~ to any of available
+interfaces (predefined are ~flyspell-correct/ivy~ and ~flyspell-correct/helm~). For
+example,
+
+#+BEGIN_SRC emacs-lisp
+(setq flyspell-correct-interface 'flyspell-correct/ivy)
+#+END_SRC
+
+After that, just call ~flyspell-correct/word~ with cursor on misspelled word. You
+can also bind it by adding this to your ~init.el~ file:
+
+#+BEGIN_SRC emacs-lisp
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct/word)
+#+END_SRC
+
+When invoked, it will show the list of corrections suggested by Flyspell. ~ivy~
+only allows to correct word, while ~helm~ also allows to save unknown word to your
+dictionary, accept this spelling in current buffer or whole session.
+
+* Custom interfaces
+
+One can easily implement custom interface for ~flyspell-correct/word~. It has to
+be function that takes two arguments - candidates and misspelled word. it has to
+return either replacement word or ~(command, word)~ tuple that will be passed to
+~flyspell-do-correct~. Check ~flyspell-correct/helm~ for example of interface that
+uses this feature.
+
+* Thanks
+
+Thanks go to [[https://github.com/pronobis][Andrzej Pronobis]] for the inspiration and his original [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
+
+* Known problems
+
+Package requirements are not properly set, since depending on users choice this
+package might require ~helm~ or ~ivy~ or non of them.
