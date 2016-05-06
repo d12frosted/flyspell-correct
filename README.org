@@ -1,5 +1,7 @@
 * flyspell-correct
 
+[[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]
+
 Correcting words with flyspell via custom interface.
 
 To use set the value of ~flyspell-correct-interface~ to any of available
