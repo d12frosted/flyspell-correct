@@ -1,4 +1,4 @@
-;;; flyspell-correct.el --- correcting words with flyspell via custom interface
+;;; flyspell-correct.el --- correcting words with flyspell via custom interface -*- lexical-binding: t -*-
 ;;
 ;; Copyright (c) 2016 Boris Buliga
 ;;
@@ -14,7 +14,6 @@
 ;;
 ;;; Code:
 ;;
-;;; -*- lexical-binding: t -*-
 
 ;; Requires
 
