@@ -13,16 +13,12 @@
 ;; For usage instructions refer README file.
 ;;
 ;;; Code:
-
-;; For lexical-let
-(eval-when-compile
-  (require 'cl-lib))
+;;
+;;; -*- lexical-binding: t -*-
 
 ;; Requires
 
 (require 'flyspell)
-;; (require 'ivy)
-;; (require 'helm)
 
 ;; Variables
 
@@ -73,7 +69,7 @@ of (command, word) to be used by flyspell-do-correct."
                          )
                        (helm-build-sync-source "Options"
                          :candidates '(lambda ()
-                                        (lexical-let ((tmp word))
+                                        (let ((tmp word))
                                            (flyspell-correct//helm-option-candidates tmp)))
                          :action 'identity
                          :candidate-number-limit 9999
