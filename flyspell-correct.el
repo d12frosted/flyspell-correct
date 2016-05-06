@@ -29,6 +29,10 @@
 
 ;; Ivy interface
 
+(declare-function ivy-read "ext:ivy.el" (PROMPT COLLECTION &optional PREDICATE REQUIRE-MATCH INITIAL-INPUT HISTORY
+                                                PRESELECT KEYMAP UPDATE-FN SORT ACTION UNWIND RE-BUILDER MATCHER
+                                                DYNAMIC-COLLECTION CALLER))
+
 (defun flyspell-correct/ivy (candidates word)
   "Run helm for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement."
@@ -38,6 +42,10 @@ Return a selected word to use as a replacement."
                              "Default")) candidates))
 
 ;; Helm interface
+
+(declare-function helm "ext:helm.el" (&optional SOURCES INPUT PROMPT RESUME PRESELECT BUFFER KEYMAP DEFAULT HISTORY
+                                                ALLOW-NEST OTHER-LOCAL-VARS))
+(declare-function helm-build-sync-source "ext:helm-source.el" (NAME &rest ARGS))
 
 (defun flyspell-correct//helm-always-match (candidate)
   "Return true for any CANDIDATE."
