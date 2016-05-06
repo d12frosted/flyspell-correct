@@ -8,15 +8,15 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
-
+;;
 ;;; Commentary:
 ;; For usage instructions refer README file.
-
+;;
 ;;; Code:
 
 ;; For lexical-let
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;; Requires
 
