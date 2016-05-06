@@ -19,17 +19,16 @@ can also bind it by adding this to your ~init.el~ file:
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
 #+END_SRC
 
-When invoked, it will show the list of corrections suggested by Flyspell. ~ivy~
-only allows to correct word, while ~helm~ and ~popup~ also allows to save unknown
-word to your dictionary, accept this spelling in current buffer or whole
-session.
+When invoked, it will show the list of corrections suggested by Flyspell. ~ivy~,
+~helm~ and ~popup~ also allows to save unknown word to your dictionary, accept this
+spelling in current buffer or whole session.
 
 * Custom interfaces
 
 One can easily implement custom interface for ~flyspell-correct-word-generic~. It has to
 be function that takes two arguments - candidates and misspelled word. it has to
 return either replacement word or ~(command, word)~ tuple that will be passed to
-~flyspell-do-correct~. Check ~flyspell-correct-helm~ for example of interface that
+~flyspell-do-correct~. Check ~flyspell-correct-popup~ for example of interface that
 uses this feature.
 
 * Thanks
