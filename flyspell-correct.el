@@ -33,7 +33,7 @@
                                                 DYNAMIC-COLLECTION CALLER))
 
 (defun flyspell-correct-ivy (candidates word)
-  "Run helm for the given CANDIDATES given by flyspell for the WORD.
+  "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement."
   (ivy-read (format "Suggestions for \"%s\" in dictionary \"%s\": "
                     word (or ispell-local-dictionary
