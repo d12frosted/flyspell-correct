@@ -1,5 +1,4 @@
-;;; flyspell-correct.el --- package for correcting words with flyspell using
-;;; custom interface
+;;; flyspell-correct.el --- correcting words with flyspell via custom interface
 ;;
 ;; Copyright (c) 2016 Boris Buliga
 ;;

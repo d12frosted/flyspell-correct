@@ -1,6 +1,6 @@
 * flyspell-correct
 
-Package for correcting words with flyspell using custom interface.
+Correcting words with flyspell via custom interface.
 
 To use set the value of ~flyspell-correct-interface~ to any of available
 interfaces (predefined are ~flyspell-correct/ivy~ and ~flyspell-correct/helm~). For
