@@ -35,6 +35,7 @@ uses this feature.
 * Thanks
 
 Thanks go to [[https://github.com/pronobis][Andrzej Pronobis]] for the inspiration and his original [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
+and [[https://github.com/xuchunyang][xuchunyang]] for the inspiration and her original [[https://github.com/xuchunyang/flyspell-popup][flyspell-popup]].
 
 * Known problems
 
