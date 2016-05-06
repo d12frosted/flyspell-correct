@@ -24,8 +24,8 @@
 
 (defvar flyspell-correct-interface nil
   "Interface for `flyspell-correct-word'. Available predefined
-  interfaces are `flyspell-correct/ivy' and
-  `flyspell-correct/helm'.")
+  interfaces are `flyspell-correct-ivy' and
+  `flyspell-correct-helm'.")
 
 ;; Ivy interface
 
@@ -33,7 +33,7 @@
                                                 PRESELECT KEYMAP UPDATE-FN SORT ACTION UNWIND RE-BUILDER MATCHER
                                                 DYNAMIC-COLLECTION CALLER))
 
-(defun flyspell-correct/ivy (candidates word)
+(defun flyspell-correct-ivy (candidates word)
   "Run helm for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement."
   (ivy-read (format "Suggestions for \"%s\" in dictionary \"%s\": "
@@ -47,11 +47,11 @@ Return a selected word to use as a replacement."
                                                 ALLOW-NEST OTHER-LOCAL-VARS))
 (declare-function helm-build-sync-source "ext:helm-source.el" (NAME &rest ARGS))
 
-(defun flyspell-correct//helm-always-match (candidate)
+(defun flyspell-correct--helm-always-match (candidate)
   "Return true for any CANDIDATE."
   t)
 
-(defun flyspell-correct//helm-option-candidates (word)
+(defun flyspell-correct--helm-option-candidates (word)
   "Return a set of options for the given WORD."
   (let ((opts (list (cons (format "Save \"%s\"" word) (cons 'save word))
                     (cons (format "Accept (session) \"%s\"" word) (cons 'session word))
@@ -62,7 +62,7 @@ Return a selected word to use as a replacement."
                                     (cons (format "Accept (buffer) \"%s\"" helm-pattern) (cons 'buffer helm-pattern))))))
     opts))
 
-(defun flyspell-correct/helm (candidates word)
+(defun flyspell-correct-helm (candidates word)
   "Run helm for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by flyspell-do-correct."
@@ -78,10 +78,10 @@ of (command, word) to be used by flyspell-do-correct."
                        (helm-build-sync-source "Options"
                          :candidates '(lambda ()
                                         (let ((tmp word))
-                                           (flyspell-correct//helm-option-candidates tmp)))
+                                           (flyspell-correct--helm-option-candidates tmp)))
                          :action 'identity
                          :candidate-number-limit 9999
-                         :match 'flyspell-correct//helm-always-match
+                         :match 'flyspell-correct--helm-always-match
                          :volatile t
                          )
                        )
@@ -91,7 +91,7 @@ of (command, word) to be used by flyspell-do-correct."
 ;; Implementation
 
 ;;;###autoload
-(defun flyspell-correct/word ()
+(defun flyspell-correct-word-generic ()
   "Correct word before point using `flyspell-correct-interface'.
 Adapted from `flyspell-correct-word-before-point'."
   (interactive)
