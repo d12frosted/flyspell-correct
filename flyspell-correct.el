@@ -23,8 +23,8 @@
 
 (defvar flyspell-correct-interface nil
   "Interface for `flyspell-correct-word'. Available predefined
-  interfaces are `flyspell-correct-ivy' and
-  `flyspell-correct-helm'.")
+  interfaces are `flyspell-correct-ivy', `flyspell-correct-helm'
+  and `flyspell-correct-popup'.")
 
 ;; Ivy interface
 
@@ -86,6 +86,36 @@ of (command, word) to be used by flyspell-do-correct."
                        )
         :buffer "*Helm Flyspell*"
         :prompt "Correction: "))
+
+;; Popup interface
+
+(declare-function popup-menu* "ext:popup.el"
+                  (LIST &optional POINT (AROUND t) (WIDTH (popup-preferred-width list))
+                        (HEIGHT 15) MAX-WIDTH MARGIN MARGIN-LEFT MARGIN-RIGHT SCROLL-BAR SYMBOL PARENT
+                        PARENT-OFFSET CURSOR (KEYMAP popup-menu-keymap) (FALLBACK 'popup-menu-fallback)
+                        HELP-DELAY NOWAIT PROMPT ISEARCH (ISEARCH-FILTER 'popup-isearch-filter-list)
+                        (ISEARCH-CURSOR-COLOR popup-isearch-cursor-color)
+                        (ISEARCH-KEYMAP popup-isearch-keymap) ISEARCH-CALLBACK INITIAL-INDEX))
+
+(declare-function popup-make-item "ext:popup.el"
+                  (NAME &optional VALUE FACE MOUSE-FACE SELECTION-FACE SUBLIST DOCUMENT
+                        SYMBOL SUMMARY))
+
+(defun flyspell-correct-popup (candidates word)
+  "Run popup for the given CANDIDATES given by flyspell for the WORD.
+Return a selected word to use as a replacement or a tuple
+of (command, word) to be used by flyspell-do-correct."
+  (popup-menu*
+   (append
+    candidates
+    (list
+     (popup-make-item (format "Save \"%s\"" word)
+                      :value (cons 'save word))
+     (popup-make-item (format "Accept (session) \"%s\"" word)
+                      :value (cons 'session word))
+     (popup-make-item (format "Accept (buffer) \"%s\"" word)
+                      :value (cons 'buffer word))))
+   :margin t))
 
 ;; Implementation
 
