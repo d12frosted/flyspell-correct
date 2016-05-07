@@ -37,9 +37,9 @@
 Return a selected word to use as a replacement."
   (let* (result
          (action-default (lambda (x) (setq result x)))
-         (action-save-word (lambda (x) (setq result (cons 'save word))))
-         (action-accept-session (lambda (x) (setq result (cons 'session word))))
-         (action-accept-buffer (lambda (x) (setq result (cons 'buffer word))))
+         (action-save-word (lambda (_) (setq result (cons 'save word))))
+         (action-accept-session (lambda (_) (setq result (cons 'session word))))
+         (action-accept-buffer (lambda (_) (setq result (cons 'buffer word))))
          (action `(1
                    ("o" ,action-default "correct")
                    ("s" ,action-save-word "Save")
@@ -60,7 +60,7 @@ Return a selected word to use as a replacement."
                                                 ALLOW-NEST OTHER-LOCAL-VARS))
 (declare-function helm-build-sync-source "ext:helm-source.el" (NAME &rest ARGS))
 
-(defun flyspell-correct--helm-always-match (candidate)
+(defun flyspell-correct--helm-always-match (_)
   "Return true for any CANDIDATE."
   t)
 
