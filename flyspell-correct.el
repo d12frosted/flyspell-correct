@@ -36,17 +36,22 @@
   "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement."
   (let* (result
-         (action (lambda (x) (setq result x))))
+         (action-default (lambda (x) (setq result x)))
+         (action-save-word (lambda (x) (setq result (cons 'save word))))
+         (action-accept-session (lambda (x) (setq result (cons 'session word))))
+         (action-accept-buffer (lambda (x) (setq result (cons 'buffer word))))
+         (action `(1
+                   ("o" ,action-default "correct")
+                   ("s" ,action-save-word "Save")
+                   ("S" ,action-accept-session "Accept (session)")
+                   ("b" ,action-accept-buffer "Accept (buffer)"))))
     (ivy-read (format "Suggestions for \"%s\" in dictionary \"%s\": "
                       word (or ispell-local-dictionary
                                ispell-dictionary
                                "Default"))
-              (append
-               (mapcar (lambda (x) (cons x x)) candidates)
-               (list (cons (format "Save \"%s\"" word) (cons 'save word))
-                     (cons (format "Accept (session) \"%s\"" word) (cons 'session word))
-                     (cons (format "Accept (buffer) \"%s\"" word) (cons 'buffer word))))
-              :action action)
+              candidates
+              :action action
+              :caller 'flyspell-correct-ivy)
     result))
 
 ;; Helm interface
