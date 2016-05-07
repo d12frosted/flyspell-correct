@@ -1,6 +1,7 @@
 * flyspell-correct
 
 [[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]
+[[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]]
 
 Correcting words with flyspell via custom interface.
 
@@ -31,10 +32,26 @@ return either replacement word or ~(command, word)~ tuple that will be passed to
 ~flyspell-do-correct~. Check ~flyspell-correct-popup~ for example of interface that
 uses this feature.
 
-* Thanks
+* Screenshots
 
-Thanks go to [[https://github.com/pronobis][Andrzej Pronobis]] for the inspiration and his original [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
-and [[https://github.com/xuchunyang][xuchunyang]] for the inspiration and her original [[https://github.com/xuchunyang/flyspell-popup][flyspell-popup]].
+** Ivy interface
+ [[file:images/screenshot-ivy-1.png]]
+
+ [[file:images/screenshot-ivy-2.png]]
+
+** Popup interface
+ [[file:images/screenshot-popup.png]]
+
+** Helm interface
+ [[file:images/screenshot-helm.png]]
+
+* Acknowledgments
+
+This package is available thanks to these people:
+
+- [[https://github.com/pronobis][Andrzej Pronobis]] for inspiration and [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
+- [[https://github.com/xuchunyang][xuchunyang]] for [[https://github.com/xuchunyang/flyspell-popup][flyspell-popup]]
+- [[https://github.com/abo-abo][Oleh Krehel]] for [[https://github.com/abo-abo/swiper][swiper]] and all the help
 
 * Known problems
 

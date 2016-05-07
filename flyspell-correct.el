@@ -22,9 +22,9 @@
 ;; Variables
 
 (defvar flyspell-correct-interface nil
-  "Interface for `flyspell-correct-word'. Available predefined
-  interfaces are `flyspell-correct-ivy', `flyspell-correct-helm'
-  and `flyspell-correct-popup'.")
+  "Interface for `flyspell-correct-word-generic'. Available
+  predefined interfaces are `flyspell-correct-ivy',
+  `flyspell-correct-helm' and `flyspell-correct-popup'.")
 
 ;; Ivy interface
 
