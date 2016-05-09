@@ -28,11 +28,11 @@ spelling in current buffer or whole session.
 
 * Custom interfaces
 
-One can easily implement custom interface for ~flyspell-correct-word-generic~. It has to
-be function that takes two arguments - candidates and misspelled word. it has to
-return either replacement word or ~(command, word)~ tuple that will be passed to
-~flyspell-do-correct~. Check ~flyspell-correct-popup~ for example of interface that
-uses this feature.
+One can easily implement custom interface for ~flyspell-correct-word-generic~. It
+has to be function that takes two arguments - candidates and misspelled word. It
+has to return either replacement word or ~(command, word)~ tuple that will be
+passed to ~flyspell-do-correct~. Check ~flyspell-correct-popup~ for example of
+interface that uses this feature.
 
 * Screenshots
 
@@ -58,4 +58,4 @@ This package is available thanks to these people:
 * Known problems
 
 Package requirements are not properly set, since depending on users choice this
-package might require ~helm~ or ~ivy~ or non of them.
+package might require ~helm~ or ~ivy~ or ~popup~ or non of them.

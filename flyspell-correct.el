@@ -24,7 +24,11 @@
 (defvar flyspell-correct-interface nil
   "Interface for `flyspell-correct-word-generic'. Available
   predefined interfaces are `flyspell-correct-ivy',
-  `flyspell-correct-helm' and `flyspell-correct-popup'.")
+  `flyspell-correct-helm' and `flyspell-correct-popup'. It has to
+  be function that accepts two arguments - candidates and
+  misspelled word. It has to return either replacement word
+  or (command, word) tuple that will be passed to
+  `flyspell-do-correct'.")
 
 ;; Ivy interface
 
@@ -34,7 +38,8 @@
 
 (defun flyspell-correct-ivy (candidates word)
   "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.
-Return a selected word to use as a replacement."
+Return a selected word to use as a replacement or a tuple
+of (command, word) to be used by `flyspell-do-correct'."
   (let* (result
          (action-default (lambda (x) (setq result x)))
          (action-save-word (lambda (_) (setq result (cons 'save word))))
@@ -78,7 +83,7 @@ Return a selected word to use as a replacement."
 (defun flyspell-correct-helm (candidates word)
   "Run helm for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement or a tuple
-of (command, word) to be used by flyspell-do-correct."
+of (command, word) to be used by `flyspell-do-correct'."
   (helm :sources (list (helm-build-sync-source (format "Suggestions for \"%s\" in dictionary \"%s\""
                                                        word (or ispell-local-dictionary
                                                                 ispell-dictionary
