@@ -10,7 +10,20 @@
 ;;; License: GPLv3
 ;;
 ;;; Commentary:
-;; For usage instructions refer README file.
+;; In order to use this package set the value of `flyspell-correct-interface' to
+;; any of available interfaces (predefined are `flyspell-correct-ivy',
+;; `flyspell-correct-helm' and `flyspell-correct-popup'). For example,
+;;
+;; (setq flyspell-correct-interface 'flyspell-correct-ivy)
+;;
+;; After that, just call `flyspell-correct-word-generic' with cursor on
+;; misspelled word. You can also bind it by adding this to your init.el file:
+;;
+;; (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
+;;
+;; When invoked, it will show the list of corrections suggested by Flyspell.
+;; `ivy', `helm' and `popup' also allows to save unknown word to your
+;; dictionary, accept this spelling in current buffer or whole session.
 ;;
 ;;; Code:
 ;;
@@ -22,13 +35,13 @@
 ;; Variables
 
 (defvar flyspell-correct-interface nil
-  "Interface for `flyspell-correct-word-generic'. Available
-  predefined interfaces are `flyspell-correct-ivy',
-  `flyspell-correct-helm' and `flyspell-correct-popup'. It has to
-  be function that accepts two arguments - candidates and
-  misspelled word. It has to return either replacement word
-  or (command, word) tuple that will be passed to
-  `flyspell-do-correct'.")
+  "Interface for `flyspell-correct-word-generic'.
+Available predefined interfaces are `flyspell-correct-ivy',
+`flyspell-correct-helm' and `flyspell-correct-popup'. It has to
+be function that accepts two arguments - candidates and
+misspelled word. It has to return either replacement word
+or (command, word) tuple that will be passed to
+`flyspell-do-correct'.")
 
 ;; Ivy interface
 
@@ -66,7 +79,7 @@ of (command, word) to be used by `flyspell-do-correct'."
 (declare-function helm-build-sync-source "ext:helm-source.el" (NAME &rest ARGS))
 
 (defun flyspell-correct--helm-always-match (_)
-  "Return true for any CANDIDATE."
+  "Return non-nil for any CANDIDATE."
   t)
 
 (defun flyspell-correct--helm-option-candidates (word)
@@ -123,7 +136,7 @@ of (command, word) to be used by `flyspell-do-correct'."
 (defun flyspell-correct-popup (candidates word)
   "Run popup for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement or a tuple
-of (command, word) to be used by flyspell-do-correct."
+of (command, word) to be used by `flyspell-do-correct'."
   (popup-menu*
    (append
     candidates
