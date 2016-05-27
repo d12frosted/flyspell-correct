@@ -229,4 +229,8 @@ Adapted from `flyspell-correct-word-before-point'."
           (ispell-pdict-save t)))))
 
 (provide 'flyspell-correct)
+
+;; Local Variables:
+;; no-byte-compile: t
+;; END:
 ;;; flyspell-correct.el ends here
