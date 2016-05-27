@@ -85,6 +85,9 @@ of (command, word) to be used by `flyspell-do-correct'."
 (declare-function helm-build-sync-source "ext:helm-source.el"
                   (name &rest args))
 
+(defvar flyspell-correct--helm-options-word nil
+  "Internal variable to hold current word.")
+
 (defun flyspell-correct--helm-always-match (_)
   "Return non-nil for any CANDIDATE."
   t)
@@ -112,6 +115,7 @@ of (command, word) to be used by `flyspell-do-correct'."
   "Run helm for the given CANDIDATES given by flyspell for the WORD.
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
+  (setq flyspell-correct--helm-options-word word)
   (helm :sources (list (helm-build-sync-source
                            (format "Suggestions for \"%s\" in dictionary \"%s\""
                                    word (or ispell-local-dictionary
@@ -123,8 +127,8 @@ of (command, word) to be used by `flyspell-do-correct'."
                          :fuzzy-match t)
                        (helm-build-sync-source "Options"
                          :candidates '(lambda ()
-                                        (let ((tmp word))
-                                           (flyspell-correct--helm-option-candidates tmp)))
+                                        (flyspell-correct--helm-option-candidates
+                                         flyspell-correct--helm-options-word))
                          :action 'identity
                          :candidate-number-limit 9999
                          :match 'flyspell-correct--helm-always-match
