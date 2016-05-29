@@ -186,8 +186,8 @@ Adapted from `flyspell-correct-word-before-point'."
         (word (flyspell-get-word))
         (opoint (point)))
     (if (consp word)
-        (let ((start (car (cdr word)))
-              (end (car (cdr (cdr word))))
+        (let ((start (nth 1 word))
+              (end (nth 2 word))
               (word (car word))
               poss ispell-filter)
           ;; now check spelling of word.
@@ -214,18 +214,14 @@ Adapted from `flyspell-correct-word-before-point'."
             (error "Ispell: error in Ispell process"))
            (t
             ;; The word is incorrect, we have to propose a replacement.
-            (let ((res (funcall flyspell-correct-interface (third poss) word)))
+            (let ((res (funcall flyspell-correct-interface (nth 2 poss) word)))
               (cond ((stringp res)
                      (flyspell-do-correct res poss word cursor-location start end opoint))
                     (t
                      (let ((cmd (car res))
                            (wrd (cdr res)))
-                       (if (string= wrd word)
-                           (flyspell-do-correct cmd poss wrd
-                                                cursor-location start end opoint)
-                         (progn
-                           (flyspell-do-correct cmd poss wrd cursor-location start end opoint)
-                           (flyspell-do-correct wrd poss word cursor-location start end opoint)))))))))
+                       (flyspell-do-correct
+                        cmd poss wrd cursor-location start end opoint)))))))
           (ispell-pdict-save t)))))
 
 (provide 'flyspell-correct)
