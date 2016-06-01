@@ -122,9 +122,8 @@ of (command, word) to be used by `flyspell-do-correct'."
                          :candidate-number-limit 9999
                          :fuzzy-match t)
                        (helm-build-sync-source "Options"
-                         :candidates '(lambda ()
-                                        (let ((tmp word))
-                                           (flyspell-correct--helm-option-candidates tmp)))
+                         :candidates (lambda ()
+                                       (flyspell-correct--helm-option-candidates word))
                          :action 'identity
                          :candidate-number-limit 9999
                          :match 'flyspell-correct--helm-always-match
