@@ -173,7 +173,7 @@ of (command, word) to be used by `flyspell-do-correct'."
                       :value (cons 'buffer word))))
    :margin t))
 
-;; Implementation
+;; On point word correction
 
 ;;;###autoload
 (defun flyspell-correct-word-generic ()
@@ -223,6 +223,9 @@ Adapted from `flyspell-correct-word-before-point'."
                        (flyspell-do-correct
                         cmd poss wrd cursor-location start end opoint)))))))
           (ispell-pdict-save t)))))
+
+;;; Previous word correction
+;; mostly stolen from flyspell.el
 
 (defvar flyspell-correct-previous-word--pos nil
   "Holds the start of the first incorrect word before point.")
