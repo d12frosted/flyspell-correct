@@ -74,3 +74,8 @@ This package is available thanks to these people:
 
 Package requirements are not properly set, since depending on users choice this
 package might require ~helm~ or ~ivy~ or ~popup~ or non of them.
+
+The plan is to divide this package into several packages - one base (containing
+functionality) and several interface-specific packages. As it was already
+stated, ~flyspell-correct~ is not about several interfaces in one package, but
+about functionality.
