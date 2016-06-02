@@ -16,14 +16,19 @@
 ;;
 ;; (setq flyspell-correct-interface 'flyspell-correct-ivy)
 ;;
-;; After that, just call `flyspell-correct-word-generic' with cursor on
-;; misspelled word. You can also bind it by adding this to your init.el file:
+;; This package provides two functions for correcting words:
+;; `flyspell-correct-word-generic' to correct word at point and
+;; `flyspell-correct-previous-word-generic' to correct any visible word before
+;; point. In most cases second function is more convenient, so don't forget to
+;; bind it.
 ;;
-;; (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
+;; (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 ;;
 ;; When invoked, it will show the list of corrections suggested by Flyspell.
 ;; `ivy', `helm' and `popup' also allows to save unknown word to your
 ;; dictionary, accept this spelling in current buffer or whole session.
+;;
+;; For more information about this package, please read README.org file.
 ;;
 ;;; Code:
 ;;

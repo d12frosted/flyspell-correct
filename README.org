@@ -7,19 +7,21 @@ Correcting words with flyspell via custom interface.
 
 [[http://d12frosted.github.io/posts/flyspell-correct-intro.html][Read intro post]]
 
-To use set the value of ~flyspell-correct-interface~ to any of available
-interfaces (predefined are ~flyspell-correct-ivy~, ~flyspell-correct-helm~ and
-~flyspell-correct-popup~). For example,
+In order to use this package set the value of ~flyspell-correct-interface~ to any
+of available interfaces (predefined are ~flyspell-correct-ivy~,
+~flyspell-correct-helm~ and ~flyspell-correct-popup~). For example,
 
 #+BEGIN_SRC emacs-lisp
 (setq flyspell-correct-interface 'flyspell-correct-ivy)
 #+END_SRC
 
-After that, just call ~flyspell-correct-word-generic~ with cursor on misspelled word. You
-can also bind it by adding this to your ~init.el~ file:
+This package provides two functions for correcting words:
+~flyspell-correct-word-generic~ to correct word at point and
+~flyspell-correct-previous-word-generic~ to correct any visible word before point.
+In most cases second function is more convenient, so don't forget to bind it.
 
 #+BEGIN_SRC emacs-lisp
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
 When invoked, it will show the list of corrections suggested by Flyspell. ~ivy~,
@@ -28,11 +30,11 @@ spelling in current buffer or whole session.
 
 * Custom interfaces
 
-One can easily implement custom interface for ~flyspell-correct-word-generic~. It
-has to be function that takes two arguments - candidates and misspelled word. It
-has to return either replacement word or ~(command, word)~ tuple that will be
-passed to ~flyspell-do-correct~. Check ~flyspell-correct-popup~ for example of
-interface that uses this feature.
+One can easily implement custom interface for ~flyspell-correct-word-generic~ and
+~flyspell-correct-previous-word-generic~. It has to be function that takes two
+arguments - candidates and misspelled word. It has to return either replacement
+word or ~(command, word)~ tuple that will be passed to ~flyspell-do-correct~. Check
+~flyspell-correct-popup~ for example of interface that uses this feature.
 
 * Screenshots
 
