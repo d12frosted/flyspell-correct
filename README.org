@@ -36,6 +36,19 @@ arguments - candidates and misspelled word. It has to return either replacement
 word or ~(command, word)~ tuple that will be passed to ~flyspell-do-correct~. Check
 ~flyspell-correct-popup~ for example of interface that uses this feature.
 
+* Reasoning
+
+There are already packages like ~helm-flyspell~ and ~flyspell-popup~. So why would
+anyone create yet another similar package? The reason is simple - to support
+another interface or completion system. ~flyspell-correct~ started because ~ivy~ was
+missing similar to ~helm-flyspell~ package. But I didn't want to create a package
+just for ~ivy~. The reasoning is simple - all those packages should have similar
+functionality but different interface. Adding something new to one if these
+packages ideally should be reflected in all others. So I decided to create
+generic package that works with any interfaces. It's not about one package
+containing all possible interfaces, but about package that gives you
+functionality with interface of your choice.
+
 * Screenshots
 
 ** Ivy interface
