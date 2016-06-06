@@ -7,26 +7,35 @@ Correcting words with flyspell via custom interface.
 
 [[http://d12frosted.github.io/posts/flyspell-correct-intro.html][Read intro post]]
 
-In order to use this package set the value of ~flyspell-correct-interface~ to any
-of available interfaces (predefined are ~flyspell-correct-ivy~,
-~flyspell-correct-helm~ and ~flyspell-correct-popup~). For example,
-
-#+BEGIN_SRC emacs-lisp
-(setq flyspell-correct-interface 'flyspell-correct-ivy)
-#+END_SRC
-
-This package provides two functions for correcting words:
-~flyspell-correct-word-generic~ to correct word at point and
-~flyspell-correct-previous-word-generic~ to correct any visible word before point.
-In most cases second function is more convenient, so don't forget to bind it.
+This package provides functionality for correcting words via custom interfaces.
+There are two functions for this: ~flyspell-correct-word-generic~ to correct
+word at point and ~flyspell-correct-previous-word-generic~ to correct any
+visible word before point. In most cases second function is more convenient, so
+don't forget to bind it.
 
 #+BEGIN_SRC emacs-lisp
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
-When invoked, it will show the list of corrections suggested by Flyspell. ~ivy~,
-~helm~ and ~popup~ also allows to save unknown word to your dictionary, accept this
-spelling in current buffer or whole session.
+When invoked, it will show the list of corrections suggested by Flyspell. Most
+interfaces also allow you to save new word to your dictionary, accept this
+spelling in current buffer or for a whole session.
+
+Since this package does not provide any interface for correcting words, it's
+better to use one of the following packages: ~flyspell-correct-ivy~,
+~flyspell-correct-helm~ and ~flyspell-correct-popup~. The all depend on
+~flyspell-correct~ and just provide interface for it's functionality.
+
+* Available interfaces
+
+Currently there are three packages that provide interface for ~flyspell-correct~:
+
+- ~flyspell-correct-ivy~
+- ~flyspell-correct-helm~
+- ~flyspell-correct-popup~
+
+In most cases you should just use one of these packages instead of interfaceless
+~flyspell-correct~.
 
 * Custom interfaces
 
@@ -69,13 +78,3 @@ This package is available thanks to these people:
 - [[https://github.com/pronobis][Andrzej Pronobis]] for inspiration and [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
 - [[https://github.com/xuchunyang][xuchunyang]] for [[https://github.com/xuchunyang/flyspell-popup][flyspell-popup]]
 - [[https://github.com/abo-abo][Oleh Krehel]] for [[https://github.com/abo-abo/swiper][swiper]] and all the help
-
-* Known problems
-
-Package requirements are not properly set, since depending on users choice this
-package might require ~helm~ or ~ivy~ or ~popup~ or non of them.
-
-The plan is to divide this package into several packages - one base (containing
-functionality) and several interface-specific packages. As it was already
-stated, ~flyspell-correct~ is not about several interfaces in one package, but
-about functionality.

@@ -1,34 +1,39 @@
-;;; flyspell-correct.el --- correcting words with flyspell via custom interface -*- lexical-binding: t -*-
+;;; flyspell-correct.el --- correcting words with flyspell via custom interface
 ;;
 ;; Copyright (c) 2016 Boris Buliga
 ;;
 ;; Author: Boris Buliga <d12frosted@gmail.com>
 ;; URL: https://github.com/d12frosted/flyspell-correct
+;; Package-version: 0.1
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
 ;;
 ;;; Commentary:
-;; In order to use this package set the value of `flyspell-correct-interface' to
-;; any of available interfaces (predefined are `flyspell-correct-ivy',
-;; `flyspell-correct-helm' and `flyspell-correct-popup'). For example,
 ;;
-;; (setq flyspell-correct-interface 'flyspell-correct-ivy)
-;;
-;; This package provides two functions for correcting words:
-;; `flyspell-correct-word-generic' to correct word at point and
-;; `flyspell-correct-previous-word-generic' to correct any visible word before
-;; point. In most cases second function is more convenient, so don't forget to
-;; bind it.
+;; This package provides functionality for correcting words via custom
+;; interfaces. There are two functions for this: `flyspell-correct-word-generic'
+;; to correct word at point and `flyspell-correct-previous-word-generic' to
+;; correct any visible word before point. In most cases second function is more
+;; convenient, so don't forget to bind it.
 ;;
 ;; (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 ;;
 ;; When invoked, it will show the list of corrections suggested by Flyspell.
-;; `ivy', `helm' and `popup' also allows to save unknown word to your
-;; dictionary, accept this spelling in current buffer or whole session.
+;; Most interfaces also allow you to save new word to your dictionary, accept
+;; this spelling in current buffer or for a whole session.
 ;;
-;; For more information about this package, please read README.org file.
+;; Since this package does not provide any interface for correcting words, it's
+;; better to use one of the following packages: `flyspell-correct-ivy',
+;; `flyspell-correct-helm' and `flyspell-correct-popup'. The all depend on
+;; `flyspell-correct' and just provide interface for it's functionality.
+;;
+;; But one can easily implement it's own interface for `flyspell-correct'.
+;; Checkout documentation for `flyspell-correct-interface' variable.
+;;
+;; For more information about this and related package, please read attached
+;; README.org file.
 ;;
 ;;; Code:
 ;;
@@ -41,137 +46,10 @@
 
 (defvar flyspell-correct-interface nil
   "Interface for `flyspell-correct-word-generic'.
-Available predefined interfaces are `flyspell-correct-ivy',
-`flyspell-correct-helm' and `flyspell-correct-popup'. It has to
-be function that accepts two arguments - candidates and
+It has to be function that accepts two arguments - candidates and
 misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
-
-;; Ivy interface
-
-(declare-function ivy-read "ext:ivy.el"
-                  (prompt collection &optional predicate
-                          require-match initial-input history
-                          preselect keymap update-fn sort action
-                          unwind re-builder matcher
-                          dynamic-collection caller))
-
-(defun flyspell-correct-ivy (candidates word)
-  "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.
-Return a selected word to use as a replacement or a tuple
-of (command, word) to be used by `flyspell-do-correct'."
-  (let* (result
-         (action-default (lambda (x) (setq result x)))
-         (action-save-word (lambda (_) (setq result (cons 'save word))))
-         (action-accept-session (lambda (_) (setq result (cons 'session word))))
-         (action-accept-buffer (lambda (_) (setq result (cons 'buffer word))))
-         (action `(1
-                   ("o" ,action-default "correct")
-                   ("s" ,action-save-word "Save")
-                   ("S" ,action-accept-session "Accept (session)")
-                   ("b" ,action-accept-buffer "Accept (buffer)"))))
-    (ivy-read (format "Suggestions for \"%s\" in dictionary \"%s\": "
-                      word (or ispell-local-dictionary
-                               ispell-dictionary
-                               "Default"))
-              candidates
-              :action action
-              :caller 'flyspell-correct-ivy)
-    result))
-
-;; Helm interface
-
-(declare-function helm "ext:helm.el"
-                  (&optional sources input prompt resume
-                             preselect buffer keymap default
-                             history allow-nest
-                             other-local-vars))
-(declare-function helm-build-sync-source "ext:helm-source.el"
-                  (name &rest args))
-
-(defun flyspell-correct--helm-always-match (_)
-  "Return non-nil for any CANDIDATE."
-  t)
-
-(defun flyspell-correct--helm-option-candidates (word)
-  "Return a set of options for the given WORD."
-  (let ((opts (list (cons (format "Save \"%s\"" word)
-                          (cons 'save word))
-                    (cons (format "Accept (session) \"%s\"" word)
-                          (cons 'session word))
-                    (cons (format "Accept (buffer) \"%s\"" word)
-                          (cons 'buffer word)))))
-    (unless (string= helm-pattern "")
-      (setq opts
-            (append opts
-                    (list (cons (format "Save \"%s\"" helm-pattern)
-                                (cons 'save helm-pattern))
-                          (cons (format "Accept (session) \"%s\"" helm-pattern)
-                                (cons 'session helm-pattern))
-                          (cons (format "Accept (buffer) \"%s\"" helm-pattern)
-                                (cons 'buffer helm-pattern))))))
-    opts))
-
-(defun flyspell-correct-helm (candidates word)
-  "Run helm for the given CANDIDATES given by flyspell for the WORD.
-Return a selected word to use as a replacement or a tuple
-of (command, word) to be used by `flyspell-do-correct'."
-  (helm :sources (list (helm-build-sync-source
-                           (format "Suggestions for \"%s\" in dictionary \"%s\""
-                                   word (or ispell-local-dictionary
-                                            ispell-dictionary
-                                            "Default"))
-                         :candidates candidates
-                         :action 'identity
-                         :candidate-number-limit 9999
-                         :fuzzy-match t)
-                       (helm-build-sync-source "Options"
-                         :candidates (lambda ()
-                                       (flyspell-correct--helm-option-candidates word))
-                         :action 'identity
-                         :candidate-number-limit 9999
-                         :match 'flyspell-correct--helm-always-match
-                         :volatile t))
-        :buffer "*Helm Flyspell*"
-        :prompt "Correction: "))
-
-;; Popup interface
-
-(declare-function popup-menu* "ext:popup.el"
-                  (list &optional point (around t)
-                        (width (popup-preferred-width list))
-                        (height 15) max-width margin margin-left
-                        margin-right scroll-bar symbol parent
-                        parent-offset cursor (keymap popup-menu-keymap)
-                        (fallback 'popup-menu-fallback)
-                        help-delay nowait prompt
-                        isearch (isearch-filter
-                        'popup-isearch-filter-list)
-                        (isearch-cursor-color popup-isearch-cursor-color)
-                        (isearch-keymap popup-isearch-keymap)
-                        isearch-callback initial-index))
-
-(declare-function popup-make-item "ext:popup.el"
-                  (name &optional value face mouse-face
-                        selection-face sublist document symbol
-                        summary))
-
-(defun flyspell-correct-popup (candidates word)
-  "Run popup for the given CANDIDATES given by flyspell for the WORD.
-Return a selected word to use as a replacement or a tuple
-of (command, word) to be used by `flyspell-do-correct'."
-  (popup-menu*
-   (append
-    candidates
-    (list
-     (popup-make-item (format "Save \"%s\"" word)
-                      :value (cons 'save word))
-     (popup-make-item (format "Accept (session) \"%s\"" word)
-                      :value (cons 'session word))
-     (popup-make-item (format "Accept (buffer) \"%s\"" word)
-                      :value (cons 'buffer word))))
-   :margin t))
 
 ;; On point word correction
 
@@ -290,7 +168,4 @@ Uses `flyspell-correct-word-generic' function for correction."
 
 (provide 'flyspell-correct)
 
-;; Local Variables:
-;; no-byte-compile: t
-;; END:
 ;;; flyspell-correct.el ends here
