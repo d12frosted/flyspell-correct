@@ -1,0 +1,14 @@
+* v0.2
+- Various documentation updates.
+- ~flyspell-correct-previous-word-generic~ now corrects word at point if it's
+  incorrect (#19).
+
+* v0.1
+- Initial implementation.
+- Two correction functions:
+  - ~flyspell-correct-word-generic~
+  - ~flyspell-correct-previous-word-generic~
+- Three out of box interfaces:
+  - ~ivy~
+  - ~helm~
+  - ~popup~
