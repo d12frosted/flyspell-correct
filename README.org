@@ -1,7 +1,11 @@
 * flyspell-correct
 
-[[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]
 [[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]]
+
+| =flyspell-correct=       | [[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]       |
+| =flyspell-correct-ivy=   | [[http://melpa.org/#/flyspell-correct-ivy][file:http://melpa.org/packages/flyspell-correct-ivy-badge.svg]]   |
+| =flyspell-correct-helm=  | [[http://melpa.org/#/flyspell-correct-helm][file:http://melpa.org/packages/flyspell-correct-helm-badge.svg]]  |
+| =flyspell-correct-popup= | [[http://melpa.org/#/flyspell-correct-popup][file:http://melpa.org/packages/flyspell-correct-popup-badge.svg]] |
 
 Correcting words with flyspell via custom interface.
 
