@@ -138,8 +138,8 @@ Uses `flyspell-correct-word-generic' function for correction."
           ;; only reset if a new overlay exists
           (setq flyspell-correct-previous-word--pos nil)
 
-          (let ((overlay-list (overlays-in (point-min) position))
-                (point-at-incorrect (not (null (overlays-in position position))))
+          (let ((overlay-list (overlays-in (point-min) (+ position 1)))
+                (point-at-incorrect (not (null (overlays-in position (+ position 1)))))
                 (new-overlay 'dummy-value))
 
             (when point-at-incorrect
