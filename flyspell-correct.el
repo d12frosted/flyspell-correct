@@ -139,10 +139,15 @@ Uses `flyspell-correct-word-generic' function for correction."
           (setq flyspell-correct-previous-word--pos nil)
 
           (let ((overlay-list (overlays-in (point-min) position))
+                (point-at-incorrect (not (null (overlays-in position position))))
                 (new-overlay 'dummy-value))
+
+            (when point-at-incorrect
+              (setq new-overlay (car (last overlay-list))))
 
             ;; search for previous (new) flyspell overlay
             (while (and new-overlay
+                        (not point-at-incorrect)
                         (or (not (flyspell-overlay-p new-overlay))
                             ;; check if its face has changed
                             (not (eq (get-char-property
