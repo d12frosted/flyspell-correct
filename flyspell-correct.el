@@ -171,6 +171,54 @@ Uses `flyspell-correct-word-generic' function for correction."
             ;; the point may have moved so reset this
             (setq flyspell-correct-previous-word--pos (point))))))))
 
+;;; Automatically correct
+;; based on `flyspell-popup-auto-correct-mode'
+
+(defcustom flyspell-correct-auto-delay 1.6
+  "Delay in seconds before `flyspell-correct-previous-word-generic' is called.
+Use floating point numbers to express fractions of seconds."
+  :group 'flyspell
+  :type 'number
+  :safe #'numberp)
+
+(defvar flyspell-correct--auto-timer nil
+  "Timer to automatically call `flyspell-correct-previous-word-generic'.")
+(make-variable-buffer-local 'flyspell-correct--auto-timer)
+
+(defvar flyspell-correct--auto-active-p nil)
+(make-variable-buffer-local 'flyspell-correct--auto-active-p)
+
+(defun flyspell-correct-auto-cancel-timer ()
+  (when flyspell-correct--auto-timer
+    (cancel-timer flyspell-correct--auto-timer)
+    (setq flyspell-correct--auto-timer nil)))
+
+(defun flyspell-correct-auto-soon ()
+  "Call `flyspell-correct-previous-word-generic' delayed."
+  (flyspell-correct-auto-cancel-timer)
+  (when (and flyspell-mode
+             (not (bound-and-true-p flyspell-correct--auto-active-p)))
+    (setq flyspell-correct--auto-timer
+          (run-at-time flyspell-correct-auto-delay nil
+                       (lambda ()
+                         (flyspell-correct-auto-cancel-timer)
+                         (when (and flyspell-mode
+                                    (not (bound-and-true-p flyspell-correct--auto-active-p)))
+                           (setq flyspell-correct--auto-active-p t)
+                           (with-local-quit
+                             (call-interactively #'flyspell-correct-previous-word-generic))
+                           (setq flyspell-correct--auto-active-p nil)))))))
+
+;;;###autoload
+(define-minor-mode flyspell-correct-auto-mode
+  "Minor mode for automatically correcting word at point."
+  :group 'flyspell
+  :lighter "auto-correct"
+  (if flyspell-correct-auto-mode
+      (progn
+        (add-hook 'post-command-hook 'flyspell-correct-auto-soon nil 'local))
+    (remove-hook 'post-command-hook 'flyspell-correct-auto-soon 'local)))
+
 (provide 'flyspell-correct)
 
 ;;; flyspell-correct.el ends here
