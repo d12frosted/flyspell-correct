@@ -181,6 +181,10 @@ Use floating point numbers to express fractions of seconds."
   :type 'number
   :safe #'numberp)
 
+(defvar flyspell-correct-auto-mode-interface nil
+  "Interface to use in `flyspell-correct-auto-mode'.
+When set to nil `flyspell-correct-interface' is used.")
+
 (defvar flyspell-correct--auto-timer nil
   "Timer to automatically call `flyspell-correct-previous-word-generic'.")
 (make-variable-buffer-local 'flyspell-correct--auto-timer)
@@ -198,16 +202,23 @@ Use floating point numbers to express fractions of seconds."
   (flyspell-correct-auto-cancel-timer)
   (when (and flyspell-mode
              (not (bound-and-true-p flyspell-correct--auto-active-p)))
-    (setq flyspell-correct--auto-timer
-          (run-at-time flyspell-correct-auto-delay nil
-                       (lambda ()
-                         (flyspell-correct-auto-cancel-timer)
-                         (when (and flyspell-mode
-                                    (not (bound-and-true-p flyspell-correct--auto-active-p)))
-                           (setq flyspell-correct--auto-active-p t)
-                           (with-local-quit
-                             (call-interactively #'flyspell-correct-previous-word-generic))
-                           (setq flyspell-correct--auto-active-p nil)))))))
+    (setq
+     flyspell-correct--auto-timer
+     (run-at-time
+      flyspell-correct-auto-delay
+      nil
+      (lambda ()
+        (flyspell-correct-auto-cancel-timer)
+        (when (and flyspell-mode
+                   (not (bound-and-true-p flyspell-correct--auto-active-p)))
+          (setq flyspell-correct--auto-active-p t)
+          (with-local-quit
+            (let ((flyspell-correct-interface
+                   (if (bound-and-true-p flyspell-correct-auto-mode-interface)
+                       flyspell-correct-auto-mode-interface
+                     flyspell-correct-interface)))
+              (call-interactively #'flyspell-correct-previous-word-generic)))
+          (setq flyspell-correct--auto-active-p nil)))))))
 
 ;;;###autoload
 (define-minor-mode flyspell-correct-auto-mode
