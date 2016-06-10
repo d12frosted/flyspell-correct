@@ -18,7 +18,7 @@ visible word before point. In most cases second function is more convenient, so
 don't forget to bind it.
 
 #+BEGIN_SRC emacs-lisp
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") #'flyspell-correct-previous-word-generic)
 #+END_SRC
 
 When invoked, it will show the list of corrections suggested by Flyspell. Most
