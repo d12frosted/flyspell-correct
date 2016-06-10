@@ -23,15 +23,9 @@
 ;; Requires
 
 (require 'flyspell-correct)
+(require 'ivy)
 
 ;; Interface implementation
-
-(declare-function ivy-read "ext:ivy.el"
-                  (prompt collection &optional predicate
-                          require-match initial-input history
-                          preselect keymap update-fn sort action
-                          unwind re-builder matcher
-                          dynamic-collection caller))
 
 (defun flyspell-correct-ivy (candidates word)
   "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.

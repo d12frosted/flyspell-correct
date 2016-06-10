@@ -23,27 +23,9 @@
 ;; Requires
 
 (require 'flyspell-correct)
+(require 'popup)
 
 ;; Interface implementation
-
-(declare-function popup-menu* "ext:popup.el"
-                  (list &optional point (around t)
-                        (width (popup-preferred-width list))
-                        (height 15) max-width margin margin-left
-                        margin-right scroll-bar symbol parent
-                        parent-offset cursor (keymap popup-menu-keymap)
-                        (fallback 'popup-menu-fallback)
-                        help-delay nowait prompt
-                        isearch (isearch-filter
-                        'popup-isearch-filter-list)
-                        (isearch-cursor-color popup-isearch-cursor-color)
-                        (isearch-keymap popup-isearch-keymap)
-                        isearch-callback initial-index))
-
-(declare-function popup-make-item "ext:popup.el"
-                  (name &optional value face mouse-face
-                        selection-face sublist document symbol
-                        summary))
 
 (defun flyspell-correct-popup (candidates word)
   "Run popup for the given CANDIDATES given by flyspell for the WORD.

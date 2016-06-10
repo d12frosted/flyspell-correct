@@ -23,16 +23,9 @@
 ;; Requires
 
 (require 'flyspell-correct)
+(require 'helm)
 
 ;; Interface implementation
-
-(declare-function helm "ext:helm.el"
-                  (&optional sources input prompt resume
-                             preselect buffer keymap default
-                             history allow-nest
-                             other-local-vars))
-(declare-function helm-build-sync-source "ext:helm-source.el"
-                  (name &rest args))
 
 (defun flyspell-correct--helm-always-match (_)
   "Return non-nil for any CANDIDATE."
