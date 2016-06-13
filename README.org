@@ -49,6 +49,21 @@ arguments - candidates and misspelled word. It has to return either replacement
 word or ~(command, word)~ tuple that will be passed to ~flyspell-do-correct~. Check
 ~flyspell-correct-popup~ for example of interface that uses this feature.
 
+* Auto correction mode
+
+This package also provides auto correction minor mode called
+=flyspell-correct-auto-mode=. When enabled it will automatically invoke
+=flyspell-correct-previous-word-generic= after certain delay configured by
+=flyspell-correct-auto-delay= when there is at least one misspelled word.
+
+#+BEGIN_SRC
+(add-hook 'flyspell-mode-hook #'flyspell-correct-auto-mode)
+#+END_SRC
+
+One can also configure interface specially for
+=flyspell-correct-previous-word-generic= called by =flyspell-correct-auto-mode= by
+setting value of =flyspell-correct-auto-mode-interface=.
+
 * Reasoning
 
 There are already packages like ~helm-flyspell~ and ~flyspell-popup~. So why would
