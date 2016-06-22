@@ -2,6 +2,7 @@
 - Various documentation updates.
 - ~flyspell-correct-previous-word-generic~ now corrects word at point if it's
   incorrect (#19).
+- Basic implementation of ~flyspell-correct-auto-mode~.
 
 * v0.1
 - Initial implementation.
