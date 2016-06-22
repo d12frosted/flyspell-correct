@@ -41,6 +41,10 @@ Currently there are three packages that provide interface for ~flyspell-correct~
 In most cases you should just use one of these packages instead of interfaceless
 ~flyspell-correct~.
 
+Note that in order to access save actions in ~ivy~ interface you need to press
+~M-o~. More on ~ivy~ mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official
+documentation]].
+
 * Custom interfaces
 
 One can easily implement custom interface for ~flyspell-correct-word-generic~ and
