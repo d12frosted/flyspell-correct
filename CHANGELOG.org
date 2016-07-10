@@ -4,6 +4,7 @@
   incorrect (#19).
 - Simplify ~flyspell-correct-previous-word-generic~ implementation.
 - Basic implementation of ~flyspell-correct-auto-mode~.
+- Warn user when correction interface is not set.
 
 * v0.1
 - Initial implementation.

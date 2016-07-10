@@ -58,6 +58,8 @@ or (command, word) tuple that will be passed to
   "Correct word before point using `flyspell-correct-interface'.
 Adapted from `flyspell-correct-word-before-point'."
   (interactive)
+  (unless flyspell-correct-interface
+    (error "Could not correct word because `flyspell-correct-interface' is not set."))
   ;; use the correct dictionary
   (flyspell-accept-buffer-local-defs)
   (let ((cursor-location (point))
