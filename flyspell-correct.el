@@ -120,6 +120,10 @@ Uses `flyspell-correct-word-generic' function for correction."
         (position-at-incorrect-word))
     (save-excursion
       (save-restriction
+        ;; make sure that word under point is checked first
+        (forward-word)
+
+        ;; narrow the region
         (narrow-to-region top bot)
         (overlay-recenter (point))
 
