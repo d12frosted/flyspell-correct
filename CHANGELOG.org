@@ -1,6 +1,7 @@
 * next-version
 - Make sure that word at point is corrected first when using
   ~flyspell-correct-previous-word-generic~.
+- New ~ido~ interface (thanks to @jpkotta).
 
 * v0.2
 - Various documentation updates.
