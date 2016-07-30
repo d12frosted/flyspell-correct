@@ -28,7 +28,10 @@
 ;; Interface implementation
 
 (defun flyspell-correct-ivy (candidates word)
-  "Run `ivy-read' for the given CANDIDATES given by flyspell for the WORD.
+  "Run `ivy-read' for the given CANDIDATES.
+
+List of CANDIDATES is given by flyspell for the WORD.
+
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (let* (result

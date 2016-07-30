@@ -32,7 +32,10 @@
 (require 'ido)
 
 (defun flyspell-correct-ido (candidates word)
-  "Run `ido-completing-read' for the given CANDIDATES given by flyspell for the WORD.
+  "Run `ido-completing-read' for the given CANDIDATES.
+
+List of CANDIDATES is given by flyspell for the WORD.
+
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (let* ((save "[SAVE]")

@@ -51,7 +51,10 @@
     opts))
 
 (defun flyspell-correct-helm (candidates word)
-  "Run helm for the given CANDIDATES given by flyspell for the WORD.
+  "Run `helm' for the given CANDIDATES.
+
+List of CANDIDATES is given by flyspell for the WORD.
+
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (helm :sources (list (helm-build-sync-source
