@@ -101,3 +101,11 @@ This package is available thanks to these people:
 - [[https://github.com/pronobis][Andrzej Pronobis]] for inspiration and [[https://github.com/pronobis/helm-flyspell][helm-flyspell]]
 - [[https://github.com/xuchunyang][xuchunyang]] for [[https://github.com/xuchunyang/flyspell-popup][flyspell-popup]]
 - [[https://github.com/abo-abo][Oleh Krehel]] for [[https://github.com/abo-abo/swiper][swiper]] and all the help
+
+Additional thanks to all contributors:
+
+- [[https://github.com/mrBliss][mrBliss]]
+- [[https://github.com/syohex][Syohei YOSHIDA]]
+- [[https://github.com/vermiculus][Sean Allred]]
+- [[https://github.com/manuel-uberti][Manuel Uberti]]
+- [[https://github.com/jpkotta][jpkotta]]
