@@ -25,25 +25,73 @@ When invoked, it will show the list of corrections suggested by Flyspell. Most
 interfaces also allow you to save new word to your dictionary, accept this
 spelling in current buffer or for a whole session.
 
-Since this package does not provide any interface for correcting words, it's
-better to use one of the following packages: ~flyspell-correct-ivy~,
-~flyspell-correct-helm~ and ~flyspell-correct-popup~. The all depend on
-~flyspell-correct~ and just provide interface for it's functionality.
+Default interface is implemented using ~completing-read~, but it's highly
+advised to use ~flyspell-correct-ido~ (which comes bundled with this package) or
+any interface provided by following packages: ~flyspell-correct-ivy~,
+~flyspell-correct-helm~ and ~flyspell-correct-popup~.
 
-* Available interfaces
+** Using ~flyspell-correct-dummy~ interface
 
-Currently there are three packages that provide interface for ~flyspell-correct~:
+In order to use ~flyspell-correct-dummy~ interface you have to install
+~flyspell-correct~ package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
 
-- ~flyspell-correct-ivy~
-- ~flyspell-correct-helm~
-- ~flyspell-correct-popup~
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+#+END_SRC
 
-In most cases you should just use one of these packages instead of interfaceless
-~flyspell-correct~.
+This is the only bundled interface that does not allow to save or accept current
+spelling.
+
+** Using ~flyspell-correct-ido~ interface
+
+In order to use ~flyspell-correct-ido~ interface you have to install
+~flyspell-correct~ package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-ido)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+#+END_SRC
+
+** Using ~flyspell-correct-ivy~ interface
+
+In order to use ~flyspell-correct-ivy~ interface you have to install
+~flyspell-correct-ivy~ package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-ivy)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+#+END_SRC
 
 Note that in order to access save actions in ~ivy~ interface you need to press
 ~M-o~. More on ~ivy~ mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official
 documentation]].
+
+** Using ~flyspell-correct-helm~ interface
+
+In order to use ~flyspell-correct-helm~ interface you have to install
+~flyspell-correct-helm~ package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-helm)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+#+END_SRC
+
+** Using ~flyspell-correct-popup~ interface
+
+In order to use ~flyspell-correct-popup~ interface you have to install
+~flyspell-correct-popup~ package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-popup)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+#+END_SRC
+
 
 * Custom interfaces
 

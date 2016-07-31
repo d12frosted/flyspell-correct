@@ -20,8 +20,7 @@
 ;; Example usage:
 ;;
 ;;   (require 'flyspell-correct-ido)
-;;   (setq flyspell-correct-interface #'flyspell-correct-ido) ;; optional
-;;   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
+;;   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 ;;
 ;;; Code:
 ;;
