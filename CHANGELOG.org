@@ -1,4 +1,6 @@
 * next-version
+- Implement ~flyspell-correct-next-word-generic~ (thanks to @mattiasb for
+  suggestion).
 * v0.3
 - Make sure that word at point is corrected first when using
   ~flyspell-correct-previous-word-generic~.
