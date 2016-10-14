@@ -12,10 +12,11 @@ Correcting words with flyspell via custom interface.
 [[http://d12frosted.github.io/posts/flyspell-correct-intro.html][Read intro post]]
 
 This package provides functionality for correcting words via custom interfaces.
-There are two functions for this: ~flyspell-correct-word-generic~ to correct
-word at point and ~flyspell-correct-previous-word-generic~ to correct any
-visible word before point. In most cases second function is more convenient, so
-don't forget to bind it.
+There are two functions for this: =flyspell-correct-word-generic= to correct
+word at point, =flyspell-correct-previous-word-generic= to correct any visible
+word before point and =flyspell-correct-next-word-generic= to correct any
+visible word after point. In most cases second function is more convenient (at
+least in my opinion), so don't forget to bind it.
 
 #+BEGIN_SRC emacs-lisp
 (define-key flyspell-mode-map (kbd "C-;") #'flyspell-correct-previous-word-generic)
@@ -25,15 +26,15 @@ When invoked, it will show the list of corrections suggested by Flyspell. Most
 interfaces also allow you to save new word to your dictionary, accept this
 spelling in current buffer or for a whole session.
 
-Default interface is implemented using ~completing-read~, but it's highly
-advised to use ~flyspell-correct-ido~ (which comes bundled with this package) or
-any interface provided by following packages: ~flyspell-correct-ivy~,
-~flyspell-correct-helm~ and ~flyspell-correct-popup~.
+Default interface is implemented using =completing-read=, but it's highly
+advised to use =flyspell-correct-ido= (which comes bundled with this package) or
+any interface provided by following packages: =flyspell-correct-ivy=,
+=flyspell-correct-helm= and =flyspell-correct-popup=.
 
-** Using ~flyspell-correct-dummy~ interface
+** Using =flyspell-correct-dummy= interface
 
-In order to use ~flyspell-correct-dummy~ interface you have to install
-~flyspell-correct~ package in any preferred way and then add following snippet
+In order to use =flyspell-correct-dummy= interface you have to install
+=flyspell-correct= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
@@ -44,10 +45,10 @@ to relevant part of your =init.el= file.
 This is the only bundled interface that does not allow to save or accept current
 spelling.
 
-** Using ~flyspell-correct-ido~ interface
+** Using =flyspell-correct-ido= interface
 
-In order to use ~flyspell-correct-ido~ interface you have to install
-~flyspell-correct~ package in any preferred way and then add following snippet
+In order to use =flyspell-correct-ido= interface you have to install
+=flyspell-correct= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
@@ -55,10 +56,10 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
-** Using ~flyspell-correct-ivy~ interface
+** Using =flyspell-correct-ivy= interface
 
-In order to use ~flyspell-correct-ivy~ interface you have to install
-~flyspell-correct-ivy~ package in any preferred way and then add following snippet
+In order to use =flyspell-correct-ivy= interface you have to install
+=flyspell-correct-ivy= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
@@ -66,14 +67,14 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
-Note that in order to access save actions in ~ivy~ interface you need to press
-~M-o~. More on ~ivy~ mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official
+Note that in order to access save actions in =ivy= interface you need to press
+~M-o~. More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official
 documentation]].
 
-** Using ~flyspell-correct-helm~ interface
+** Using =flyspell-correct-helm= interface
 
-In order to use ~flyspell-correct-helm~ interface you have to install
-~flyspell-correct-helm~ package in any preferred way and then add following snippet
+In order to use =flyspell-correct-helm= interface you have to install
+=flyspell-correct-helm= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
@@ -81,10 +82,10 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
-** Using ~flyspell-correct-popup~ interface
+** Using =flyspell-correct-popup= interface
 
-In order to use ~flyspell-correct-popup~ interface you have to install
-~flyspell-correct-popup~ package in any preferred way and then add following snippet
+In order to use =flyspell-correct-popup= interface you have to install
+=flyspell-correct-popup= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
@@ -92,14 +93,13 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
-
 * Custom interfaces
 
-One can easily implement custom interface for ~flyspell-correct-word-generic~ and
-~flyspell-correct-previous-word-generic~. It has to be function that takes two
+One can easily implement custom interface for =flyspell-correct-word-generic= and
+=flyspell-correct-previous-word-generic=. It has to be function that takes two
 arguments - candidates and misspelled word. It has to return either replacement
-word or ~(command, word)~ tuple that will be passed to ~flyspell-do-correct~. Check
-~flyspell-correct-popup~ for example of interface that uses this feature.
+word or ~(command, word)~ tuple that will be passed to =flyspell-do-correct=. Check
+=flyspell-correct-popup= for example of interface that uses this feature.
 
 * Auto correction mode
 
@@ -118,11 +118,11 @@ setting value of =flyspell-correct-auto-mode-interface=.
 
 * Reasoning
 
-There are already packages like ~helm-flyspell~ and ~flyspell-popup~. So why would
+There are already packages like =helm-flyspell= and =flyspell-popup=. So why would
 anyone create yet another similar package? The reason is simple - to support
-another interface or completion system. ~flyspell-correct~ started because ~ivy~ was
-missing similar to ~helm-flyspell~ package. But I didn't want to create a package
-just for ~ivy~. The reasoning is simple - all those packages should have similar
+another interface or completion system. =flyspell-correct= started because =ivy= was
+missing similar to =helm-flyspell= package. But I didn't want to create a package
+just for =ivy=. The reasoning is simple - all those packages should have similar
 functionality but different interface. Adding something new to one if these
 packages ideally should be reflected in all others. So I decided to create
 generic package that works with any interfaces. It's not about one package
@@ -142,7 +142,7 @@ functionality with interface of your choice.
 ** Helm interface
  [[file:images/screenshot-helm.png]]
 
-* Acknowledgments
+* Acknowledgements
 
 This package is available thanks to these people:
 
