@@ -1,26 +1,26 @@
 * next-version
-- Implement ~flyspell-correct-next-word-generic~ (thanks to @mattiasb for
+- Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
 * v0.3
 - Make sure that word at point is corrected first when using
-  ~flyspell-correct-previous-word-generic~.
-- New ~ido~ interface (thanks to @jpkotta).
-- New ~dummy~ interface (thanks to @purcell for suggestion).
+  =flyspell-correct-previous-word-generic=.
+- New =ido= interface (thanks to @jpkotta).
+- New =dummy= interface (thanks to @purcell for suggestion).
 
 * v0.2
 - Various documentation updates.
-- ~flyspell-correct-previous-word-generic~ now corrects word at point if it's
+- =flyspell-correct-previous-word-generic= now corrects word at point if it's
   incorrect (#19).
-- Simplify ~flyspell-correct-previous-word-generic~ implementation.
-- Basic implementation of ~flyspell-correct-auto-mode~.
+- Simplify =flyspell-correct-previous-word-generic= implementation.
+- Basic implementation of =flyspell-correct-auto-mode=.
 - Warn user when correction interface is not set.
 
 * v0.1
 - Initial implementation.
 - Two correction functions:
-  - ~flyspell-correct-word-generic~
-  - ~flyspell-correct-previous-word-generic~
+  - =flyspell-correct-word-generic=
+  - =flyspell-correct-previous-word-generic=
 - Three out of box interfaces:
-  - ~ivy~
-  - ~helm~
-  - ~popup~
+  - =ivy=
+  - =helm=
+  - =popup=
