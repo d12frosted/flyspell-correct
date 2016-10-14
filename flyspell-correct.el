@@ -163,6 +163,49 @@ Uses `flyspell-correct-word-generic' function for correction."
     (when position-at-incorrect-word
       (forward-word))))
 
+;;; Next word correction
+;;
+
+;;;###autoload
+(defun flyspell-correct-next-word-generic (position)
+  "Correct the first misspelled word that occurs after point.
+But don't look beyond what's visible on the screen.
+
+Uses `flyspell-correct-word-generic' function for correction."
+  (interactive "d")
+  (let ((top (window-start))
+        (bot (window-end))
+        (incorrect-word-pos)
+        (position-at-incorrect-word))
+    (save-excursion
+      (save-restriction
+        ;; make sure that word under point is checked first
+        (backward-word)
+
+        ;; narrow the region
+        (narrow-to-region top bot)
+        (overlay-recenter (point))
+
+        (let ((overlay-list (overlays-in position (point-max)))
+              (overlay 'dummy-value))
+
+          (while overlay
+            (setq overlay (car-safe overlay-list))
+            (setq overlay-list (cdr-safe overlay-list))
+            (when (and overlay
+                       (flyspell-overlay-p overlay))
+              (setq position-at-incorrect-word (and (<= (overlay-start overlay) position)
+                                                    (>= (overlay-end overlay) position)))
+              (setq incorrect-word-pos (overlay-start overlay))
+              (setq overlay nil)))
+
+          (when incorrect-word-pos
+            (save-excursion
+              (goto-char incorrect-word-pos)
+              (flyspell-correct-word-generic))))))
+    (when position-at-incorrect-word
+      (forward-word))))
+
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'
 
