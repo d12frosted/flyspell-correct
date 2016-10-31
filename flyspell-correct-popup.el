@@ -4,8 +4,8 @@
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
-;; Package-Version: 0.1.0
-;; Package-Requires: ((flyspell-correct "0.1.0") (popup "0.5.3"))
+;; Package-Version: 0.4.0
+;; Package-Requires: ((flyspell-correct "0.4.0") (popup "0.5.3"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;

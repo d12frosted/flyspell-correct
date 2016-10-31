@@ -1,4 +1,5 @@
 * next-version
+* v0.4
 - Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
 - Minor readme updates.
