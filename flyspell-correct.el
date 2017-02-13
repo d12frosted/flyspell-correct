@@ -263,7 +263,15 @@ When set to nil `flyspell-correct-interface' is used.")
 
 ;;;###autoload
 (define-minor-mode flyspell-correct-auto-mode
-  "Minor mode for automatically correcting word at point."
+  "Minor mode for automatically correcting word at point.
+
+Take my advice and don't use this functionality unless you find
+`flyspell-correct-previous-word-generic' function useless for
+your purposes. Seriously, just try named function for completion.
+You can find more info in comment[1].
+
+[1]:
+https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-274320376"
   :group 'flyspell
   :lighter "auto-correct"
   (if flyspell-correct-auto-mode

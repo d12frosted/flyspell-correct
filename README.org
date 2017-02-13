@@ -103,6 +103,11 @@ word or ~(command, word)~ tuple that will be passed to =flyspell-do-correct=. Ch
 
 * Auto correction mode
 
+/Take my advice and don't use this functionality unless you find
+=flyspell-correct-previous-word-generic= function useless for your purposes.
+Seriously, just try named function for completion. You can find more info in
+[[https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-274320376][this comment]]./
+
 This package also provides auto correction minor mode called
 =flyspell-correct-auto-mode=. When enabled it will automatically invoke
 =flyspell-correct-previous-word-generic= after certain delay configured by
