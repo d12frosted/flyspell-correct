@@ -1,4 +1,6 @@
 * next-version
+- skip words that don't need to be fixed (e. g. duplicates)
+
 * v0.4
 - Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
