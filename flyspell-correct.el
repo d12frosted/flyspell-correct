@@ -117,8 +117,8 @@ Adapted from `flyspell-correct-word-before-point'."
                      (let ((cmd (car res))
                            (wrd (cdr res)))
                        (flyspell-do-correct
-                        cmd poss wrd cursor-location start end opoint)))))))
-          (ispell-pdict-save t)))))
+                        cmd poss wrd cursor-location start end opoint))))
+              (ispell-pdict-save t))))))))
 
 ;;; Previous word correction
 ;;
@@ -154,12 +154,15 @@ Uses `flyspell-correct-word-generic' function for correction."
               (setq position-at-incorrect-word (and (<= (overlay-start overlay) position)
                                                     (>= (overlay-end overlay) position)))
               (setq incorrect-word-pos (overlay-start overlay))
-              (setq overlay nil)))
 
-          (when incorrect-word-pos
-            (save-excursion
-              (goto-char incorrect-word-pos)
-              (flyspell-correct-word-generic))))))
+              ;; try to correct word
+              (save-excursion
+                (goto-char incorrect-word-pos)
+                ;; `flyspell-correct-word-generic' returns t when there is
+                ;; nothing to correct. In such case we just skip current word.
+                (unless (flyspell-correct-word-generic)
+                  (setq overlay nil))))))))
+
     (when position-at-incorrect-word
       (forward-word))))
 
@@ -197,12 +200,15 @@ Uses `flyspell-correct-word-generic' function for correction."
               (setq position-at-incorrect-word (and (<= (overlay-start overlay) position)
                                                     (>= (overlay-end overlay) position)))
               (setq incorrect-word-pos (overlay-start overlay))
-              (setq overlay nil)))
 
-          (when incorrect-word-pos
-            (save-excursion
-              (goto-char incorrect-word-pos)
-              (flyspell-correct-word-generic))))))
+              ;; try to correct word
+              (save-excursion
+                (goto-char incorrect-word-pos)
+                ;; `flyspell-correct-word-generic' returns t when there is
+                ;; nothing to correct. In such case we just skip current word.
+                (unless (flyspell-correct-word-generic)
+                  (setq overlay nil))))))))
+
     (when position-at-incorrect-word
       (forward-word))))
 
