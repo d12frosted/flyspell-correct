@@ -77,7 +77,7 @@ of (command, word) to be used by `flyspell-do-correct'."
 Adapted from `flyspell-correct-word-before-point'."
   (interactive)
   (unless flyspell-correct-interface
-    (error "Could not correct word because `flyspell-correct-interface' is not set."))
+    (error "Could not correct word because `flyspell-correct-interface' is not set"))
   ;; use the correct dictionary
   (flyspell-accept-buffer-local-defs)
   (let ((cursor-location (point))
@@ -128,8 +128,8 @@ Adapted from `flyspell-correct-word-before-point'."
 (defalias 'flyspell-correct-previous-word-generic 'flyspell-correct-previous)
 
 ;;;###autoload
-  "Correct the first misspelled word that occurs before point.
 (defun flyspell-correct-previous (position)
+  "Correct the first misspelled word that occurs before POSITION.
 But don't look beyond what's visible on the screen.
 
 Uses `flyspell-correct-at-point' function for correction."
@@ -176,8 +176,8 @@ Uses `flyspell-correct-at-point' function for correction."
 (defalias 'flyspell-correct-next-word-generic 'flyspell-correct-next)
 
 ;;;###autoload
-  "Correct the first misspelled word that occurs after point.
 (defun flyspell-correct-next (position)
+  "Correct the first misspelled word that occurs after POSITION.
 But don't look beyond what's visible on the screen.
 
 Uses `flyspell-correct-at-point' function for correction."
@@ -240,6 +240,7 @@ When set to nil `flyspell-correct-interface' is used.")
 (make-variable-buffer-local 'flyspell-correct--auto-active-p)
 
 (defun flyspell-correct-auto-cancel-timer ()
+  "Cancel auto correct timer."
   (when flyspell-correct--auto-timer
     (cancel-timer flyspell-correct--auto-timer)
     (setq flyspell-correct--auto-timer nil)))
