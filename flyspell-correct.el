@@ -106,6 +106,7 @@ Adapted from `flyspell-correct-word-before-point'."
           (cond
            ((or (eq poss t) (stringp poss))
             ;; don't correct word
+            (message "%s is correct" (funcall ispell-format-word-function word))
             t)
            ((null poss)
             ;; ispell error
