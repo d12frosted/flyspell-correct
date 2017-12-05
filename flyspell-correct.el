@@ -128,43 +128,12 @@ Adapted from `flyspell-correct-word-before-point'."
   "Correct the first misspelled word that occurs before point.
 But don't look beyond what's visible on the screen.
 
-Uses `flyspell-correct-word-generic' function for correction."
+Uses `flyspell-correct-word-generic' function for correction.
+
+With a prefix argument, automatically continues to all prior misspelled words in the buffer."
   (interactive "d")
-  (let ((top (window-start))
-        (bot (window-end))
-        (incorrect-word-pos)
-        (position-at-incorrect-word))
-    (save-excursion
-      (save-restriction
-        ;; make sure that word under point is checked first
-        (forward-word)
+  (flyspell-correct-move position nil current-prefix-arg))
 
-        ;; narrow the region
-        (narrow-to-region top bot)
-        (overlay-recenter (point))
-
-        (let ((overlay-list (overlays-in (point-min) (+ position 1)))
-              (overlay 'dummy-value))
-
-          (while overlay
-            (setq overlay (car-safe overlay-list))
-            (setq overlay-list (cdr-safe overlay-list))
-            (when (and overlay
-                       (flyspell-overlay-p overlay))
-              (setq position-at-incorrect-word (and (<= (overlay-start overlay) position)
-                                                    (>= (overlay-end overlay) position)))
-              (setq incorrect-word-pos (overlay-start overlay))
-
-              ;; try to correct word
-              (save-excursion
-                (goto-char incorrect-word-pos)
-                ;; `flyspell-correct-word-generic' returns t when there is
-                ;; nothing to correct. In such case we just skip current word.
-                (unless (flyspell-correct-word-generic)
-                  (setq overlay nil))))))))
-
-    (when position-at-incorrect-word
-      (forward-word))))
 
 ;;; Next word correction
 ;;
@@ -172,45 +141,72 @@ Uses `flyspell-correct-word-generic' function for correction."
 ;;;###autoload
 (defun flyspell-correct-next-word-generic (position)
   "Correct the first misspelled word that occurs after point.
-But don't look beyond what's visible on the screen.
 
-Uses `flyspell-correct-word-generic' function for correction."
+Uses `flyspell-correct-word-generic' function for correction.
+With a prefix argument, automatically continues to all further misspelled words in the buffer."
+
+  (interactive "d")
+  (flyspell-correct-move position t current-prefix-arg))
+
+
+;;;###autoload
+(defun flyspell-correct-move (position &optional forward rapid)
+  "Correct the first misspelled word that occurs before point.
+
+Uses `flyspell-correct-word-generic' function for correction.
+With FORWARD set non-nil, check forward instead of backward.
+Wirh RAPID set non-nil, automatically continues in direction until all errors in buffer have been addressed."
+
+;; BUG: In rapid mode, how can one decide not to correct a word, but
+;; proceed to the next error?
+
+;; NOTE: The way I may be pushing the mark may possibly be more
+;; idiomatically done using the opoint arg of
+;; `flyspell-correct-word-before-point'.
+
   (interactive "d")
   (let ((top (window-start))
         (bot (window-end))
         (incorrect-word-pos)
         (position-at-incorrect-word))
-    (save-excursion
-      (save-restriction
-        ;; make sure that word under point is checked first
-        (backward-word)
 
-        ;; narrow the region
-        (narrow-to-region top bot)
-        (overlay-recenter (point))
+    ;; make sure that word under point is checked first
+    (if forward (backward-word) (forward-word))
 
-        (let ((overlay-list (overlays-in position (point-max)))
-              (overlay 'dummy-value))
+    ;; narrow the region
+    (overlay-recenter (point))
 
-          (while overlay
-            (setq overlay (car-safe overlay-list))
-            (setq overlay-list (cdr-safe overlay-list))
-            (when (and overlay
-                       (flyspell-overlay-p overlay))
-              (setq position-at-incorrect-word (and (<= (overlay-start overlay) position)
-                                                    (>= (overlay-end overlay) position)))
-              (setq incorrect-word-pos (overlay-start overlay))
+    (let ((overlay-list
+            (if forward
+              (overlays-in position (point-max))
+             (overlays-in (point-min) (+ position 1))))
+          (overlay 'dummy-value))
+      (while overlay
+        (setq overlay (car-safe overlay-list))
+        (setq overlay-list (cdr-safe overlay-list))
+        (when (and overlay
+                   (flyspell-overlay-p overlay))
+          (setq position-at-incorrect-word
+                (and (<= (overlay-start overlay) position)
+                     (>= (overlay-end overlay) position)))
+          (setq incorrect-word-pos (overlay-start overlay))
+          (let ((scroll (> incorrect-word-pos (window-end))))
+            (goto-char incorrect-word-pos)
+            (when scroll (recenter)))
 
-              ;; try to correct word
-              (save-excursion
-                (goto-char incorrect-word-pos)
-                ;; `flyspell-correct-word-generic' returns t when there is
-                ;; nothing to correct. In such case we just skip current word.
-                (unless (flyspell-correct-word-generic)
-                  (setq overlay nil))))))))
+          ;; try to correct word
+          ;; `flyspell-correct-word-generic' returns t when
+          ;; there is nothing to correct. In such case we just
+          ;; skip current word.
+          (unless (flyspell-correct-word-generic)
+            (when (/= (mark) (point)) (push-mark (point) t))
+            (when (not rapid) (setq overlay nil))))))
 
-    (when position-at-incorrect-word
-      (forward-word))))
+    (when incorrect-word-pos
+      (goto-char incorrect-word-pos)
+      (forward-word)
+      (when (= (mark) (point)) (pop-mark)))))
+
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'
