@@ -56,6 +56,9 @@ misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
+(defvar  flyspell-direction t
+  "Used by function `flyspell-popup-wrapper' to determine and toggle direction of search, `t' being reverse and `nil' being forward, in order to retain backward compatability with the prior operation of `flyspell-correct'.")
+
 
 ;; Convenience wrapper function for most uses
 
@@ -74,11 +77,11 @@ C-u C-u C-u does both."
    ;   (setq current-prefix-arg '(4)))
     ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
        (setq current-prefix-arg nil)
-       (setq my-flyspell-direction (not my-flyspell-direction)))
+       (setq flyspell-direction (not flyspell-direction)))
     ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
       ;(setq current-prefix-arg '(4) is unnecessary
-       (setq my-flyspell-direction (not my-flyspell-direction))))
-  (if my-flyspell-direction
+       (setq flyspell-direction (not flyspell-direction))))
+  (if flyspell-direction
     (flyspell-correct-previous-word-generic (point))
    (flyspell-correct-next-word-generic (point))))
 
