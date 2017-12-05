@@ -56,6 +56,33 @@ misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
+
+;; Convenience wrapper function for most uses
+
+;;;###autoload
+(defun flyspell-popup-wrapper (arg)
+  "Search for the previous or next spelling error and suggest
+corrections via popup interface.
+
+C-u continues to check all errors in the current direction.
+C-u C-u changes direction.
+C-u C-u C-u does both."
+  (interactive "P")
+  (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
+  (cond
+   ;((equal current-prefix-arg '(4)) ; C-u = rapid
+   ;   (setq current-prefix-arg '(4)))
+    ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
+       (setq current-prefix-arg nil)
+       (setq my-flyspell-direction (not my-flyspell-direction)))
+    ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
+      ;(setq current-prefix-arg '(4) is unnecessary
+       (setq my-flyspell-direction (not my-flyspell-direction))))
+  (if my-flyspell-direction
+    (flyspell-correct-previous-word-generic (point))
+   (flyspell-correct-next-word-generic (point))))
+
+
 ;; Default interface
 
 (defun flyspell-correct-dummy (candidates word)
