@@ -9,7 +9,7 @@
 
 Correcting words with flyspell via custom interface.
 
-[[http://d12frosted.github.io/posts/flyspell-correct-intro.html][Read intro post]]
+[[https://d12frosted.io/posts/2016-05-09-flyspell-correct-intro.html][Read intro post]]
 
 This package provides functionality for correcting words via custom interfaces.
 There are two functions for this: =flyspell-correct-word-generic= to correct
