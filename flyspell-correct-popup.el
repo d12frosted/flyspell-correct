@@ -1,6 +1,6 @@
 ;;; flyspell-correct-popup.el --- correcting words with flyspell via popup interface
 ;;
-;; Copyright (c) 2016 Boris Buliga
+;; Copyright (c) 2016-2018 Boris Buliga
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct

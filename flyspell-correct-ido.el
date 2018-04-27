@@ -1,6 +1,6 @@
 ;;; flyspell-correct-ido.el --- correcting words with flyspell via ido interface
 ;;
-;; Copyright (c) 2016 Boris Buliga
+;; Copyright (c) 2016-2018 Boris Buliga
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
