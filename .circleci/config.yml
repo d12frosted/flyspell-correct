@@ -25,7 +25,7 @@ teststeps: &teststeps
           - CASK: /root/.cask/bin/cask.sh
         command: |
           set -v
-          cask exec ert-runner
+          $CASK exec ert-runner
 
     - store_test_results:
         path: ~/proj/test_results
