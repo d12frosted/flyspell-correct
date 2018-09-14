@@ -78,13 +78,6 @@ jobs:
       - EMACS: emacs
       - CASK_EMACS: emacs
     <<: *teststeps
-  emacs_24.3:
-    docker:
-      - image: olanilsson/emacs:24.3-ci
-    environment:
-      - EMACS: emacs
-      - CASK_EMACS: emacs
-    <<: *teststeps
 
 workflows:
   version: 2
@@ -96,4 +89,3 @@ workflows:
       - emacs_25.1
       - emacs_24.5
       - emacs_24.4
-      - emacs_24.3
