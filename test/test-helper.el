@@ -92,7 +92,6 @@ your programs, too." ,@body))
            (ispell-current-dictionary "english"))
        (flyspell-buffer)
        (sync-cursor)
-       (message "cursor location is %s" (point))
        (with-mock
          (mock (window-start) => (buffer-end 0))
          (mock (window-end) => (buffer-end 1))
