@@ -1,0 +1,51 @@
+---
+teststeps: &teststeps
+  working_directory: ~/proj
+  steps:
+    - checkout
+    - run: $EMACS --version | tee .emacsversion
+    - run:
+        name: Install cask
+        environment:
+          - CASKURL: https://raw.githubusercontent.com/snogge/cask/master/go.sh
+          - CASK: /root/.cask/bin/cask.sh
+        command: |
+          echo curl -fsSL $CASKURL
+          curl -fsSL $CASKURL | /bin/sh
+    - run:
+        name: Install Dependencies
+        environment:
+          - CASK: /root/.cask/bin/cask.sh
+        command: |
+          echo $CASK install
+          $CASK install
+    - run:
+        name: test
+        environment:
+          - CASK: /root/.cask/bin/cask.sh
+        command: |
+          set -v
+          cask exec ert-runner
+
+    - store_test_results:
+        path: ~/proj/test_results
+    - store_artifacts:
+        path: ~/proj/test_results
+    - store_artifacts:
+        path: ~/proj/.emacsversion
+
+version: 2
+jobs:
+  emacs_26.1:
+    docker:
+      - image: olanilsson/emacs:26.1-alpine-ci
+    environment:
+      - EMACS: emacs
+      - CASK_EMACS: emacs
+    <<: *teststeps
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - emacs_26.1
