@@ -89,7 +89,7 @@ Adapted from `flyspell-correct-word-before-point'."
               (word (car word))
               poss ispell-filter)
           ;; now check spelling of word.
-          (ispell-send-string "%\n")	;put in verbose mode
+          (ispell-send-string "%\n")    ;put in verbose mode
           (ispell-send-string (concat "^" word "\n"))
           ;; wait until ispell has processed word
           (while (progn
@@ -136,7 +136,7 @@ But don't look beyond what's visible on the screen.
 Uses `flyspell-correct-at-point' function for correction."
   (interactive "d")
   (let ((top (window-start))
-        (bot (window-end))
+        (bot (min (buffer-end 1) (window-end)))
         (incorrect-word-pos)
         (position-at-incorrect-word))
     (save-excursion
@@ -184,7 +184,7 @@ But don't look beyond what's visible on the screen.
 Uses `flyspell-correct-at-point' function for correction."
   (interactive "d")
   (let ((top (window-start))
-        (bot (window-end))
+        (bot (min (buffer-end 1) (window-end)))
         (incorrect-word-pos)
         (position-at-incorrect-word))
     (save-excursion
