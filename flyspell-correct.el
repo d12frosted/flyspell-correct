@@ -196,7 +196,7 @@ Uses `flyspell-correct-at-point' function for correction."
         (narrow-to-region top bot)
         (overlay-recenter (point))
 
-        (let ((overlay-list (overlays-in position (point-max)))
+        (let ((overlay-list (overlays-in (- position 1) (point-max)))
               (overlay 'dummy-value))
 
           (while overlay
