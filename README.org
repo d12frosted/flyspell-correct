@@ -93,6 +93,9 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 #+END_SRC
 
+There are some cool usability suggestions by @alphapapa shared in
+[[https://github.com/d12frosted/flyspell-correct/issues/30][d12frosted/flyspell-correct#30]] that you might want to use. Enjoy!
+
 * Custom interfaces
 
 One can easily implement custom interface for =flyspell-correct-word-generic= and
