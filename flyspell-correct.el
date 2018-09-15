@@ -184,7 +184,7 @@ But don't look beyond what's visible on the screen.
 Uses `flyspell-correct-at-point' function for correction."
   (interactive "d")
   (let ((top (window-start))
-        (bot (min (buffer-end 1) (window-end)))
+        (bot (window-end))
         (incorrect-word-pos)
         (position-at-incorrect-word))
     (save-excursion
