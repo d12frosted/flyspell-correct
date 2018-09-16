@@ -127,8 +127,9 @@ Adapted from `flyspell-correct-word-before-point'."
                     (t
                      (let ((cmd (car res))
                            (wrd (cdr res)))
-                       (flyspell-do-correct
-                        cmd poss wrd cursor-location start end opoint))))
+                       (unless (eq cmd 'skip)
+                         (flyspell-do-correct
+                          cmd poss wrd cursor-location start end opoint)))))
               (ispell-pdict-save t))))))))
 
 ;;; Previous word correction
@@ -199,14 +200,9 @@ With FORWARD set non-nil, check forward instead of backward.
 
 With RAPID set non-nil, automatically continues in direction
 until all errors in buffer have been addressed."
-
-  ;; BUG: In rapid mode, how can one decide not to correct a word, but
-  ;; proceed to the next error?
-
   ;; NOTE: The way I may be pushing the mark may possibly be more
   ;; idiomatically done using the opoint arg of
   ;; `flyspell-correct-word-before-point'.
-
   (interactive "d")
   (let ((top (window-start))
         (bot (window-end))

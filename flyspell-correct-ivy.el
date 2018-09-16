@@ -39,11 +39,13 @@ of (command, word) to be used by `flyspell-do-correct'."
          (action-save-word (lambda (_) (setq result (cons 'save word))))
          (action-accept-session (lambda (_) (setq result (cons 'session word))))
          (action-accept-buffer (lambda (_) (setq result (cons 'buffer word))))
+         (action-skip-word (lambda (_) (setq result (cons 'skip word))))
          (action `(1
                    ("o" ,action-default "correct")
                    ("s" ,action-save-word "Save")
                    ("S" ,action-accept-session "Accept (session)")
-                   ("b" ,action-accept-buffer "Accept (buffer)"))))
+                   ("b" ,action-accept-buffer "Accept (buffer)")
+                   ("k" ,action-skip-word "Skip"))))
     (ivy-read (format "Suggestions for \"%s\" in dictionary \"%s\": "
                       word (or ispell-local-dictionary
                                ispell-dictionary
