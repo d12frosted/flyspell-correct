@@ -62,35 +62,8 @@ toggle direction of search, `t' being reverse and `nil' being
 forward, in order to retain backward compatability with the prior
 operation of `flyspell-correct'.")
 
-;; Convenience wrapper function for most uses
-
-;;;###autoload
-(defun flyspell-popup-wrapper (arg)
-  "Search for the previous or next spelling error and suggest
-corrections via popup interface.
-
-C-u continues to check all errors in the current direction.
-
-C-u C-u changes direction.
-
-C-u C-u C-u does both."
-  (interactive "P")
-  (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
-  (cond
-   ;; ((equal current-prefix-arg '(4)) ; C-u = rapid
-   ;;    (setq current-prefix-arg '(4)))
-   ((equal current-prefix-arg '(16))    ; C-u C-u = change direction
-    (setq current-prefix-arg nil)
-    (setq flyspell-direction (not flyspell-direction)))
-   ((equal current-prefix-arg '(64))    ; C-u C-u C-u = do both
-    ;; (setq current-prefix-arg '(4) is unnecessary
-    (setq flyspell-direction (not flyspell-direction))))
-  (if flyspell-direction
-      (flyspell-correct-previous-word-generic (point))
-    (flyspell-correct-next-word-generic (point))))
-
-
-;; Default interface
+;;; Default interface
+;;
 
 (defun flyspell-correct-dummy (candidates word)
   "Run `completing-read' for the given CANDIDATES.
@@ -101,7 +74,8 @@ Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (completing-read (format "Correcting '%s': " word) candidates))
 
-;; On point word correction
+;;; On point word correction
+;;
 
 (defalias 'flyspell-correct-at-point 'flyspell-correct-word-generic)
 
@@ -173,7 +147,6 @@ With a prefix argument, automatically continues to all prior misspelled words in
   (interactive "d")
   (flyspell-correct-move position nil current-prefix-arg))
 
-
 ;;; Next word correction
 ;;
 
@@ -185,10 +158,36 @@ With a prefix argument, automatically continues to all prior misspelled words in
 
 Uses `flyspell-correct-word-generic' function for correction.
 With a prefix argument, automatically continues to all further misspelled words in the buffer."
-
   (interactive "d")
   (flyspell-correct-move position t current-prefix-arg))
 
+;;; Generic helpers
+;;
+
+;;;###autoload
+(defun flyspell-correct-wrapper (arg)
+  "Search for the previous or next spelling error and suggest
+corrections via `flyspell-correct-interface'.
+
+C-u continues to check all errors in the current direction.
+
+C-u C-u changes direction.
+
+C-u C-u C-u does both."
+  (interactive "P")
+  (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
+  (cond
+   ;; ((equal current-prefix-arg '(4)) ; C-u = rapid
+   ;;    (setq current-prefix-arg '(4)))
+   ((equal current-prefix-arg '(16))    ; C-u C-u = change direction
+    (setq current-prefix-arg nil)
+    (setq flyspell-direction (not flyspell-direction)))
+   ((equal current-prefix-arg '(64))    ; C-u C-u C-u = do both
+    ;; (setq current-prefix-arg '(4) is unnecessary
+    (setq flyspell-direction (not flyspell-direction))))
+  (if flyspell-direction
+      (flyspell-correct-previous (point))
+    (flyspell-correct-next (point))))
 
 ;;;###autoload
 (defun flyspell-correct-move (position &optional forward rapid)
@@ -255,7 +254,7 @@ until all errors in buffer have been addressed."
 ;; based on `flyspell-popup-auto-correct-mode'
 
 (defcustom flyspell-correct-auto-delay 1.6
-  "Delay in seconds before `flyspell-correct-previous-word-generic' is called.
+  "Delay in seconds before `flyspell-correct-previous' is called.
 Use floating point numbers to express fractions of seconds."
   :group 'flyspell
   :type 'number
@@ -266,7 +265,7 @@ Use floating point numbers to express fractions of seconds."
 When set to nil `flyspell-correct-interface' is used.")
 
 (defvar flyspell-correct--auto-timer nil
-  "Timer to automatically call `flyspell-correct-previous-word-generic'.")
+  "Timer to automatically call `flyspell-correct-previous'.")
 (make-variable-buffer-local 'flyspell-correct--auto-timer)
 
 (defvar flyspell-correct--auto-active-p nil)
@@ -279,7 +278,7 @@ When set to nil `flyspell-correct-interface' is used.")
     (setq flyspell-correct--auto-timer nil)))
 
 (defun flyspell-correct-auto-soon ()
-  "Call `flyspell-correct-previous-word-generic' delayed."
+  "Call `flyspell-correct-previous' delayed."
   (flyspell-correct-auto-cancel-timer)
   (when (and flyspell-mode
              (not (bound-and-true-p flyspell-correct--auto-active-p)))
@@ -298,7 +297,7 @@ When set to nil `flyspell-correct-interface' is used.")
                    (if (bound-and-true-p flyspell-correct-auto-mode-interface)
                        flyspell-correct-auto-mode-interface
                      flyspell-correct-interface)))
-              (call-interactively #'flyspell-correct-previous-word-generic)))
+              (call-interactively #'flyspell-correct-previous)))
           (setq flyspell-correct--auto-active-p nil)))))))
 
 ;;;###autoload
@@ -306,9 +305,9 @@ When set to nil `flyspell-correct-interface' is used.")
   "Minor mode for automatically correcting word at point.
 
 Take my advice and don't use this functionality unless you find
-`flyspell-correct-previous-word-generic' function useless for
-your purposes. Seriously, just try named function for completion.
-You can find more info in comment[1].
+`flyspell-correct-previous' function useless for your purposes.
+Seriously, just try named function for completion. You can find
+more info in comment[1].
 
 [1]:
 https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-274320376"
