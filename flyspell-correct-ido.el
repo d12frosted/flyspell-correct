@@ -40,10 +40,11 @@ of (command, word) to be used by `flyspell-do-correct'."
   (let* ((save "[SAVE]")
          (accept-session "[ACCEPT (session)]")
          (accept-buffer "[ACCEPT (buffer)]")
+         (skip "[SKIP]")
          (result (ido-completing-read
                   (format "Correcting '%s': " word)
                   (append candidates
-                          (list save accept-session accept-buffer)))))
+                          (list save accept-session accept-buffer skip)))))
     (cond
      ((string= result save)
       (cons 'save word))
@@ -51,6 +52,8 @@ of (command, word) to be used by `flyspell-do-correct'."
       (cons 'session word))
      ((string= result accept-buffer)
       (cons 'buffer word))
+     ((string= result skip)
+      (cons 'skip word))
      (t
       result))))
 

@@ -43,7 +43,9 @@ of (command, word) to be used by `flyspell-do-correct'."
      (popup-make-item (format "Accept (session) \"%s\"" word)
                       :value (cons 'session word))
      (popup-make-item (format "Accept (buffer) \"%s\"" word)
-                      :value (cons 'buffer word))))
+                      :value (cons 'buffer word))
+     (popup-make-item (format "Skip \"%s\"" word)
+                      :value (cons 'skip word))))
    :margin t))
 
 (setq flyspell-correct-interface #'flyspell-correct-popup)

@@ -38,7 +38,9 @@
                     (cons (format "Accept (session) \"%s\"" word)
                           (cons 'session word))
                     (cons (format "Accept (buffer) \"%s\"" word)
-                          (cons 'buffer word)))))
+                          (cons 'buffer word))
+                    (cons (format "Skip \"%s\"" word)
+                          (cons 'skip word)))))
     (unless (string= helm-pattern "")
       (setq opts
             (append opts
