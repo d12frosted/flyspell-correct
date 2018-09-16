@@ -57,8 +57,10 @@ or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
 (defvar  flyspell-direction t
-  "Used by function `flyspell-popup-wrapper' to determine and toggle direction of search, `t' being reverse and `nil' being forward, in order to retain backward compatability with the prior operation of `flyspell-correct'.")
-
+  "Used by function `flyspell-popup-wrapper' to determine and
+toggle direction of search, `t' being reverse and `nil' being
+forward, in order to retain backward compatability with the prior
+operation of `flyspell-correct'.")
 
 ;; Convenience wrapper function for most uses
 
@@ -68,22 +70,24 @@ or (command, word) tuple that will be passed to
 corrections via popup interface.
 
 C-u continues to check all errors in the current direction.
+
 C-u C-u changes direction.
+
 C-u C-u C-u does both."
   (interactive "P")
   (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
   (cond
-   ;((equal current-prefix-arg '(4)) ; C-u = rapid
-   ;   (setq current-prefix-arg '(4)))
-    ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
-       (setq current-prefix-arg nil)
-       (setq flyspell-direction (not flyspell-direction)))
-    ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
-      ;(setq current-prefix-arg '(4) is unnecessary
-       (setq flyspell-direction (not flyspell-direction))))
+   ;; ((equal current-prefix-arg '(4)) ; C-u = rapid
+   ;;    (setq current-prefix-arg '(4)))
+   ((equal current-prefix-arg '(16))    ; C-u C-u = change direction
+    (setq current-prefix-arg nil)
+    (setq flyspell-direction (not flyspell-direction)))
+   ((equal current-prefix-arg '(64))    ; C-u C-u C-u = do both
+    ;; (setq current-prefix-arg '(4) is unnecessary
+    (setq flyspell-direction (not flyspell-direction))))
   (if flyspell-direction
-    (flyspell-correct-previous-word-generic (point))
-   (flyspell-correct-next-word-generic (point))))
+      (flyspell-correct-previous-word-generic (point))
+    (flyspell-correct-next-word-generic (point))))
 
 
 ;; Default interface
@@ -99,10 +103,10 @@ of (command, word) to be used by `flyspell-do-correct'."
 
 ;; On point word correction
 
-(defalias 'flyspell-correct-word-generic 'flyspell-correct-at-point)
+(defalias 'flyspell-correct-at-point 'flyspell-correct-word-generic)
 
 ;;;###autoload
-(defun flyspell-correct-at-point ()
+(defun flyspell-correct-word-generic ()
   "Correct word before point using `flyspell-correct-interface'.
 Adapted from `flyspell-correct-word-before-point'."
   (interactive)
@@ -176,7 +180,7 @@ With a prefix argument, automatically continues to all prior misspelled words in
 (defalias 'flyspell-correct-next-word-generic 'flyspell-correct-next)
 
 ;;;###autoload
-(defun flyspell-correct-next-word-generic (position)
+(defun flyspell-correct-next (position)
   "Correct the first misspelled word that occurs after point.
 
 Uses `flyspell-correct-word-generic' function for correction.
@@ -191,15 +195,18 @@ With a prefix argument, automatically continues to all further misspelled words 
   "Correct the first misspelled word that occurs before point.
 
 Uses `flyspell-correct-word-generic' function for correction.
+
 With FORWARD set non-nil, check forward instead of backward.
-Wirh RAPID set non-nil, automatically continues in direction until all errors in buffer have been addressed."
 
-;; BUG: In rapid mode, how can one decide not to correct a word, but
-;; proceed to the next error?
+With RAPID set non-nil, automatically continues in direction
+until all errors in buffer have been addressed."
 
-;; NOTE: The way I may be pushing the mark may possibly be more
-;; idiomatically done using the opoint arg of
-;; `flyspell-correct-word-before-point'.
+  ;; BUG: In rapid mode, how can one decide not to correct a word, but
+  ;; proceed to the next error?
+
+  ;; NOTE: The way I may be pushing the mark may possibly be more
+  ;; idiomatically done using the opoint arg of
+  ;; `flyspell-correct-word-before-point'.
 
   (interactive "d")
   (let ((top (window-start))
@@ -214,8 +221,8 @@ Wirh RAPID set non-nil, automatically continues in direction until all errors in
     (overlay-recenter (point))
 
     (let ((overlay-list
-            (if forward
-              (overlays-in position (point-max))
+           (if forward
+               (overlays-in (- position 1) (point-max))
              (overlays-in (point-min) (+ position 1))))
           (overlay 'dummy-value))
       (while overlay
@@ -231,10 +238,9 @@ Wirh RAPID set non-nil, automatically continues in direction until all errors in
             (goto-char incorrect-word-pos)
             (when scroll (recenter)))
 
-          ;; try to correct word
-          ;; `flyspell-correct-word-generic' returns t when
-          ;; there is nothing to correct. In such case we just
-          ;; skip current word.
+          ;; try to correct word `flyspell-correct-word-generic' returns t when
+          ;; there is nothing to correct. In such case we just skip current
+          ;; word.
           (unless (flyspell-correct-word-generic)
             (when (/= (mark) (point)) (push-mark (point) t))
             (when (not rapid) (setq overlay nil))))))
