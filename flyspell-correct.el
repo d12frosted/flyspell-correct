@@ -13,16 +13,25 @@
 ;;; Commentary:
 ;;
 ;; This package provides functionality for correcting words via custom
-;; interfaces. There are two functions for this: `flyspell-correct-at-point'
-;; to correct word at point and `flyspell-correct-previous-word-generic' to
-;; correct any visible word before point. In most cases second function is more
-;; convenient, so don't forget to bind it.
+;; interfaces. There are several functions for this:
 ;;
-;;   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+;; - `flyspell-correct-at-point' - to correct word at point.
+;; - `flyspell-correct-previous' to correct any visible word before the point.
+;; - `flyspell-correct-next' to correct any visible word after the point.
+;; - `flyspell-correct-wrapper' - a beefed wrapper for
+;;   `flyspell-correct-previous' and `flyspell-correct-next' allowing one to
+;;   correct many words at once (rapid flow) and change correction direction.
+;;
+;; In most cases the last function is the most convenient, so don't forget to
+;; bind it.
+;;
+;;   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 ;;
 ;; When invoked, it will show the list of corrections suggested by Flyspell.
-;; Most interfaces also allow you to save new word to your dictionary, accept
-;; this spelling in current buffer or for a whole session.
+;;
+;; Most interfaces also allow you to save the new word to your dictionary,
+;; accept this spelling in current buffer or for a whole session, or even skip
+;; this word (useful in a rapid flow).
 ;;
 ;; Default interface is implemented using `completing-read', but it's highly
 ;; advised to use `flyspell-correct-ido' (which comes bundled with this package)
@@ -77,10 +86,10 @@ of (command, word) to be used by `flyspell-do-correct'."
 ;;; On point word correction
 ;;
 
-(defalias 'flyspell-correct-at-point 'flyspell-correct-word-generic)
+(defalias 'flyspell-correct-word-generic 'flyspell-correct-at-point)
 
 ;;;###autoload
-(defun flyspell-correct-word-generic ()
+(defun flyspell-correct-at-point ()
   "Correct word before point using `flyspell-correct-interface'.
 Adapted from `flyspell-correct-word-before-point'."
   (interactive)
@@ -142,7 +151,7 @@ Adapted from `flyspell-correct-word-before-point'."
   "Correct the first misspelled word that occurs before POSITION.
 But don't look beyond what's visible on the screen.
 
-Uses `flyspell-correct-word-generic' function for correction.
+Uses `flyspell-correct-at-point' function for correction.
 
 With a prefix argument, automatically continues to all prior misspelled words in the buffer."
   (interactive "d")
@@ -157,7 +166,7 @@ With a prefix argument, automatically continues to all prior misspelled words in
 (defun flyspell-correct-next (position)
   "Correct the first misspelled word that occurs after point.
 
-Uses `flyspell-correct-word-generic' function for correction.
+Uses `flyspell-correct-at-point' function for correction.
 With a prefix argument, automatically continues to all further misspelled words in the buffer."
   (interactive "d")
   (flyspell-correct-move position t current-prefix-arg))
@@ -174,7 +183,8 @@ C-u continues to check all errors in the current direction.
 
 C-u C-u changes direction.
 
-C-u C-u C-u does both."
+C-u C-u C-u changes direction and continues to check all errors
+in the current direction."
   (interactive "P")
   (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
   (cond
@@ -194,7 +204,7 @@ C-u C-u C-u does both."
 (defun flyspell-correct-move (position &optional forward rapid)
   "Correct the first misspelled word that occurs before point.
 
-Uses `flyspell-correct-word-generic' function for correction.
+Uses `flyspell-correct-at-point' function for correction.
 
 With FORWARD set non-nil, check forward instead of backward.
 
@@ -233,10 +243,10 @@ until all errors in buffer have been addressed."
             (goto-char incorrect-word-pos)
             (when scroll (recenter)))
 
-          ;; try to correct word `flyspell-correct-word-generic' returns t when
+          ;; try to correct word `flyspell-correct-at-point' returns t when
           ;; there is nothing to correct. In such case we just skip current
           ;; word.
-          (unless (flyspell-correct-word-generic)
+          (unless (flyspell-correct-at-point)
             (when (/= (mark) (point)) (push-mark (point) t))
             (when (not rapid) (setq overlay nil))))))
 

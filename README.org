@@ -12,23 +12,31 @@ Correcting words with flyspell via custom interface.
 [[https://d12frosted.io/posts/2016-05-09-flyspell-correct-intro.html][Read intro post]]
 
 This package provides functionality for correcting words via custom interfaces.
-There are two functions for this: =flyspell-correct-word-generic= to correct
-word at point, =flyspell-correct-previous-word-generic= to correct any visible
-word before point and =flyspell-correct-next-word-generic= to correct any
-visible word after point. In most cases second function is more convenient (at
-least in my opinion), so don't forget to bind it.
+There are several functions for this:
+
+- =flyspell-correct-at-point= - to correct word at point.
+- =flyspell-correct-previous= to correct any visible word before the point.
+- =flyspell-correct-next= to correct any visible word after the point.
+- =flyspell-correct-wrapper= - a beefed wrapper for =flyspell-correct-previous=
+  and =flyspell-correct-next= allowing one to correct many words at once (rapid
+  flow) and change correction direction.
+
+In most cases the last function is the most convenient, so don't forget to bind
+it.
 
 #+BEGIN_SRC emacs-lisp
-(define-key flyspell-mode-map (kbd "C-;") #'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") #'flyspell-correct-wrapper)
 #+END_SRC
 
-When invoked, it will show the list of corrections suggested by Flyspell. Most
-interfaces also allow you to save new word to your dictionary, accept this
-spelling in current buffer or for a whole session.
+When invoked, it will show the list of corrections suggested by Flyspell.
+
+Most interfaces also allow you to save the new word to your dictionary, accept
+this spelling in current buffer or for a whole session, or even skip this word
+(useful in a rapid flow).
 
 Default interface is implemented using =completing-read=, but it's highly
 advised to use =flyspell-correct-ido= (which comes bundled with this package) or
-any interface provided by following packages: =flyspell-correct-ivy=,
+any other interface provided by the following packages: =flyspell-correct-ivy=,
 =flyspell-correct-helm= and =flyspell-correct-popup=.
 
 ** Using =flyspell-correct-dummy= interface
@@ -39,11 +47,10 @@ to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
-This is the only bundled interface that does not allow to save or accept current
-spelling.
+This interface does not allow to save or accept current spelling.
 
 ** Using =flyspell-correct-ido= interface
 
@@ -53,7 +60,7 @@ to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-ido)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
 ** Using =flyspell-correct-ivy= interface
@@ -64,12 +71,11 @@ to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-ivy)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
-Note that in order to access save actions in =ivy= interface you need to press
-~M-o~. More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official
-documentation]].
+Note that in order to access actions in =ivy= interface you need to press ~M-o~.
+More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official documentation]].
 
 ** Using =flyspell-correct-helm= interface
 
@@ -79,7 +85,7 @@ to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-helm)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
 ** Using =flyspell-correct-popup= interface
@@ -90,7 +96,7 @@ to relevant part of your =init.el= file.
 
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-popup)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
 There are some cool usability suggestions by @alphapapa shared in
@@ -98,18 +104,23 @@ There are some cool usability suggestions by @alphapapa shared in
 
 * Custom interfaces
 
-One can easily implement custom interface for =flyspell-correct-word-generic= and
-=flyspell-correct-previous-word-generic=. It has to be function that takes two
+One can easily implement custom interface for =flyspell-correct-at-point= (which
+is used by other correct functions). It has to be function that takes two
 arguments - candidates and misspelled word. It has to return either replacement
-word or ~(command, word)~ tuple that will be passed to =flyspell-do-correct=. Check
-=flyspell-correct-popup= for example of interface that uses this feature.
+word or ~(command, word)~ tuple, where ~command~ can be one of the following:
+
+- ~skip~ - meaning that no action is required for current misspelled ~word~;
+- ~save~ - meaning that the ~word~ must be saved in a dictionary;
+- ~session~ - meaning that the ~word~ must be saved for current session;
+- ~buffer~ - meaning that the ~word~ must be saved for current buffer.
+
+Check =flyspell-correct-popup= for example of interface that uses this feature.
 
 * Auto correction mode
 
 /Take my advice and don't use this functionality unless you find
-=flyspell-correct-previous-word-generic= function useless for your purposes.
-Seriously, just try named function for completion. You can find more info in
-[[https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-274320376][this comment]]./
+=flyspell-correct-wrapper= function useless for your purposes. Seriously, just
+try named function for completion. You can find more info in [[https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-274320376][this comment]]./
 
 This package also provides auto correction minor mode called
 =flyspell-correct-auto-mode=. When enabled it will automatically invoke
@@ -126,16 +137,16 @@ setting value of =flyspell-correct-auto-mode-interface=.
 
 * Reasoning
 
-There are already packages like =helm-flyspell= and =flyspell-popup=. So why would
-anyone create yet another similar package? The reason is simple - to support
-another interface or completion system. =flyspell-correct= started because =ivy= was
-missing similar to =helm-flyspell= package. But I didn't want to create a package
-just for =ivy=. The reasoning is simple - all those packages should have similar
-functionality but different interface. Adding something new to one if these
-packages ideally should be reflected in all others. So I decided to create
-generic package that works with any interfaces. It's not about one package
-containing all possible interfaces, but about package that gives you
-functionality with interface of your choice.
+There are already packages like =helm-flyspell= and =flyspell-popup=. So why
+would anyone create yet another similar package? The reason is simple - to
+support another interface or completion system. =flyspell-correct= started
+because =ivy= was missing similar to =helm-flyspell= package. But I didn't want
+to create a package just for =ivy=. The reasoning is simple - all those packages
+should have similar functionality but different interface. Adding something new
+to one of these packages ideally should be reflected in all others. So I decided
+to create generic package that works with any interfaces. It's not about one
+package containing all possible interfaces, but about a package giving you
+functionality with an interface of your choice.
 
 * Screenshots
 
@@ -160,6 +171,7 @@ This package is available thanks to these people:
 
 Additional thanks to all contributors:
 
+- [[https://github.com/Boruch-Baum][Boruch Baum]]
 - [[https://github.com/mrBliss][mrBliss]]
 - [[https://github.com/syohex][Syohei YOSHIDA]]
 - [[https://github.com/vermiculus][Sean Allred]]
