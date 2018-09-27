@@ -161,6 +161,9 @@ functionality with an interface of your choice.
 ** Helm interface
  [[file:images/screenshot-helm.png]]
 
+** Ido interface
+ [[file:images/screenshot-ido.png]]
+
 * Acknowledgements
 
 This package is available thanks to these people:
