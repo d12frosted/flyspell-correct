@@ -39,6 +39,17 @@ advised to use =flyspell-correct-ido= (which comes bundled with this package) or
 any other interface provided by the following packages: =flyspell-correct-ivy=,
 =flyspell-correct-helm= and =flyspell-correct-popup=.
 
+** Deprecations in =v0.5=
+
+Unfortunately, following functions are renamed and their original name is being
+deprecated and will be removed in the future (summer 2019).
+
+- =flyspell-correct-next-word-generic= -> =flyspell-correct-next=
+- =flyspell-correct-previous-word-generic= -> =flyspell-correct-previous=
+- =flyspell-correct-word-generic= -> =flyspell-correct-at-point=
+
+Please make sure to update to new names.
+
 ** Using =flyspell-correct-dummy= interface
 
 In order to use =flyspell-correct-dummy= interface you have to install
