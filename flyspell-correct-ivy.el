@@ -64,4 +64,4 @@ of (command, word) to be used by `flyspell-do-correct'."
 
 (provide 'flyspell-correct-ivy)
 
-;;; flyspell-correct-helm.el ends here
+;;; flyspell-correct-ivy.el ends here
