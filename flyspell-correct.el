@@ -214,47 +214,47 @@ until all errors in buffer have been addressed."
   ;; idiomatically done using the opoint arg of
   ;; `flyspell-correct-word-before-point'.
   (interactive "d")
-  (let ((top (window-start))
-        (bot (window-end))
-        (incorrect-word-pos)
-        (position-at-incorrect-word))
+  (save-excursion
+    (let ((top (window-start))
+          (bot (window-end))
+          (incorrect-word-pos)
+          (position-at-incorrect-word))
 
-    ;; make sure that word under point is checked first
-    (if forward (backward-word) (forward-word))
+      ;; make sure that word under point is checked first
+      (if forward (backward-word) (forward-word))
 
-    ;; narrow the region
-    (overlay-recenter (point))
+      ;; narrow the region
+      (overlay-recenter (point))
 
-    (let ((overlay-list
-           (if forward
-               (overlays-in (- position 1) (point-max))
-             (overlays-in (point-min) (+ position 1))))
-          (overlay 'dummy-value))
-      (while overlay
-        (setq overlay (car-safe overlay-list))
-        (setq overlay-list (cdr-safe overlay-list))
-        (when (and overlay
-                   (flyspell-overlay-p overlay))
-          (setq position-at-incorrect-word
-                (and (<= (overlay-start overlay) position)
-                     (>= (overlay-end overlay) position)))
-          (setq incorrect-word-pos (overlay-start overlay))
-          (let ((scroll (> incorrect-word-pos (window-end))))
-            (goto-char incorrect-word-pos)
-            (when scroll (recenter)))
+      (let ((overlay-list
+             (if forward
+                 (overlays-in (- position 1) (point-max))
+               (overlays-in (point-min) (+ position 1))))
+            (overlay 'dummy-value))
+        (while overlay
+          (setq overlay (car-safe overlay-list))
+          (setq overlay-list (cdr-safe overlay-list))
+          (when (and overlay
+                     (flyspell-overlay-p overlay))
+            (setq position-at-incorrect-word
+                  (and (<= (overlay-start overlay) position)
+                       (>= (overlay-end overlay) position)))
+            (setq incorrect-word-pos (overlay-start overlay))
+            (let ((scroll (> incorrect-word-pos (window-end))))
+              (goto-char incorrect-word-pos)
+              (when scroll (recenter)))
 
-          ;; try to correct word `flyspell-correct-at-point' returns t when
-          ;; there is nothing to correct. In such case we just skip current
-          ;; word.
-          (unless (flyspell-correct-at-point)
-            (when (/= (mark) (point)) (push-mark (point) t))
-            (when (not rapid) (setq overlay nil))))))
+            ;; try to correct word `flyspell-correct-at-point' returns t when
+            ;; there is nothing to correct. In such case we just skip current
+            ;; word.
+            (unless (flyspell-correct-at-point)
+              (when (/= (mark) (point)) (push-mark (point) t))
+              (when (not rapid) (setq overlay nil))))))
 
-    (when incorrect-word-pos
-      (goto-char incorrect-word-pos)
-      (forward-word)
-      (when (= (mark) (point)) (pop-mark)))))
-
+      (when incorrect-word-pos
+        (goto-char incorrect-word-pos)
+        (forward-word)
+        (when (= (mark) (point)) (pop-mark))))))
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'

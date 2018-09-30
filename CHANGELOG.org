@@ -1,4 +1,5 @@
 * next-version
+- Do not move point by correction functions.
 
 * v0.5
 - Skip words that don't need to be fixed (e. g. duplicates).
