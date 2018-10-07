@@ -65,8 +65,8 @@ misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
-  "Used by function `flyspell-popup-wrapper' to determine and
 (defvar  flyspell-correct--direction t
+  "Used by function `flyspell-correct-wrapper' to determine and
 toggle direction of search, `t' being reverse and `nil' being
 forward, in order to retain backward compatability with the prior
 operation of `flyspell-correct'.")
