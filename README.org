@@ -1,6 +1,6 @@
 * flyspell-correct
 
-[[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]] [[CircleCI][file:https://circleci.com/gh/d12frosted/flyspell-correct.svg?style=svg]]
+l[[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]] [[CircleCI][file:https://circleci.com/gh/d12frosted/flyspell-correct.svg?style=svg]]
 
 | =flyspell-correct=       | [[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]       | [[https://stable.melpa.org/#/flyspell-correct][file:https://stable.melpa.org/packages/flyspell-correct-badge.svg]]       |
 | =flyspell-correct-ivy=   | [[http://melpa.org/#/flyspell-correct-ivy][file:http://melpa.org/packages/flyspell-correct-ivy-badge.svg]]   | [[https://stable.melpa.org/#/flyspell-correct-ivy][file:https://stable.melpa.org/packages/flyspell-correct-ivy-badge.svg]]   |
@@ -14,12 +14,12 @@ Correcting words with flyspell via custom interface.
 This package provides functionality for correcting words via custom interfaces.
 There are several functions for this:
 
+- =flyspell-correct-wrapper= - a beefed wrapper for =flyspell-correct-previous=
+  and =flyspell-correct-next= allowing one to correct many words at once ([[#rapid-mode][rapid
+  mode]]) and change correction direction.
 - =flyspell-correct-at-point= - to correct word at point.
 - =flyspell-correct-previous= to correct any visible word before the point.
 - =flyspell-correct-next= to correct any visible word after the point.
-- =flyspell-correct-wrapper= - a beefed wrapper for =flyspell-correct-previous=
-  and =flyspell-correct-next= allowing one to correct many words at once (rapid
-  flow) and change correction direction.
 
 In most cases the last function is the most convenient, so don't forget to bind
 it.
@@ -38,6 +38,16 @@ Default interface is implemented using =completing-read=, but it's highly
 advised to use =flyspell-correct-ido= (which comes bundled with this package) or
 any other interface provided by the following packages: =flyspell-correct-ivy=,
 =flyspell-correct-helm= and =flyspell-correct-popup=.
+
+** Rapid mode
+:PROPERTIES:
+:ID:                     25719606-9996-4056-9049-18F73A609FF6
+:END:
+
+Rapid mode means that you can correct many words in a single invocation of
+=flyspell-correct-wrapper= following current direction (usually, backwards). In
+order to enable it, one should call =flyspell-correct-wrapper= with universal
+argument - =C-u=. For example, =C-u C-;= will do it.
 
 ** Deprecations in =v0.5=
 
