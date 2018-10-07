@@ -126,14 +126,14 @@ There are some cool usability suggestions by @alphapapa shared in
 * Custom interfaces
 
 One can easily implement custom interface for =flyspell-correct-at-point= (which
-is used by other correct functions). It has to be function that takes two
-arguments - candidates and misspelled word. It has to return either replacement
+is used by other correct functions). It has to be a function that takes two
+arguments - candidates and incorrect word. It has to return either replacement
 word or ~(command, word)~ tuple, where ~command~ can be one of the following:
 
-- ~skip~ - meaning that no action is required for current misspelled ~word~;
+- ~skip~ - meaning that no action is required for current incorrect ~word~;
 - ~save~ - meaning that the ~word~ must be saved in a dictionary;
-- ~session~ - meaning that the ~word~ must be saved for current session;
-- ~buffer~ - meaning that the ~word~ must be saved for current buffer.
+- ~session~ - meaning that the ~word~ must be saved for the current session;
+- ~buffer~ - meaning that the ~word~ must be saved for the current buffer.
 
 Check =flyspell-correct-popup= for example of interface that uses this feature.
 
@@ -146,7 +146,7 @@ try named function for completion. You can find more info in [[https://github.co
 This package also provides auto correction minor mode called
 =flyspell-correct-auto-mode=. When enabled it will automatically invoke
 =flyspell-correct-previous-word-generic= after certain delay configured by
-=flyspell-correct-auto-delay= when there is at least one misspelled word.
+=flyspell-correct-auto-delay= when there is at least one incorrect word.
 
 #+BEGIN_SRC
 (add-hook 'flyspell-mode-hook #'flyspell-correct-auto-mode)

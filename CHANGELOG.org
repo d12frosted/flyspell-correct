@@ -2,7 +2,7 @@
 - Do not move point by correction functions.
 
 * v0.5
-- Skip words that don't need to be fixed (e. g. duplicates).
+- Skip words that don't need to be fixed (e.g. duplicates).
 - Rename several functions (via name deprecation)
   - =flyspell-correct-next-word-generic= -> =flyspell-correct-next=
   - =flyspell-correct-previous-word-generic= -> =flyspell-correct-previous=
@@ -10,7 +10,7 @@
 - Create a wrapper function for most of the cases, namely
   =flyspell-correct-wrapper=.
 - Implement a 'rapid mode' for =flyspell-correct-wrapper=, allowing user to fix
-  multiple words in one run (=skip= action can be used to skip current dispelled
+  multiple words in one run (=skip= action can be used to skip current incorrect
   word and continue to the next one).
 - Add some simple tests to cover the most important use cases.
 - Fix issue when =flyspell-correct-next= doesn't correct word at point.
