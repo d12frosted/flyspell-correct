@@ -254,7 +254,11 @@ until all errors in buffer have been addressed."
       (when incorrect-word-pos
         (goto-char incorrect-word-pos)
         (forward-word)
-        (when (= (mark) (point)) (pop-mark))))))
+        (when (= (mark) (point)) (pop-mark)))))
+
+  ;; For some reason, `save-excursion' doesn't work in this case. So manually
+  ;; restore the location of point.
+  (goto-char position))
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'

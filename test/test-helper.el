@@ -92,10 +92,13 @@ your programs, too." ,@body))
            (ispell-current-dictionary "english"))
        (flyspell-buffer)
        (sync-cursor)
-       (with-mock
-         (mock (window-start) => (buffer-end 0))
-         (mock (window-end) => (buffer-end 1))
-         ,@body))))
+       (let ((position (point)))
+         (with-mock
+          (mock (window-start) => (buffer-end 0))
+          (mock (window-end) => (buffer-end 1))
+          ,@body
+          (should (equal position
+                         (point))))))))
 
 (defmacro ensure-no-corrections ()
   `(not-called correct))
