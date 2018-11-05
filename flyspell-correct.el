@@ -220,9 +220,6 @@ until all errors in buffer have been addressed."
           (incorrect-word-pos)
           (position-at-incorrect-word))
 
-      ;; make sure that word under point is checked first
-      (if forward (backward-word) (forward-word))
-
       ;; narrow the region
       (overlay-recenter (point))
 
