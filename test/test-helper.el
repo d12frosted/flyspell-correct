@@ -27,7 +27,7 @@ programs, too." ,@body))
     "The licenses for most software and other practical works are
 designed to take away your freedom to share and change the works.
 By contrast, the GNU General Public License is intended to
-guarantee your freedom to share and change all |versiuns of a
+guarantee your freedom to share and change all |†versiuns of a
 program--to make sure it remains free software for all its users.
 We, the Free Software Foundation, use the GNU General Public
 License for most of our software; it applies also to any other
@@ -51,7 +51,7 @@ programs, too." ,@body))
     "The licenses for most software and other practical works are
 designed to take away your freedom to share and change the works.
 By contrast, the GNU General Public License is intended to
-guarantee your freedom to share and change all ver|siuns of a
+guarantee your freedom to share and change all †ver|siuns of a
 program--to make sure it remains free software for all its users.
 We, the Free Software Foundation, use the GNU General Public
 License for most of our software; it applies also to any other
@@ -63,7 +63,7 @@ programs, too." ,@body))
     "The licenses for most software and other practical works are
 designed to take away your freedom to share and change the works.
 By contrast, the GNU General Public License is intended to
-guarantee your freedom to share and change all versiuns| of a
+guarantee your freedom to share and change all †versiuns| of a
 program--to make sure it remains free software for all its users.
 We, the Free Software Foundation, use the GNU General Public
 License for most of our software; it applies also to any other
@@ -91,14 +91,19 @@ your programs, too." ,@body))
               ("english" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1)))
            (ispell-current-dictionary "english"))
        (flyspell-buffer)
-       (sync-cursor)
-       (let ((position (point)))
+       (let* ((points (sync-cursors "|" "†"))
+              (initial-point (car points))
+              (end-point (cadr points)))
+         (message "points = %s" points)
          (with-mock
-          (mock (window-start) => (buffer-end 0))
-          (mock (window-end) => (buffer-end 1))
-          ,@body
-          (should (equal position
-                         (point))))))))
+           (mock (window-start) => (buffer-end 0))
+           (mock (window-end) => (buffer-end 1))
+           (goto-char initial-point)
+           (message "point before: %s" (point))
+           ,@body
+           (message "point after: %s" (point))
+           (should (equal end-point
+                          (point))))))))
 
 (defmacro ensure-no-corrections ()
   `(not-called correct))
@@ -106,11 +111,21 @@ your programs, too." ,@body))
 (defmacro ensure-correction (from to)
   `(mock (correct * ,from) => ,to :times 1))
 
-(defun sync-cursor ()
-  (interactive)
+(defun sync-cursor (cursor)
   (beginning-of-buffer)
-  (let ((cursor "|"))
+  (ignore-errors
     (search-forward cursor)
-    (delete-backward-char (length cursor))))
+    (delete-backward-char (length cursor))
+    (point)))
 
-(defun correct (word candidates))
+(defun sync-cursors (initial-cursor end-cursor)
+  (let* ((initial-point0 (sync-cursor initial-cursor))
+         (end-point0 (or (sync-cursor end-cursor)
+                         initial-point0))
+         (initial-point initial-point0)
+         (end-point end-point0))
+    (when (> initial-point0 end-point0)
+      (setq initial-point (- initial-point (length end-cursor))))
+    (list initial-point end-point)))
+
+(defun correct (candidates word))

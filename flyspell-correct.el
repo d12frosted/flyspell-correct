@@ -236,6 +236,7 @@ until all errors in buffer have been addressed."
             (setq position-at-incorrect-word
                   (and (<= (overlay-start overlay) position)
                        (>= (overlay-end overlay) position)))
+            (setq on-the-edge (= (overlay-end overlay) position))
             (setq incorrect-word-pos (overlay-start overlay))
             (let ((scroll (> incorrect-word-pos (window-end))))
               (goto-char incorrect-word-pos)
@@ -251,11 +252,7 @@ until all errors in buffer have been addressed."
       (when incorrect-word-pos
         (goto-char incorrect-word-pos)
         (forward-word)
-        (when (= (mark) (point)) (pop-mark)))))
-
-  ;; For some reason, `save-excursion' doesn't work in this case. So manually
-  ;; restore the location of point.
-  (goto-char position))
+        (when (= (mark) (point)) (pop-mark))))))
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'
