@@ -40,21 +40,21 @@ List of CANDIDATES is given by flyspell for the WORD.
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (let* ((corrects   (if flyspell-sort-corrections
-			 (sort candidates 'string<)
-		       candidates))
-	 (cor-menu   (if (consp corrects)
-			 (mapcar (lambda (correct)
-				   (list correct correct))
-				 corrects)
-		       '()))
+                         (sort candidates 'string<)
+                       candidates))
+         (cor-menu   (if (consp corrects)
+                         (mapcar (lambda (correct)
+                                   (list correct correct))
+                                 corrects)
+                       '()))
          (base-menu  (let ((save `(("Save word" (save . ,word))
                                    ("Accept (session)" (session . ,word))
                                    ("Accept (buffer)" (buffer . ,word))
                                    ("Skip" (skip . ,word)))))
-		       (if (consp cor-menu)
-			   (append cor-menu (cons "" save))
-			 save)))
-	 (menu       (cons "flyspell correction menu" base-menu)))
+                       (if (consp cor-menu)
+                           (append cor-menu (cons "" save))
+                         save)))
+         (menu       (cons "flyspell correction menu" base-menu)))
     (car (avy-menu "*flyspell-correct-avy*"
                    (list (format "%s [%s]" word (or ispell-local-dictionary
                                                     ispell-dictionary))
