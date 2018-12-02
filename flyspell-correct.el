@@ -66,10 +66,10 @@ or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
 (defvar  flyspell-correct--direction t
-  "Used by function `flyspell-correct-wrapper' to determine and
-toggle direction of search, `t' being reverse and `nil' being
-forward, in order to retain backward compatability with the prior
-operation of `flyspell-correct'.")
+  "Direction of correction.
+
+  - t means backward direction
+  - nil means forward direction")
 
 ;;; Default interface
 ;;
@@ -164,10 +164,12 @@ With a prefix argument, automatically continues to all prior misspelled words in
 
 ;;;###autoload
 (defun flyspell-correct-next (position)
-  "Correct the first misspelled word that occurs after point.
+  "Correct the first misspelled word that occurs after POSITION.
 
 Uses `flyspell-correct-at-point' function for correction.
-With a prefix argument, automatically continues to all further misspelled words in the buffer."
+
+With a prefix argument, automatically continues to all further
+misspelled words in the buffer."
   (interactive "d")
   (flyspell-correct-move position t current-prefix-arg))
 
@@ -176,15 +178,13 @@ With a prefix argument, automatically continues to all further misspelled words 
 
 ;;;###autoload
 (defun flyspell-correct-wrapper (arg)
-  "Search for the previous or next spelling error and suggest
-corrections via `flyspell-correct-interface'.
+  "Correct spelling error in a dwim fashion based on ARG.
 
-C-u continues to check all errors in the current direction.
-
-C-u C-u changes direction.
-
-C-u C-u C-u changes direction and continues to check all errors
-in the current direction."
+- One \\[universal-argument] enables rapid mode.
+- Two \\[universal-argument]'s changes direction of spelling
+  errors search.
+- Three \\[universal-argument]'s changes direction of spelling
+  errors search and enables rapid mode."
   (interactive "P")
   (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
   (cond
@@ -202,7 +202,7 @@ in the current direction."
 
 ;;;###autoload
 (defun flyspell-correct-move (position &optional forward rapid)
-  "Correct the first misspelled word that occurs before point.
+  "Correct the first misspelled word that occurs before POSITION.
 
 Uses `flyspell-correct-at-point' function for correction.
 
@@ -236,7 +236,6 @@ until all errors in buffer have been addressed."
             (setq position-at-incorrect-word
                   (and (<= (overlay-start overlay) position)
                        (>= (overlay-end overlay) position)))
-            (setq on-the-edge (= (overlay-end overlay) position))
             (setq incorrect-word-pos (overlay-start overlay))
             (let ((scroll (> incorrect-word-pos (window-end))))
               (goto-char incorrect-word-pos)
