@@ -87,6 +87,17 @@ to relevant part of your =init.el= file.
 Note that in order to access actions in =ivy= interface you need to press ~M-o~.
 More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official documentation]].
 
+** Using =flyspell-correct-avy-menu= interface
+
+In order to use =flyspell-correct-avy-menu= interface you have to install
+=flyspell-correct-avy-menu= package in any preferred way and then add following
+snippet to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-avy-menu)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+#+END_SRC
+
 ** Using =flyspell-correct-ido= interface
 
 In order to use =flyspell-correct-ido= interface you have to install
@@ -175,6 +186,10 @@ functionality with an interface of your choice.
  [[file:images/screenshot-ivy-1.png]]
 
  [[file:images/screenshot-ivy-2.png]]
+
+** Avy Menu interface
+
+TBD
 
 ** Popup interface
  [[file:images/screenshot-popup.png]]
