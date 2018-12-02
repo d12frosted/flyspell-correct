@@ -216,3 +216,4 @@ Additional thanks to all contributors:
 - [[https://github.com/vermiculus][Sean Allred]]
 - [[https://github.com/manuel-uberti][Manuel Uberti]]
 - [[https://github.com/jpkotta][jpkotta]]
+- [[https://github.com/clemera][Clemens Radermacher]]

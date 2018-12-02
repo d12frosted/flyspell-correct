@@ -3,6 +3,7 @@
 ;; Copyright (c) 2016-2018 Boris Buliga;
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
+;;         Clemens Radermacher <clemera@posteo.net>
 ;; URL: https://github.com/d12frosted/flyspell-correct
 ;; Package-Version: 0.5.0
 ;; Package-Requires: ((flyspell-correct "0.5.0") (avy-menu "0.1.1"))
