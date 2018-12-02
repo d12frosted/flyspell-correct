@@ -73,17 +73,6 @@ to relevant part of your =init.el= file.
 
 This interface does not allow to save or accept current spelling.
 
-** Using =flyspell-correct-ido= interface
-
-In order to use =flyspell-correct-ido= interface you have to install
-=flyspell-correct= package in any preferred way and then add following snippet
-to relevant part of your =init.el= file.
-
-#+BEGIN_SRC emacs-lisp
-(require 'flyspell-correct-ido)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
-#+END_SRC
-
 ** Using =flyspell-correct-ivy= interface
 
 In order to use =flyspell-correct-ivy= interface you have to install
@@ -97,6 +86,17 @@ to relevant part of your =init.el= file.
 
 Note that in order to access actions in =ivy= interface you need to press ~M-o~.
 More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official documentation]].
+
+** Using =flyspell-correct-ido= interface
+
+In order to use =flyspell-correct-ido= interface you have to install
+=flyspell-correct= package in any preferred way and then add following snippet
+to relevant part of your =init.el= file.
+
+#+BEGIN_SRC emacs-lisp
+(require 'flyspell-correct-ido)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+#+END_SRC
 
 ** Using =flyspell-correct-helm= interface
 
