@@ -32,6 +32,7 @@
 
 ;; Interface implementation
 
+;;;###autoload
 (defun flyspell-correct--helm-always-match (_)
   "Return non-nil for any CANDIDATE."
   t)

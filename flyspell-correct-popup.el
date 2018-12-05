@@ -32,6 +32,7 @@
 
 ;; Interface implementation
 
+;;;###autoload
 (defun flyspell-correct-popup (candidates word)
   "Run `popup-menu*' for the given CANDIDATES.
 

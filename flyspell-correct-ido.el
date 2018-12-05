@@ -30,6 +30,7 @@
 (require 'flyspell-correct)
 (require 'ido)
 
+;;;###autoload
 (defun flyspell-correct-ido (candidates word)
   "Run `ido-completing-read' for the given CANDIDATES.
 

@@ -32,6 +32,7 @@
 
 ;; Interface implementation
 
+;;;###autoload
 (defun flyspell-correct-ivy (candidates word)
   "Run `ivy-read' for the given CANDIDATES.
 

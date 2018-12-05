@@ -33,6 +33,7 @@
 
 ;; Interface implementation
 
+;;;###autoload
 (defun flyspell-correct-avy-menu (candidates word)
   "Run `avy-menu' for the given CANDIDATES.
 
