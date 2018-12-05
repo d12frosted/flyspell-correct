@@ -73,6 +73,13 @@ to relevant part of your =init.el= file.
 
 This interface does not allow to save or accept current spelling.
 
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :bind ("C-M-;" . flyspell-correct-wrapper))
+#+END_SRC
+
 ** Using =flyspell-correct-ivy= interface
 
 In order to use =flyspell-correct-ivy= interface you have to install
@@ -82,6 +89,15 @@ to relevant part of your =init.el= file.
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-ivy)
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+#+END_SRC
+
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct-ivy
+    :bind ("C-M-;" . flyspell-correct-wrapper)
+    :init
+    (setq flyspell-correct-interface #'flyspell-correct-ivy))
 #+END_SRC
 
 Note that in order to access actions in =ivy= interface you need to press ~M-o~.
@@ -98,6 +114,15 @@ snippet to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct-avy-menu
+    :bind ("C-M-;" . flyspell-correct-wrapper)
+    :init
+    (setq flyspell-correct-interface #'flyspell-correct-avy-menu))
+#+END_SRC
+
 ** Using =flyspell-correct-ido= interface
 
 In order to use =flyspell-correct-ido= interface you have to install
@@ -107,6 +132,15 @@ to relevant part of your =init.el= file.
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-ido)
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+#+END_SRC
+
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct-ido
+    :bind ("C-M-;" . flyspell-correct-wrapper)
+    :init
+    (setq flyspell-correct-interface #'flyspell-correct-ido))
 #+END_SRC
 
 ** Using =flyspell-correct-helm= interface
@@ -120,6 +154,15 @@ to relevant part of your =init.el= file.
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
 
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct-helm
+    :bind ("C-M-;" . flyspell-correct-wrapper)
+    :init
+    (setq flyspell-correct-interface #'flyspell-correct-helm))
+#+END_SRC
+
 ** Using =flyspell-correct-popup= interface
 
 In order to use =flyspell-correct-popup= interface you have to install
@@ -129,6 +172,15 @@ to relevant part of your =init.el= file.
 #+BEGIN_SRC emacs-lisp
 (require 'flyspell-correct-popup)
 (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
+#+END_SRC
+
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct-popup
+    :bind ("C-M-;" . flyspell-correct-wrapper)
+    :init
+    (setq flyspell-correct-interface #'flyspell-correct-popup))
 #+END_SRC
 
 There are some cool usability suggestions by @alphapapa shared in

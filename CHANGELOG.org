@@ -2,6 +2,7 @@
 - Do not move point by correction functions.
 - New interface - =avy-menu=. Thanks to @clemera.
 - Mark custom interfaces as autoload.
+- Add =use-package= examples.
 
 * v0.5
 - Skip words that don't need to be fixed (e.g. duplicates).
