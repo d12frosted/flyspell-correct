@@ -65,12 +65,6 @@ misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
-(defvar  flyspell-correct--direction t
-  "Direction of correction.
-
-  - t means backward direction
-  - nil means forward direction")
-
 ;;; Default interface
 ;;
 
@@ -186,19 +180,20 @@ misspelled words in the buffer."
 - Three \\[universal-argument]'s changes direction of spelling
   errors search and enables rapid mode."
   (interactive "P")
-  (if (or (not (mark)) (/= (mark) (point))) (push-mark (point) t))
+  (if (or (not (mark)) (/= (mark) (point)))
+	  (push-mark (point) t))
+
+  (let ((flyspell-forward-direction t)
+		(flyspell-rapid nil))
   (cond
-   ;; ((equal current-prefix-arg '(4)) ; C-u = rapid
-   ;;    (setq current-prefix-arg '(4)))
+   ((equal current-prefix-arg '(4)) ; C-u = rapid
+	(setq flyspell-rapid t))
    ((equal current-prefix-arg '(16))    ; C-u C-u = change direction
-    (setq current-prefix-arg nil)
-    (setq flyspell-correct--direction (not flyspell-correct--direction)))
+    (setq flyspell-forward-direction nil))
    ((equal current-prefix-arg '(64))    ; C-u C-u C-u = do both
-    ;; (setq current-prefix-arg '(4) is unnecessary
-    (setq flyspell-correct--direction (not flyspell-correct--direction))))
-  (if flyspell-correct--direction
-      (flyspell-correct-previous (point))
-    (flyspell-correct-next (point))))
+	(setq flyspell-rapid t)
+	(setq flyspell-forward-direction nil)))
+  (flyspell-correct-move (point) flyspell-forward-direction flyspell-rapid)))
 
 ;;;###autoload
 (defun flyspell-correct-move (position &optional forward rapid)
