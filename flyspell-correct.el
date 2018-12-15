@@ -181,19 +181,20 @@ misspelled words in the buffer."
   errors search and enables rapid mode."
   (interactive "P")
   (if (or (not (mark)) (/= (mark) (point)))
-	  (push-mark (point) t))
+	    (push-mark (point) t))
 
   (let ((flyspell-forward-direction t)
-		(flyspell-rapid nil))
-  (cond
-   ((equal current-prefix-arg '(4)) ; C-u = rapid
-	(setq flyspell-rapid t))
-   ((equal current-prefix-arg '(16))    ; C-u C-u = change direction
-    (setq flyspell-forward-direction nil))
-   ((equal current-prefix-arg '(64))    ; C-u C-u C-u = do both
-	(setq flyspell-rapid t)
-	(setq flyspell-forward-direction nil)))
-  (flyspell-correct-move (point) flyspell-forward-direction flyspell-rapid)))
+		    (flyspell-rapid nil))
+    (cond
+     ((equal current-prefix-arg '(4))  ; C-u = rapid
+	    (setq flyspell-rapid t))
+     ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
+      (setq flyspell-forward-direction nil))
+     ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
+	    (setq flyspell-rapid t)
+	    (setq flyspell-forward-direction nil)))
+
+    (flyspell-correct-move (point) flyspell-forward-direction flyspell-rapid)))
 
 ;;;###autoload
 (defun flyspell-correct-move (position &optional forward rapid)
