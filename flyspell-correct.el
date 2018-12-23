@@ -183,16 +183,16 @@ misspelled words in the buffer."
   (if (or (not (mark)) (/= (mark) (point)))
 	    (push-mark (point) t))
 
-  (let ((flyspell-forward-direction t)
+  (let ((flyspell-forward-direction nil)
 		    (flyspell-rapid nil))
     (cond
      ((equal current-prefix-arg '(4))  ; C-u = rapid
 	    (setq flyspell-rapid t))
      ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
-      (setq flyspell-forward-direction nil))
+      (setq flyspell-forward-direction t))
      ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
 	    (setq flyspell-rapid t)
-	    (setq flyspell-forward-direction nil)))
+	    (setq flyspell-forward-direction t)))
 
     (flyspell-correct-move (point) flyspell-forward-direction flyspell-rapid)))
 
