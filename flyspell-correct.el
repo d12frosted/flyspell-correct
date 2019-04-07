@@ -180,8 +180,9 @@ misspelled words in the buffer."
 - Three \\[universal-argument]'s changes direction of spelling
   errors search and enables rapid mode."
   (interactive "P")
-  (if (or (not (mark)) (/= (mark) (point)))
-	    (push-mark (point) t))
+  (when (or (not (mark t))
+	    (/= (mark t) (point)))
+    (push-mark (point) t))
 
   (let ((flyspell-forward-direction nil)
 		    (flyspell-rapid nil))
@@ -241,13 +242,13 @@ until all errors in buffer have been addressed."
             ;; there is nothing to correct. In such case we just skip current
             ;; word.
             (unless (flyspell-correct-at-point)
-              (when (/= (mark) (point)) (push-mark (point) t))
+              (when (/= (mark t) (point)) (push-mark (point) t))
               (when (not rapid) (setq overlay nil))))))
 
       (when incorrect-word-pos
         (goto-char incorrect-word-pos)
         (forward-word)
-        (when (= (mark) (point)) (pop-mark))))))
+        (when (= (mark t) (point)) (pop-mark))))))
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'
