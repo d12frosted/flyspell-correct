@@ -3,6 +3,7 @@
 - New interface - =avy-menu=. Thanks to @clemera.
 - Mark custom interfaces as autoload.
 - Add =use-package= examples.
+- Fix errors in transient mode. Thanks to @Ergus
 
 * v0.5
 - Skip words that don't need to be fixed (e.g. duplicates).
