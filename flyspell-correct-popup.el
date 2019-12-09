@@ -1,4 +1,4 @@
-;;; flyspell-correct-popup.el --- correcting words with flyspell via popup interface
+;;; flyspell-correct-popup.el --- Correcting words with flyspell via popup interface
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga
 ;;

@@ -1,4 +1,4 @@
-;;; flyspell-correct-avy-menu.el --- correcting words with flyspell via avy-menu interface
+;;; flyspell-correct-avy-menu.el --- Correcting words with flyspell via avy-menu interface
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga;
 ;;

@@ -1,4 +1,4 @@
-;;; flyspell-correct-ivy.el --- correcting words with flyspell via ivy interface
+;;; flyspell-correct-ivy.el --- Correcting words with flyspell via ivy interface
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga
 ;;

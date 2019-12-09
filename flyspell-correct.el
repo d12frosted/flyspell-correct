@@ -1,4 +1,4 @@
-;;; flyspell-correct.el --- correcting words with flyspell via custom interface
+;;; flyspell-correct.el --- Correcting words with flyspell via custom interface
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga
 ;;

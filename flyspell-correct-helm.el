@@ -1,4 +1,4 @@
-;;; flyspell-correct-helm.el --- correcting words with flyspell via helm interface
+;;; flyspell-correct-helm.el --- Correcting words with flyspell via helm interface
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga
 ;;
@@ -39,12 +39,11 @@
 
 ;; Interface implementation
 
-;;;###autoload
-(defun flyspell-correct--helm-always-match (_)
+(defun flyspell-correct-helm--always-match (_)
   "Return non-nil for any CANDIDATE."
   t)
 
-(defun flyspell-correct--helm-option-candidates (word)
+(defun flyspell-correct-helm--option-candidates (word)
   "Return a set of options for the given WORD."
   (let ((opts (list (cons (format "Save \"%s\"" word)
                           (cons 'save word))
@@ -83,10 +82,10 @@ of (command, word) to be used by `flyspell-do-correct'."
                          :fuzzy-match t)
                        (helm-build-sync-source "Options"
                          :candidates (lambda ()
-                                       (flyspell-correct--helm-option-candidates word))
+                                       (flyspell-correct-helm--option-candidates word))
                          :action 'identity
                          :candidate-number-limit 9999
-                         :match 'flyspell-correct--helm-always-match
+                         :match 'flyspell-correct-helm--always-match
                          :volatile t))
         :buffer "*Helm Flyspell*"
         :prompt "Correction: "))
