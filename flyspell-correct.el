@@ -1,4 +1,4 @@
-;;; flyspell-correct.el --- Correcting words with flyspell via custom interface
+;;; flyspell-correct.el --- Correcting words with flyspell via custom interface  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2016-2019 Boris Buliga
 ;;
@@ -171,15 +171,15 @@ misspelled words in the buffer."
 ;;
 
 ;;;###autoload
-(defun flyspell-correct-wrapper (arg)
-  "Correct spelling error in a dwim fashion based on ARG.
+(defun flyspell-correct-wrapper ()
+  "Correct spelling error in a dwim fashion based on universal argument.
 
 - One \\[universal-argument] enables rapid mode.
 - Two \\[universal-argument]'s changes direction of spelling
   errors search.
 - Three \\[universal-argument]'s changes direction of spelling
   errors search and enables rapid mode."
-  (interactive "P")
+  (interactive)
   (when (or (not (mark t))
 	    (/= (mark t) (point)))
     (push-mark (point) t))
@@ -212,10 +212,7 @@ until all errors in buffer have been addressed."
   ;; `flyspell-correct-word-before-point'.
   (interactive "d")
   (save-excursion
-    (let ((top (window-start))
-          (bot (window-end))
-          (incorrect-word-pos)
-          (position-at-incorrect-word))
+    (let ((incorrect-word-pos))
 
       ;; narrow the region
       (overlay-recenter (point))
@@ -230,9 +227,6 @@ until all errors in buffer have been addressed."
           (setq overlay-list (cdr-safe overlay-list))
           (when (and overlay
                      (flyspell-overlay-p overlay))
-            (setq position-at-incorrect-word
-                  (and (<= (overlay-start overlay) position)
-                       (>= (overlay-end overlay) position)))
             (setq incorrect-word-pos (overlay-start overlay))
             (let ((scroll (> incorrect-word-pos (window-end))))
               (goto-char incorrect-word-pos)
