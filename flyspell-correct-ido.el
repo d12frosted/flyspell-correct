@@ -1,4 +1,4 @@
-;;; flyspell-correct-ido.el --- Correcting words with flyspell via ido interface
+;;; flyspell-correct-ido.el --- Correcting words with flyspell via ido interface -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2016-2018 Boris Buliga
 ;;
