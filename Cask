@@ -1,6 +1,5 @@
-(source gnu)
 (source melpa)
-(source org)
+(source gnu)
 
 (package-file "flyspell-correct.el")
 
