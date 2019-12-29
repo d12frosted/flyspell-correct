@@ -1,11 +1,17 @@
 * next-version
+
+* v0.6
+
 - Do not move point by correction functions.
 - New interface - =avy-menu=. Thanks to @clemera.
 - Mark custom interfaces as autoload.
 - Add =use-package= examples.
 - Fix errors in transient mode. Thanks to @Ergus
+- Fix many warnings.
+- Start using =lexical-binding=.
 
 * v0.5
+
 - Skip words that don't need to be fixed (e.g. duplicates).
 - Rename several functions (via name deprecation)
   - =flyspell-correct-next-word-generic= -> =flyspell-correct-next=
