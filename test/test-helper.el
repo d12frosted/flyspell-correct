@@ -96,8 +96,6 @@ your programs, too." ,@body))
               (end-point (cadr points)))
          (message "points = %s" points)
          (with-mock
-           (mock (window-start) => (buffer-end 0))
-           (mock (window-end) => (buffer-end 1))
            (goto-char initial-point)
            (message "point before: %s" (point))
            ,@body
