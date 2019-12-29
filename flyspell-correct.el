@@ -231,7 +231,7 @@ until all errors in buffer have been addressed."
             (setq incorrect-word-pos (overlay-start overlay))
             (let ((scroll (> incorrect-word-pos (window-end))))
               (goto-char incorrect-word-pos)
-              (when scroll (recenter)))
+              (when scroll (ignore-errors (recenter))))
 
             ;; try to correct word `flyspell-correct-at-point' returns t when
             ;; there is nothing to correct. In such case we just skip current
