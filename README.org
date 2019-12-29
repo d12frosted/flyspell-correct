@@ -1,6 +1,6 @@
 * flyspell-correct
 
-[[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]] [[CircleCI][file:https://circleci.com/gh/d12frosted/flyspell-correct.svg?style=svg]]
+[[https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg][file:https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg]]
 
 | =flyspell-correct=          | [[http://melpa.org/#/flyspell-correct][file:http://melpa.org/packages/flyspell-correct-badge.svg]]          | [[https://stable.melpa.org/#/flyspell-correct][file:https://stable.melpa.org/packages/flyspell-correct-badge.svg]]          |
 | =flyspell-correct-ivy=      | [[http://melpa.org/#/flyspell-correct-ivy][file:http://melpa.org/packages/flyspell-correct-ivy-badge.svg]]      | [[https://stable.melpa.org/#/flyspell-correct-ivy][file:https://stable.melpa.org/packages/flyspell-correct-ivy-badge.svg]]      |
