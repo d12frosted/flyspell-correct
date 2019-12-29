@@ -81,8 +81,6 @@ of (command, word) to be used by `flyspell-do-correct'."
 ;;; On point word correction
 ;;
 
-(defalias 'flyspell-correct-word-generic 'flyspell-correct-at-point)
-
 ;;;###autoload
 (defun flyspell-correct-at-point ()
   "Correct word before point using `flyspell-correct-interface'.
@@ -139,8 +137,6 @@ Adapted from `flyspell-correct-word-before-point'."
 ;;; Previous word correction
 ;;
 
-(defalias 'flyspell-correct-previous-word-generic 'flyspell-correct-previous)
-
 ;;;###autoload
 (defun flyspell-correct-previous (position)
   "Correct the first misspelled word that occurs before POSITION.
@@ -154,8 +150,6 @@ With a prefix argument, automatically continues to all prior misspelled words in
 
 ;;; Next word correction
 ;;
-
-(defalias 'flyspell-correct-next-word-generic 'flyspell-correct-next)
 
 ;;;###autoload
 (defun flyspell-correct-next (position)

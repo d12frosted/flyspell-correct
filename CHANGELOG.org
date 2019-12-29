@@ -1,5 +1,9 @@
 * next-version
 
+- Remove deprecated aliases (=flyspell-correct-word-generic=,
+  =flyspell-correct-previous-word-generic= and
+  =flyspell-correct-next-word-generic=).
+
 * v0.6
 
 - Do not move point by correction functions.
