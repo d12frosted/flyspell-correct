@@ -1,5 +1,7 @@
 * next-version
 
+* v0.6.1
+
 - Remove deprecated aliases (=flyspell-correct-word-generic=,
   =flyspell-correct-previous-word-generic= and
   =flyspell-correct-next-word-generic=).
