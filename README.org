@@ -29,7 +29,8 @@ it.
 (define-key flyspell-mode-map (kbd "C-;") #'flyspell-correct-wrapper)
 #+END_SRC
 
-When invoked, it will show the list of corrections suggested by Flyspell.
+When invoked, it will highlight the word being currently corrected and will show
+the list of corrections suggested by Flyspell.
 
 Most interfaces also allow you to save the new word to your dictionary, accept
 this spelling in current buffer or for a whole session, or even skip this word
@@ -200,6 +201,17 @@ word or ~(command, word)~ tuple, where ~command~ can be one of the following:
 - ~buffer~ - meaning that the ~word~ must be saved for the current buffer.
 
 Check =flyspell-correct-popup= for example of interface that uses this feature.
+
+* Highlighting
+
+The word that is being currently corrected (e.g. you are selecting the
+correction for misspelled word) is highlighted with
+=flyspell-correct-highlight-face=. If you wish to disable extra highlighting,
+just set the value of =flyspell-correct-highlight= to =nil=.
+
+#+begin_src emacs-lisp
+  (setq flyspell-correct-highlight nil)
+#+end_src
 
 * Auto correction mode
 

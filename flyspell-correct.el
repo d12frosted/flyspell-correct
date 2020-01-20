@@ -66,6 +66,21 @@ misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
 `flyspell-do-correct'.")
 
+(defcustom flyspell-correct-highlight t
+  "When non-nil highlight the word while correcting.
+
+The face `flyspell-correct-highlight-face' is used for
+highlighting."
+  :group 'flyspell-correct
+  :type 'boolean)
+
+(defface flyspell-correct-highlight-face
+  '((t (:inherit isearch)))
+  "Face used for highlighting the word while correcting."
+  :group 'flyspell-correct)
+
+(defvar flyspell-correct-overlay nil)
+
 ;;; Default interface
 ;;
 
@@ -90,49 +105,52 @@ Adapted from `flyspell-correct-word-before-point'."
     (error "Could not correct word because `flyspell-correct-interface' is not set"))
   ;; use the correct dictionary
   (flyspell-accept-buffer-local-defs)
-  (let ((cursor-location (point))
-        (word (flyspell-get-word))
-        (opoint (point)))
-    (if (consp word)
-        (let ((start (nth 1 word))
-              (end (nth 2 word))
-              (word (car word))
-              poss ispell-filter)
-          ;; now check spelling of word.
-          (ispell-send-string "%\n")    ;put in verbose mode
-          (ispell-send-string (concat "^" word "\n"))
-          ;; wait until ispell has processed word
-          (while (progn
-                   (accept-process-output ispell-process)
-                   (not (string= "" (car ispell-filter)))))
-          ;; Remove leading empty element
-          (setq ispell-filter (cdr ispell-filter))
-          ;; ispell process should return something after word is sent.
-          ;; Tag word as valid (i.e., skip) otherwise
-          (or ispell-filter
-              (setq ispell-filter '(*)))
-          (if (consp ispell-filter)
-              (setq poss (ispell-parse-output (car ispell-filter))))
-          (cond
-           ((or (eq poss t) (stringp poss))
-            ;; don't correct word
-            (message "%s is correct" (funcall ispell-format-word-function word))
-            t)
-           ((null poss)
-            ;; ispell error
-            (error "Ispell: error in Ispell process"))
-           (t
-            ;; The word is incorrect, we have to propose a replacement.
-            (let ((res (funcall flyspell-correct-interface (nth 2 poss) word)))
-              (cond ((stringp res)
-                     (flyspell-do-correct res poss word cursor-location start end opoint))
-                    (t
-                     (let ((cmd (car res))
-                           (wrd (cdr res)))
-                       (unless (eq cmd 'skip)
-                         (flyspell-do-correct
-                          cmd poss wrd cursor-location start end opoint)))))
-              (ispell-pdict-save t))))))))
+  (flyspell-correct--highlight-add)
+  (unwind-protect
+      (let ((cursor-location (point))
+            (word (flyspell-get-word))
+            (opoint (point)))
+        (if (consp word)
+            (let ((start (nth 1 word))
+                  (end (nth 2 word))
+                  (word (car word))
+                  poss ispell-filter)
+              ;; now check spelling of word.
+              (ispell-send-string "%\n") ;put in verbose mode
+              (ispell-send-string (concat "^" word "\n"))
+              ;; wait until ispell has processed word
+              (while (progn
+                       (accept-process-output ispell-process)
+                       (not (string= "" (car ispell-filter)))))
+              ;; Remove leading empty element
+              (setq ispell-filter (cdr ispell-filter))
+              ;; ispell process should return something after word is sent.
+              ;; Tag word as valid (i.e., skip) otherwise
+              (or ispell-filter
+                  (setq ispell-filter '(*)))
+              (if (consp ispell-filter)
+                  (setq poss (ispell-parse-output (car ispell-filter))))
+              (cond
+               ((or (eq poss t) (stringp poss))
+                ;; don't correct word
+                (message "%s is correct" (funcall ispell-format-word-function word))
+                t)
+               ((null poss)
+                ;; ispell error
+                (error "Ispell: error in Ispell process"))
+               (t
+                ;; The word is incorrect, we have to propose a replacement.
+                (let ((res (funcall flyspell-correct-interface (nth 2 poss) word)))
+                  (cond ((stringp res)
+                         (flyspell-do-correct res poss word cursor-location start end opoint))
+                        (t
+                         (let ((cmd (car res))
+                               (wrd (cdr res)))
+                           (unless (eq cmd 'skip)
+                             (flyspell-do-correct
+                              cmd poss wrd cursor-location start end opoint)))))
+                  (ispell-pdict-save t)))))))
+    (flyspell-correct--highlight-remove)))
 
 ;;; Previous word correction
 ;;
@@ -238,6 +256,42 @@ until all errors in buffer have been addressed."
         (goto-char incorrect-word-pos)
         (forward-word)
         (when (= (mark t) (point)) (pop-mark))))))
+
+;;; Overlays
+
+(defun flyspell-correct--highlight-add ()
+  "Highlight the spelling error at point."
+  (when flyspell-correct-highlight
+    (let* ((ov (flyspell-correct--overlay-loc))
+           (ov-start (car-safe ov))
+           (ov-end (cdr-safe ov)))
+      (when ov
+        (if flyspell-correct-overlay
+	          (move-overlay flyspell-correct-overlay ov-start ov-end (current-buffer))
+	        (setq flyspell-correct-overlay (make-overlay ov-start ov-end))
+	        (overlay-put flyspell-correct-overlay 'priority 1001)
+	        (overlay-put flyspell-correct-overlay 'face 'flyspell-correct-highlight-face))))))
+
+(defun flyspell-correct--highlight-remove ()
+  "Remove the highlight of the spelling error at point."
+  (when flyspell-correct-highlight
+    (delete-overlay flyspell-correct-overlay)
+    (setq flyspell-correct-overlay nil)))
+
+(defun flyspell-correct--overlay-loc ()
+  "Return `cons' with start and end of `flyspell' overlay at point.
+
+Returns nil if no overlay is found."
+  (let ((ovs (overlays-at (point)))
+        ov)
+    (while (and (not ov) ovs)
+      (let ((current (pop ovs)))
+        (when (flyspell-overlay-p current)
+          (setq ov current))))
+    (when ov
+      (let ((ov-start (overlay-start ov))
+            (ov-end (overlay-end ov)))
+        (cons ov-start ov-end)))))
 
 ;;; Automatically correct
 ;; based on `flyspell-popup-auto-correct-mode'

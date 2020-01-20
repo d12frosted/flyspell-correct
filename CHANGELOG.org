@@ -1,5 +1,8 @@
 * next-version
 
+- Add highlighting of the word being currently corrected (#52, thanks to
+  @hubisan).
+
 * v0.6.1
 
 - Remove deprecated aliases (=flyspell-correct-word-generic=,
@@ -32,17 +35,20 @@
 - Fix issue when =flyspell-correct-next= doesn't correct word at point.
 
 * v0.4
+
 - Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
 - Minor readme updates.
 
 * v0.3
+
 - Make sure that word at point is corrected first when using
   =flyspell-correct-previous-word-generic=.
 - New =ido= interface (thanks to @jpkotta).
 - New =dummy= interface (thanks to @purcell for suggestion).
 
 * v0.2
+
 - Various documentation updates.
 - =flyspell-correct-previous-word-generic= now corrects word at point if it's
   incorrect (#19).
@@ -51,6 +57,7 @@
 - Warn user when correction interface is not set.
 
 * v0.1
+
 - Initial implementation.
 - Two correction functions:
   - =flyspell-correct-word-generic=
