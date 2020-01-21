@@ -2,6 +2,7 @@
 
 - Add highlighting of the word being currently corrected (#52, thanks to
   @hubisan).
+- Support customization interface.
 
 * v0.6.1
 

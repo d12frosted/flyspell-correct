@@ -59,12 +59,14 @@
 
 ;; Variables
 
-(defvar flyspell-correct-interface #'flyspell-correct-dummy
+(defcustom flyspell-correct-interface #'flyspell-correct-dummy
   "Interface for `flyspell-correct-at-point'.
 It has to be function that accepts two arguments - candidates and
 misspelled word. It has to return either replacement word
 or (command, word) tuple that will be passed to
-`flyspell-do-correct'.")
+`flyspell-do-correct'."
+  :group 'flyspell-correct
+  :type 'function)
 
 (defcustom flyspell-correct-highlight t
   "When non-nil highlight the word while correcting.
