@@ -105,54 +105,61 @@ Adapted from `flyspell-correct-word-before-point'."
   (interactive)
   (unless flyspell-correct-interface
     (error "Could not correct word because `flyspell-correct-interface' is not set"))
-  ;; use the correct dictionary
-  (flyspell-accept-buffer-local-defs)
-  (flyspell-correct--highlight-add)
-  (unwind-protect
-      (let ((cursor-location (point))
-            (word (flyspell-get-word))
-            (opoint (point)))
-        (if (consp word)
-            (let ((start (nth 1 word))
-                  (end (nth 2 word))
-                  (word (car word))
-                  poss ispell-filter)
-              ;; now check spelling of word.
-              (ispell-send-string "%\n") ;put in verbose mode
-              (ispell-send-string (concat "^" word "\n"))
-              ;; wait until ispell has processed word
-              (while (progn
-                       (accept-process-output ispell-process)
-                       (not (string= "" (car ispell-filter)))))
-              ;; Remove leading empty element
-              (setq ispell-filter (cdr ispell-filter))
-              ;; ispell process should return something after word is sent.
-              ;; Tag word as valid (i.e., skip) otherwise
-              (or ispell-filter
-                  (setq ispell-filter '(*)))
-              (if (consp ispell-filter)
-                  (setq poss (ispell-parse-output (car ispell-filter))))
-              (cond
-               ((or (eq poss t) (stringp poss))
-                ;; don't correct word
-                (message "%s is correct" (funcall ispell-format-word-function word))
-                t)
-               ((null poss)
-                ;; ispell error
-                (error "Ispell: error in Ispell process"))
-               (t
-                ;; The word is incorrect, we have to propose a replacement.
-                (let ((res (funcall flyspell-correct-interface (nth 2 poss) word)))
+  (let ((res))
+    ;; use the correct dictionary
+    (flyspell-accept-buffer-local-defs)
+    (flyspell-correct--highlight-add)
+    (unwind-protect
+        (let ((cursor-location (point))
+              (word (flyspell-get-word))
+              (opoint (point)))
+          (if (consp word)
+              (let ((start (nth 1 word))
+                    (end (nth 2 word))
+                    (word (car word))
+                    poss ispell-filter)
+                ;; now check spelling of word.
+                (ispell-send-string "%\n") ;put in verbose mode
+                (ispell-send-string (concat "^" word "\n"))
+                ;; wait until ispell has processed word
+                (while (progn
+                         (accept-process-output ispell-process)
+                         (not (string= "" (car ispell-filter)))))
+                ;; Remove leading empty element
+                (setq ispell-filter (cdr ispell-filter))
+                ;; ispell process should return something after word is sent.
+                ;; Tag word as valid (i.e., skip) otherwise
+                (or ispell-filter
+                    (setq ispell-filter '(*)))
+                (if (consp ispell-filter)
+                    (setq poss (ispell-parse-output (car ispell-filter))))
+                (cond
+                 ((or (eq poss t) (stringp poss))
+                  ;; don't correct word
+                  (message "%s is correct" (funcall ispell-format-word-function word))
+                  t)
+                 ((null poss)
+                  ;; ispell error
+                  (error "Ispell: error in Ispell process"))
+                 (t
+                  ;; The word is incorrect, we have to propose a replacement.
+                  (setq res (funcall flyspell-correct-interface (nth 2 poss) word))
+                  ;; Some interfaces actually eat 'C-g' so it's impossible to
+                  ;; stop rapid mode. So when interface returns nil we treat it
+                  ;; as a stop. Fixes #60.
+                  (unless res (setq res (cons 'stop word)))
                   (cond ((stringp res)
                          (flyspell-do-correct res poss word cursor-location start end opoint))
                         (t
                          (let ((cmd (car res))
                                (wrd (cdr res)))
-                           (unless (eq cmd 'skip)
+                           (unless (or (eq cmd 'skip)
+                                       (eq cmd 'stop))
                              (flyspell-do-correct
                               cmd poss wrd cursor-location start end opoint)))))
-                  (ispell-pdict-save t)))))))
-    (flyspell-correct--highlight-remove)))
+                  (ispell-pdict-save t))))))
+      (flyspell-correct--highlight-remove))
+    res))
 
 ;;; Previous word correction
 ;;
@@ -247,12 +254,13 @@ until all errors in buffer have been addressed."
               (goto-char incorrect-word-pos)
               (when scroll (ignore-errors (recenter))))
 
-            ;; try to correct word `flyspell-correct-at-point' returns t when
-            ;; there is nothing to correct. In such case we just skip current
-            ;; word.
-            (unless (flyspell-correct-at-point)
-              (when (/= (mark t) (point)) (push-mark (point) t))
-              (when (not rapid) (setq overlay nil))))))
+            ;; Correct a word using `flyspell-correct-at-point'.
+            (let ((res (flyspell-correct-at-point)))
+              (when res
+                (when (/= (mark t) (point)) (push-mark (point) t))
+                (when (or (not rapid)
+                          (eq (car-safe res) 'stop))
+                  (setq overlay nil)))))))
 
       (when incorrect-word-pos
         (goto-char incorrect-word-pos)

@@ -3,6 +3,7 @@
 - Add highlighting of the word being currently corrected (#52, thanks to
   @hubisan).
 - Support customization interface.
+- Fix non-breaking rapid mode with helm interface (see [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]]).
 
 * v0.6.1
 
