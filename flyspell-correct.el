@@ -111,7 +111,7 @@ Adapted from `flyspell-correct-word-before-point'."
     (flyspell-correct--highlight-add)
     (unwind-protect
         (let ((cursor-location (point))
-              (word (flyspell-get-word))
+              (word (save-excursion (flyspell-get-word)))
               (opoint (point)))
           (if (consp word)
               (let ((start (nth 1 word))
@@ -233,48 +233,63 @@ until all errors in buffer have been addressed."
   ;; idiomatically done using the opoint arg of
   ;; `flyspell-correct-word-before-point'.
   (interactive "d")
-  (save-excursion
-    (let ((incorrect-word-pos))
+  (let ((original-pos (point))
+        (hard-reset-pos))
+    (save-excursion
+      (let ((incorrect-word-pos))
 
-      ;; narrow the region
-      (overlay-recenter (point))
+        ;; narrow the region
+        (overlay-recenter (point))
 
-      (let* ((unsorted-overlay-list
-              (if forward
-                  (overlays-in (- position 1) (point-max))
-                (overlays-in (point-min) (+ position 1))))
-             (comp (if forward #'< #'>))
-             (overlay-list (sort
-                            unsorted-overlay-list
-                            (lambda (o1 o2)
-                              (funcall comp
-                                       (overlay-start o1)
-                                       (overlay-start o2)))))
-             (overlay 'dummy-value))
-        (while overlay
-          (setq overlay (car-safe overlay-list))
-          (setq overlay-list (cdr-safe overlay-list))
-          (when (and overlay
-                     (flyspell-overlay-p overlay))
-            (setq incorrect-word-pos (overlay-start overlay))
-            (let ((scroll (> incorrect-word-pos (window-end))))
-              (goto-char incorrect-word-pos)
-              (when scroll (ignore-errors (recenter))))
+        (let* ((unsorted-overlay-list
+                (if forward
+                    (overlays-in (- position 1) (point-max))
+                  (overlays-in (point-min) (+ position 1))))
+               (comp (if forward #'< #'>))
+               (overlay-list (sort
+                              unsorted-overlay-list
+                              (lambda (o1 o2)
+                                (funcall comp
+                                         (overlay-start o1)
+                                         (overlay-start o2)))))
+               (overlay 'dummy-value))
+          (while overlay
+            (setq overlay (car-safe overlay-list))
+            (setq overlay-list (cdr-safe overlay-list))
+            (when (and overlay
+                       (flyspell-overlay-p overlay))
+              (setq incorrect-word-pos (overlay-start overlay))
+              (let ((scroll (> incorrect-word-pos (window-end))))
+                (goto-char incorrect-word-pos)
+                (when scroll (ignore-errors (recenter))))
 
-            ;; Correct a word using `flyspell-correct-at-point'.
-            (let ((res (flyspell-correct-at-point)))
-              (when res
-                (when (or (not (mark t))
-	                        (/= (mark t) (point)))
-                  (push-mark (point) t))
-                (when (or (not rapid)
-                          (eq (car-safe res) 'stop))
-                  (setq overlay nil)))))))
+              ;; Point originally was on misspelled word, so we need to restore
+              ;; it. This imitates just calling `flyspell-correct-at-point'. But
+              ;; gives all the perks of `flyspell-correct-move'.
+              ;;
+              ;; But with rapid mode, `hard-reset-pos' will be set to nil
+              ;; eventually. Which gives more predictable point location in
+              ;; general.
+              (setq hard-reset-pos
+                    (and (>= original-pos (overlay-start overlay))
+                         (<= original-pos (overlay-end overlay))))
 
-      (when incorrect-word-pos
-        (goto-char incorrect-word-pos)
-        (forward-word)
-        (when (= (mark t) (point)) (pop-mark))))))
+              ;; Correct a word using `flyspell-correct-at-point'.
+              (let ((res (flyspell-correct-at-point)))
+                (when res
+                  (when (or (not (mark t))
+	                          (/= (mark t) (point)))
+                    (push-mark (point) t))
+                  (when (or (not rapid)
+                            (eq (car-safe res) 'stop))
+                    (setq overlay nil)))))))
+
+        (when incorrect-word-pos
+          (goto-char incorrect-word-pos)
+          (forward-word)
+          (when (= (mark t) (point)) (pop-mark)))))
+    (when hard-reset-pos
+      (goto-char original-pos))))
 
 ;;; Overlays
 

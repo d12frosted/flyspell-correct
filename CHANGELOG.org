@@ -9,6 +9,9 @@
 - Fix exception when dealing with missing marks.
 - Explicitly sort overlays so misspelled word always at the beginning of the
   list.
+- Align point movement between =flyspell-correct-at= and
+  =flyspell-correct-move=, so there is no difference in resulting point location
+  when any of these functions is called with point at misspelled word.
 
 * v0.6.1
 
