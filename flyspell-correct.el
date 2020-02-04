@@ -239,11 +239,18 @@ until all errors in buffer have been addressed."
       ;; narrow the region
       (overlay-recenter (point))
 
-      (let ((overlay-list
-             (if forward
-                 (overlays-in (- position 1) (point-max))
-               (overlays-in (point-min) (+ position 1))))
-            (overlay 'dummy-value))
+      (let* ((unsorted-overlay-list
+              (if forward
+                  (overlays-in (- position 1) (point-max))
+                (overlays-in (point-min) (+ position 1))))
+             (comp (if forward #'< #'>))
+             (overlay-list (sort
+                            unsorted-overlay-list
+                            (lambda (o1 o2)
+                              (funcall comp
+                                       (overlay-start o1)
+                                       (overlay-start o2)))))
+             (overlay 'dummy-value))
         (while overlay
           (setq overlay (car-safe overlay-list))
           (setq overlay-list (cdr-safe overlay-list))

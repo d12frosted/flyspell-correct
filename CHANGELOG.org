@@ -7,6 +7,8 @@
 - Fix exception when trying to remove missing =flyspell-correct-overlay=
   (happens when buffer has no words to correct).
 - Fix exception when dealing with missing marks.
+- Explicitly sort overlays so misspelled word always at the beginning of the
+  list.
 
 * v0.6.1
 
