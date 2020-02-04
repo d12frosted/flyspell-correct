@@ -203,7 +203,7 @@ misspelled words in the buffer."
   errors search and enables rapid mode."
   (interactive)
   (when (or (not (mark t))
-	    (/= (mark t) (point)))
+	          (/= (mark t) (point)))
     (push-mark (point) t))
 
   (let ((forward-direction nil)
@@ -257,7 +257,9 @@ until all errors in buffer have been addressed."
             ;; Correct a word using `flyspell-correct-at-point'.
             (let ((res (flyspell-correct-at-point)))
               (when res
-                (when (/= (mark t) (point)) (push-mark (point) t))
+                (when (or (not (mark t))
+	                        (/= (mark t) (point)))
+                  (push-mark (point) t))
                 (when (or (not rapid)
                           (eq (car-safe res) 'stop))
                   (setq overlay nil)))))))
