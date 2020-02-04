@@ -32,4 +32,4 @@ jobs:
     - name: Install
       run: cask install
     - name: Test
-      run: cask exec ert-runner
+      run: cask exec buttercup -L .

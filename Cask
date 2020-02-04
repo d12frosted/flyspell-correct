@@ -1,11 +1,5 @@
-(source melpa)
 (source gnu)
-
-(package-file "flyspell-correct.el")
-
-(files "flyspell-correct.el")
+(source melpa-stable)
 
 (development
- (depends-on "el-mock")
- (depends-on "ert-runner")
- (depends-on "undercover"))
+ (depends-on "buttercup"))
