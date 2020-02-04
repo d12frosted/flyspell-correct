@@ -284,7 +284,7 @@ until all errors in buffer have been addressed."
 
 (defun flyspell-correct--highlight-remove ()
   "Remove the highlight of the spelling error at point."
-  (when flyspell-correct-highlight
+  (when flyspell-correct-overlay
     (delete-overlay flyspell-correct-overlay)
     (setq flyspell-correct-overlay nil)))
 

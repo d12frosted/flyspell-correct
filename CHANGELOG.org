@@ -4,6 +4,8 @@
   @hubisan).
 - Support customization interface.
 - Fix non-breaking rapid mode with helm interface (see [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]]).
+- Fix exception when trying to remove missing =flyspell-correct-overlay=
+  (happens when buffer has no words to correct).
 
 * v0.6.1
 
