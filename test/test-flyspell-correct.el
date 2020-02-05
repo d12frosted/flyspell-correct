@@ -414,5 +414,76 @@ Simply passed WORD to `correct-word' mock."
 
        (expect-correction "versiuns")))))
 
+(describe "rapid mode"
+  (describe "skip"
+
+    (before-each
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'skip word))))
+
+    (it "call correct interface on all misspelled words with backward direction"
+      (with-mistakes|cursor-after
+       (let ((current-prefix-arg '(4)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 2)
+         (expect 'correct-word :to-have-been-called-with "versiuns")
+         (expect 'correct-word :to-have-been-called-with "Generel"))))
+
+    (it "call correct interface on all misspelled words with forward direction"
+      (with-mistakes|cursor-before
+       (let ((current-prefix-arg '(64)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 2)
+         (expect 'correct-word :to-have-been-called-with "versiuns")
+         (expect 'correct-word :to-have-been-called-with "werk")))))
+
+  (describe "correct"
+
+    (before-each
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-call-fake (lambda (word) word)))
+
+    (it "call correct interface on all misspelled words with backward direction"
+      (with-mistakes|cursor-after
+       (let ((current-prefix-arg '(4)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 2)
+         (expect 'correct-word :to-have-been-called-with "versiuns")
+         (expect 'correct-word :to-have-been-called-with "Generel"))))
+
+    (it "call correct interface on all misspelled words with forward direction"
+      (with-mistakes|cursor-before
+       (let ((current-prefix-arg '(64)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 2)
+         (expect 'correct-word :to-have-been-called-with "versiuns")
+         (expect 'correct-word :to-have-been-called-with "werk")))))
+
+  (describe "stop"
+
+    (before-each
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-return-value nil))
+
+    (it "call correct interface only once with backward direction"
+      (with-mistakes|cursor-after
+       (let ((current-prefix-arg '(4)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 1)
+         (expect 'correct-word :to-have-been-called-with "versiuns"))))
+
+    (it "call correct interface only once with forward direction"
+      (with-mistakes|cursor-before
+       (let ((current-prefix-arg '(64)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 1)
+         (expect 'correct-word :to-have-been-called-with "versiuns"))))))
+
 (provide 'test-flyspell-correct)
 ;;; test-flyspell-correct.el ends here
