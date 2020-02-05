@@ -2,16 +2,19 @@
 
 - Add highlighting of the word being currently corrected (#52, thanks to
   @hubisan).
-- Support customization interface.
+- Support Emacs customization interface - =customize=.
 - Fix non-breaking rapid mode with helm interface (see [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]]).
 - Fix exception when trying to remove missing =flyspell-correct-overlay=
   (happens when buffer has no words to correct).
 - Fix exception when dealing with missing marks.
-- Explicitly sort overlays so misspelled word always at the beginning of the
-  list.
+- Fix word at point not being prioritised by =flyspell-correct-move=,
+  =flyspell-correct-next=, =flyspell-correct-previous= and
+  =flyspell-correct-wrapper= by explicitly sort overlays so misspelled word at
+  point is always at the beginning of the list.
 - Align point movement between =flyspell-correct-at= and
   =flyspell-correct-move=, so there is no difference in resulting point location
   when any of these functions is called with point at misspelled word.
+- Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
 
 * v0.6.1
 
