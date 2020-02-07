@@ -290,7 +290,34 @@ Simply passed WORD to `correct-word' mock."
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (expect (flyspell-correct-at-point) :to-equal "versions")
-       (expect-correction "versiuns" "versions")))))
+       (expect-correction "versiuns" "versions"))))
+
+  (describe "action - save"
+    (before-each
+      (spy-on 'flyspell-do-correct)
+      (spy-on 'correct-interface :and-call-through))
+
+    (it "save the misspelled word"
+      (with-mistakes|cursor-inside
+       (spy-on 'correct-word :and-return-value (cons 'save "versions"))
+
+       (expect (flyspell-correct-at-point) :to-equal (cons 'save "versions"))
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 'save)
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 2 "versions")))
+
+    (it "correct misspelled word and save correction"
+      (with-mistakes|cursor-end
+       (spy-on 'correct-word :and-return-value (cons 'save "versens"))
+
+       (expect (flyspell-correct-at-point) :to-equal (cons 'save "versens"))
+       (expect (flyspell-correct-at-point) :to-equal (cons 'save "versens"))
+
+       ;; save
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 'save)
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 2 "versens")
+
+       ;; correct
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 "versens")))))
 
 (describe "flyspell-correct-next"
 

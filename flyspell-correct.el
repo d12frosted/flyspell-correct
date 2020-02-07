@@ -148,15 +148,20 @@ Adapted from `flyspell-correct-word-before-point'."
                   ;; stop rapid mode. So when interface returns nil we treat it
                   ;; as a stop. Fixes #60.
                   (unless res (setq res (cons 'stop word)))
-                  (cond ((stringp res)
-                         (flyspell-do-correct res poss word cursor-location start end opoint))
-                        (t
-                         (let ((cmd (car res))
-                               (wrd (cdr res)))
-                           (unless (or (eq cmd 'skip)
-                                       (eq cmd 'stop))
-                             (flyspell-do-correct
-                              cmd poss wrd cursor-location start end opoint)))))
+                  (cond
+                   ((stringp res)
+                    (flyspell-do-correct
+                     res poss word cursor-location start end opoint))
+                   (t
+                    (let ((cmd (car res))
+                          (wrd (cdr res)))
+                      (unless (or (eq cmd 'skip)
+                                  (eq cmd 'stop))
+                        (flyspell-do-correct
+                         cmd poss wrd cursor-location start end opoint)
+                        (unless (string-equal wrd word)
+                          (flyspell-do-correct
+                           wrd poss word cursor-location start end opoint))))))
                   (ispell-pdict-save t))))))
       (flyspell-correct--highlight-remove))
     res))
