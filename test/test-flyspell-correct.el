@@ -193,6 +193,29 @@ This silences calls to `message' and anything that writes to
              ((symbol-function 'message) (lambda (&rest _))))
      ,@forms))
 
+(buttercup-define-matcher :to-have-been-called-with-nth (spy n arg)
+  (setq spy (funcall spy))
+  (cl-assert (symbolp spy))
+  (setq n (funcall n))
+  (setq arg (funcall arg))
+  (let* ((calls (mapcar (lambda (args) (nth n args)) (mapcar 'spy-context-args (spy-calls-all spy)))))
+    (cond
+     ((not calls)
+      (cons nil
+            (format "Expected `%s' to have been called with %s as %s argument, but it was not called at all" spy arg n)))
+     ((not (member arg calls))
+      (cons nil
+            (format "Expected `%s' to have been called with %s as %s argument, but it was called with %s"
+                    spy
+                    arg
+                    n
+                    (mapconcat (lambda (x)
+                                 (format "%S" x))
+                               calls
+                               ", "))))
+     (t
+      t))))
+
 (defun correct-word (_)
   "Mock function for testing `correct-interface'.")
 
@@ -202,16 +225,25 @@ This silences calls to `message' and anything that writes to
 Simply passed WORD to `correct-word' mock."
   (correct-word word))
 
-(defun expect-correction (misspelled)
-  "Expect correction interface to be called on MISSPELLED word."
+(defun expect-no-correction (misspelled)
+  "Expect no correction to happen on MISSPELLED word."
   (expect 'correct-interface :to-have-been-called-times 1)
   (expect 'correct-word :to-have-been-called-times 1)
-  (expect 'correct-word :to-have-been-called-with misspelled))
+  (expect 'correct-word :to-have-been-called-with misspelled)
+  (expect 'flyspell-do-correct :not :to-have-been-called))
+
+(defun expect-correction (misspelled correct)
+  "Expect correction of MISSPELLED to CORRECT word."
+  (expect 'correct-interface :to-have-been-called-times 1)
+  (expect 'correct-word :to-have-been-called-times 1)
+  (expect 'correct-word :to-have-been-called-with misspelled)
+  (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 correct))
 
 (describe "flyspell-correct-at-point"
 
   (before-each
-    (setq flyspell-correct-interface #'correct-interface))
+    (setq flyspell-correct-interface #'correct-interface)
+    (spy-on 'flyspell-do-correct))
 
   (it "don't call correct when word is correct"
     (with-no-mistakes
@@ -228,17 +260,17 @@ Simply passed WORD to `correct-word' mock."
     (it "call correct when the cursor is at the beginning of misspelled word"
       (with-mistakes|cursor-beginning
        (expect (flyspell-correct-at-point) :to-equal (cons 'skip "versiuns"))
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (expect (flyspell-correct-at-point) :to-equal (cons 'skip "versiuns"))
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (expect (flyspell-correct-at-point) :to-equal (cons 'skip "versiuns"))
-       (expect-correction "versiuns"))))
+       (expect-no-correction "versiuns"))))
 
   (describe "action - fix"
     (before-each
@@ -248,17 +280,17 @@ Simply passed WORD to `correct-word' mock."
     (it "call correct when the cursor is at the beginning of misspelled word"
       (with-mistakes|cursor-beginning
        (expect (flyspell-correct-at-point) :to-equal "versions")
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (expect (flyspell-correct-at-point) :to-equal "versions")
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (expect (flyspell-correct-at-point) :to-equal "versions")
-       (expect-correction "versiuns")))))
+       (expect-correction "versiuns" "versions")))))
 
 (describe "flyspell-correct-next"
 
@@ -280,6 +312,7 @@ Simply passed WORD to `correct-word' mock."
   (describe "action - skip"
 
     (before-each
+      (spy-on 'flyspell-do-correct)
       (spy-on 'correct-interface :and-call-through)
       (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'skip word))))
 
@@ -287,29 +320,29 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-before
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is at the beginning of misspelled word"
       (with-mistakes|cursor-beginning
        (flyspell-correct-next (point))
-
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns"))))
+       (expect-no-correction "versiuns"))))
 
   (describe "action - fix"
 
     (before-each
+      (spy-on 'flyspell-do-correct)
       (spy-on 'correct-interface :and-call-through)
       (spy-on 'correct-word :and-return-value "versions"))
 
@@ -317,25 +350,25 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-before
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is at the beginning of misspelled word"
       (with-mistakes|cursor-beginning
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-next (point))
 
-       (expect-correction "versiuns")))))
+       (expect-correction "versiuns" "versions")))))
 
 (describe "flyspell-correct-previous"
 
@@ -357,6 +390,7 @@ Simply passed WORD to `correct-word' mock."
   (describe "action - skip"
 
     (before-each
+      (spy-on 'flyspell-do-correct)
       (spy-on 'correct-interface :and-call-through)
       (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'skip word))))
 
@@ -364,29 +398,30 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-beginning
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is inside of misspelled word, but skip"
       (with-mistakes|cursor-inside
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-no-correction "versiuns")))
 
     (it "call correct when the cursor is after misspelled word"
       (with-mistakes|cursor-after
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns"))))
+       (expect-no-correction "versiuns"))))
 
   (describe "action - fix"
 
     (before-each
+      (spy-on 'flyspell-do-correct)
       (spy-on 'correct-interface :and-call-through)
       (spy-on 'correct-word :and-return-value "versions"))
 
@@ -394,25 +429,25 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-beginning
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))
+       (expect-correction "versiuns" "versions")))
 
     (it "call correct when the cursor is after misspelled word"
       (with-mistakes|cursor-after
        (flyspell-correct-previous (point))
 
-       (expect-correction "versiuns")))))
+       (expect-correction "versiuns" "versions")))))
 
 (describe "rapid mode"
   (describe "skip"
