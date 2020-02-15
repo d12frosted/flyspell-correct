@@ -16,6 +16,7 @@
   when any of these functions is called with point at misspelled word.
 - Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
 - Allow to correct and save the word in one pass (see #66).
+- New action - =stop= allowing to leave the point at the misspelled word.
 
 * v0.6.1
 

@@ -52,7 +52,9 @@
                     (cons (format "Accept (buffer) \"%s\"" word)
                           (cons 'buffer word))
                     (cons (format "Skip \"%s\"" word)
-                          (cons 'skip word)))))
+                          (cons 'skip word))
+                    (cons (format "Stop at \"%s\"" word)
+                          (cons 'stop word)))))
     (unless (string= helm-pattern "")
       (setq opts
             (append opts

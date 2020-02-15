@@ -99,6 +99,21 @@ License for most of our software; it applies also to any other
 werk released this way by its authors. You can apply it to your
 programs, too." ,@body))
 
+(defmacro with-mistakes|stop|cursor-before (&rest body)
+  "Execute BODY in temporary buffer that has a mistake.
+
+Cursor is placed somewhere before the misspelled word."
+  `(with-flyspell-buffer
+    "The licenses for most software and other practical works are
+designed to take away your freedom to share and change the works.
+By contrast, the GNU Generel Public License |is intended to
+guarantee your freedom to share and change all †versiuns of a
+program--to make sure it remains free software for all its users.
+We, the Free Software Foundation, use the GNU General Public
+License for most of our software; it applies also to any other
+werk released this way by its authors. You can apply it to your
+programs, too." ,@body))
+
 (defmacro with-mistakes|cursor-inside (&rest body)
   "Execute BODY in temporary buffer that has a mistake.
 
@@ -138,6 +153,21 @@ Cursor is placed somewhere after the misspelled word."
 designed to take away your freedom to share and change the works.
 By contrast, the GNU Generel Public License is intended to
 guarantee your freedom to share and change all versiuns of a
+program--to make sure it remains free software for all| its
+users. We, the Free Software Foundation, use the GNU General
+Public License for most of our software; it applies also to any
+other werk released this way by its authors. You can apply it to
+your programs, too." ,@body))
+
+(defmacro with-mistakes|stop|cursor-after (&rest body)
+  "Execute BODY in temporary buffer that has a mistake.
+
+Cursor is placed somewhere after the misspelled word."
+  `(with-flyspell-buffer
+    "The licenses for most software and other practical works are
+designed to take away your freedom to share and change the works.
+By contrast, the GNU Generel Public License is intended to
+guarantee your freedom to share and change all †versiuns of a
 program--to make sure it remains free software for all| its
 users. We, the Free Software Foundation, use the GNU General
 Public License for most of our software; it applies also to any
@@ -366,6 +396,19 @@ Simply passed WORD to `correct-word' mock."
 
        (expect-no-correction "versiuns"))))
 
+  (describe "action - stop"
+
+    (before-each
+      (spy-on 'flyspell-do-correct)
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'stop word))))
+
+    (it "stop at the beginning of misspelled word"
+      (with-mistakes|stop|cursor-before
+       (flyspell-correct-next (point))
+
+       (expect-no-correction "versiuns"))))
+
   (describe "action - fix"
 
     (before-each
@@ -441,6 +484,19 @@ Simply passed WORD to `correct-word' mock."
 
     (it "call correct when the cursor is after misspelled word"
       (with-mistakes|cursor-after
+       (flyspell-correct-previous (point))
+
+       (expect-no-correction "versiuns"))))
+
+  (describe "action - stop"
+
+    (before-each
+      (spy-on 'flyspell-do-correct)
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'stop word))))
+
+    (it "stop at the beginning of misspelled word"
+      (with-mistakes|stop|cursor-after
        (flyspell-correct-previous (point))
 
        (expect-no-correction "versiuns"))))
@@ -528,9 +584,9 @@ Simply passed WORD to `correct-word' mock."
   (describe "break"
 
     (before-each
-     (spy-on 'correct-interface :and-call-through)
-     ;; imitate C-g
-     (spy-on 'correct-word :and-return-value nil))
+      (spy-on 'correct-interface :and-call-through)
+      ;; imitate C-g
+      (spy-on 'correct-word :and-return-value nil))
 
     (it "call correct interface only once with backward direction"
       (with-mistakes|cursor-after
@@ -542,6 +598,28 @@ Simply passed WORD to `correct-word' mock."
 
     (it "call correct interface only once with forward direction"
       (with-mistakes|cursor-before
+       (let ((current-prefix-arg '(64)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 1)
+         (expect 'correct-word :to-have-been-called-with "versiuns")))))
+
+  (describe "stop"
+
+    (before-each
+      (spy-on 'correct-interface :and-call-through)
+      (spy-on 'correct-word :and-call-fake (lambda (word) (cons 'stop word))))
+
+    (it "stop at the first misspelled word with backward direction"
+      (with-mistakes|stop|cursor-after
+       (let ((current-prefix-arg '(4)))
+         (flyspell-correct-wrapper)
+
+         (expect 'correct-interface :to-have-been-called-times 1)
+         (expect 'correct-word :to-have-been-called-with "versiuns"))))
+
+    (it "stop at the first misspelled word with forward direction"
+      (with-mistakes|stop|cursor-before
        (let ((current-prefix-arg '(64)))
          (flyspell-correct-wrapper)
 
