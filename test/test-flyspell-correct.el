@@ -525,11 +525,12 @@ Simply passed WORD to `correct-word' mock."
          (expect 'correct-word :to-have-been-called-with "versiuns")
          (expect 'correct-word :to-have-been-called-with "werk")))))
 
-  (describe "stop"
+  (describe "break"
 
     (before-each
-      (spy-on 'correct-interface :and-call-through)
-      (spy-on 'correct-word :and-return-value nil))
+     (spy-on 'correct-interface :and-call-through)
+     ;; imitate C-g
+     (spy-on 'correct-word :and-return-value nil))
 
     (it "call correct interface only once with backward direction"
       (with-mistakes|cursor-after

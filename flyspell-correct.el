@@ -61,10 +61,31 @@
 
 (defcustom flyspell-correct-interface #'flyspell-correct-dummy
   "Interface for `flyspell-correct-at-point'.
-It has to be function that accepts two arguments - candidates and
-misspelled word. It has to return either replacement word
-or (command, word) tuple that will be passed to
-`flyspell-do-correct'."
+
+`flyspell-correct-interface' is a function accepting two arguments:
+
+  - candidates for correction (list of strings)
+  - misspelled word (string)
+
+Result must be either a string (replacement word) or a cons of a
+command and a string (replacement word), where the command is one
+of the following:
+
+  - skip - do nothing to misspelled word, in rapid mode used for
+    jumping to the next (or previous) misspelled word
+
+  - break - do nothing to misspelled word, break from rapid mode
+
+  - save - replace misspelled word with replacement word and save
+    it to the personal dictionary
+
+  - session - replace misspelled word with replacement word and
+    save it to the session dictionary (correction will be
+    discarded upon quitting Emacs)
+
+  - buffer - replace misspelled word with replacement word and
+    save it to the buffer dictionary (added to the bottom of
+    buffer)"
   :group 'flyspell-correct
   :type 'function)
 
@@ -147,7 +168,7 @@ Adapted from `flyspell-correct-word-before-point'."
                   ;; Some interfaces actually eat 'C-g' so it's impossible to
                   ;; stop rapid mode. So when interface returns nil we treat it
                   ;; as a stop. Fixes #60.
-                  (unless res (setq res (cons 'stop word)))
+                  (unless res (setq res (cons 'break word)))
                   (cond
                    ((stringp res)
                     (flyspell-do-correct
@@ -156,7 +177,7 @@ Adapted from `flyspell-correct-word-before-point'."
                     (let ((cmd (car res))
                           (wrd (cdr res)))
                       (unless (or (eq cmd 'skip)
-                                  (eq cmd 'stop))
+                                  (eq cmd 'break))
                         (flyspell-do-correct
                          cmd poss wrd cursor-location start end opoint)
                         (unless (string-equal wrd word)
@@ -286,7 +307,7 @@ until all errors in buffer have been addressed."
 	                          (/= (mark t) (point)))
                     (push-mark (point) t))
                   (when (or (not rapid)
-                            (eq (car-safe res) 'stop))
+                            (eq (car-safe res) 'break))
                     (setq overlay nil)))))))
 
         (when incorrect-word-pos
