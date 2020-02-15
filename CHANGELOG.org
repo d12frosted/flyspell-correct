@@ -19,6 +19,8 @@
 - New action - =stop= allowing to leave the point at the misspelled word.
 - =skip= action now allows to correct 'next' word even if rapid mode is not
   enabled (#58).
+- Allow to hook into =flyspell-correct-ivy= interface via
+  =flyspell-correct-ivy-map= (fixes #58, see example in #72).
 
 * v0.6.1
 
