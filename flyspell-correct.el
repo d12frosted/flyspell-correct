@@ -76,6 +76,9 @@ of the following:
 
   - break - do nothing to misspelled word, break from rapid mode
 
+  - stop - do nothing to misspelled word, break from rapid
+    mode (if enabled) and leave the point at the misspelled word
+
   - save - replace misspelled word with replacement word and save
     it to the personal dictionary
 
