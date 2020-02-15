@@ -377,24 +377,57 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-before
        (flyspell-correct-next (point))
 
-       (expect-no-correction "versiuns")))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "werk")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is at the beginning of misspelled word"
       (with-mistakes|cursor-beginning
        (flyspell-correct-next (point))
-       (expect-no-correction "versiuns")))
+
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "werk")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is inside of misspelled word"
       (with-mistakes|cursor-inside
        (flyspell-correct-next (point))
 
-       (expect-no-correction "versiuns")))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "werk")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-next (point))
 
-       (expect-no-correction "versiuns"))))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "werk")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
+
+    (it "act as a one-time rapid mode enabler"
+      (with-mistakes|cursor-before-all
+       (spy-on 'correct-word :and-call-fake
+               (lambda (word)
+                 (if (string-equal word "versiuns")
+                     "versions"
+                   (cons 'skip word))))
+
+       (flyspell-correct-next (point))
+
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "Generel")
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 "versions"))))
 
   (describe "action - stop"
 
@@ -468,25 +501,57 @@ Simply passed WORD to `correct-word' mock."
       (with-mistakes|cursor-beginning
        (flyspell-correct-previous (point))
 
-       (expect-no-correction "versiuns")))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "Generel")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is inside of misspelled word, but skip"
       (with-mistakes|cursor-inside
        (flyspell-correct-previous (point))
 
-       (expect-no-correction "versiuns")))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "Generel")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is at the end of misspelled word"
       (with-mistakes|cursor-end
        (flyspell-correct-previous (point))
 
-       (expect-no-correction "versiuns")))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "Generel")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
 
     (it "call correct when the cursor is after misspelled word"
       (with-mistakes|cursor-after
        (flyspell-correct-previous (point))
 
-       (expect-no-correction "versiuns"))))
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'correct-word :to-have-been-called-with "Generel")
+       (expect 'flyspell-do-correct :not :to-have-been-called)))
+
+    (it "act as a one-time rapid mode enabler"
+      (with-mistakes|cursor-after-all
+       (spy-on 'correct-word :and-call-fake
+               (lambda (word)
+                 (if (string-equal word "versiuns")
+                     "versions"
+                   (cons 'skip word))))
+
+       (flyspell-correct-previous (point))
+
+       (expect 'correct-interface :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-times 2)
+       (expect 'correct-word :to-have-been-called-with "werk")
+       (expect 'correct-word :to-have-been-called-with "versiuns")
+       (expect 'flyspell-do-correct :to-have-been-called-with-nth 0 "versions"))))
 
   (describe "action - stop"
 

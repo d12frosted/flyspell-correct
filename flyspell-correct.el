@@ -311,9 +311,14 @@ until all errors in buffer have been addressed."
                           hard-move-point t))
 
                   ;; break from rapid mode
-                  (when (or (not rapid)
-                            (eq (car-safe res) 'break)
-                            (eq (car-safe res) 'stop))
+                  (when (or
+                         ;; treat skip as one-time rapid mode enabler
+                         (and (not (eq (car-safe res) 'skip))
+                              (not rapid))
+
+                         ;; explicit rapid mode disablers
+                         (eq (car-safe res) 'break)
+                         (eq (car-safe res) 'stop))
                     (setq overlay nil))
 
                   ;; push mark
