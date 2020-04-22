@@ -370,3 +370,4 @@ Additional thanks to all contributors:
 - [[https://github.com/hubisan][Daniel Hubmann]]
 - [[https://github.com/manuel-uberti][Manuel Uberti]]
 - [[https://github.com/jpkotta][Jonathan Kotta]]
+- [[https://github.com/tpadioleau][Thomas Padioleau]]
