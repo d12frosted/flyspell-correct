@@ -92,8 +92,13 @@ Or via =use-package=.
 
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell-correct
-    :bind ("C-;" . flyspell-correct-wrapper))
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 #+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 ** =flyspell-correct-ivy= interface
 
@@ -109,11 +114,17 @@ snippet to relevant part of your =init.el= file.
 Or via =use-package=.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
   (use-package flyspell-correct-ivy
-    :bind ("C-;" . flyspell-correct-wrapper)
-    :init
-    (setq flyspell-correct-interface #'flyspell-correct-ivy))
+    :after flyspell-correct)
 #+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 Note that in order to access actions in =ivy= interface you need to press ~M-o~.
 More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official documentation]].
@@ -132,11 +143,17 @@ snippet to relevant part of your =init.el= file.
 Or via =use-package=.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
   (use-package flyspell-correct-avy-menu
-    :bind ("C-;" . flyspell-correct-wrapper)
-    :init
-    (setq flyspell-correct-interface #'flyspell-correct-avy-menu))
+    :after flyspell-correct)
 #+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 ** =flyspell-correct-ido= interface
 
@@ -149,6 +166,21 @@ snippet to relevant part of your =init.el= file.
   (require 'flyspell-correct-ido)
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
+
+Or via =use-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
+  (use-package flyspell-correct-ido
+    :after flyspell-correct)
+#+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 ** =flyspell-correct-helm= interface
 
@@ -164,11 +196,17 @@ to relevant part of your =init.el= file.
 Or via =use-package=.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
   (use-package flyspell-correct-helm
-    :bind ("C-;" . flyspell-correct-wrapper)
-    :init
-    (setq flyspell-correct-interface #'flyspell-correct-helm))
+    :after flyspell-correct)
 #+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 ** =flyspell-correct-popup= interface
 
@@ -184,11 +222,17 @@ to relevant part of your =init.el= file.
 Or via =use-package=.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package flyspell-correct
+    :after flyspell
+    :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
+
   (use-package flyspell-correct-popup
-    :bind ("C-;" . flyspell-correct-wrapper)
-    :init
-    (setq flyspell-correct-interface #'flyspell-correct-popup))
+    :after flyspell-correct)
 #+END_SRC
+
+If you do not want any binding, just replace =:bind (:map
+flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
+to use lazy loading.
 
 There are some cool usability suggestions by @alphapapa shared in
 [[https://github.com/d12frosted/flyspell-correct/issues/30][d12frosted/flyspell-correct#30]] that you might want to use. Enjoy!
