@@ -1,3 +1,9 @@
+#+begin_html
+<p align="center">
+  <img max-width="512px" src="images/flyspell-correct.png" alt="Banner">
+</p>
+#+end_html
+
 * flyspell-correct
 
 [[https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg][file:https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg]]
@@ -41,7 +47,7 @@ additional interfaces come in separate packages:
 - [[#flyspell-correct-helm-interface][flyspell-correct-helm]]
 - [[#flyspell-correct-popup-interface][flyspell-correct-popup]]
 
-** Table of contents :TOC:
+** Table of contents                                                   :TOC:
 - [[#flyspell-correct][flyspell-correct]]
   - [[#rapid-mode][Rapid mode]]
   - [[#flyspell-correct-dummy-interface][=flyspell-correct-dummy= interface]]
