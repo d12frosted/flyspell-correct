@@ -60,20 +60,25 @@ specification."
           (lambda (x)
             (setq flyspell-correct-ivy--result x)))
          (action-save-word
-          (lambda (_)
-            (setq flyspell-correct-ivy--result (cons 'save word))))
+          (lambda (x)
+            (setq flyspell-correct-ivy--result
+                  (cons 'save (if (member x candidates) word x)))))
          (action-accept-session
-          (lambda (_)
-            (setq flyspell-correct-ivy--result (cons 'session word))))
+          (lambda (x)
+            (setq flyspell-correct-ivy--result
+                  (cons 'session (if (member x candidates) word x)))))
          (action-accept-buffer
-          (lambda (_)
-            (setq flyspell-correct-ivy--result (cons 'buffer word))))
+          (lambda (x)
+            (setq flyspell-correct-ivy--result
+                  (cons 'buffer (if (member x candidates) word x)))))
          (action-skip-word
-          (lambda (_)
-            (setq flyspell-correct-ivy--result (cons 'skip word))))
+          (lambda (x)
+            (setq flyspell-correct-ivy--result
+                  (cons 'skip (if (member x candidates) word x)))))
          (action-stop
-          (lambda (_)
-            (setq flyspell-correct-ivy--result (cons 'stop word))))
+          (lambda (x)
+            (setq flyspell-correct-ivy--result
+                  (cons 'stop (if (member x candidates) word x)))))
          (action `(1
                    ("o" ,action-default "correct")
                    ("s" ,action-save-word "Save")
