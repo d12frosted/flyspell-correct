@@ -117,7 +117,25 @@ List of CANDIDATES is given by flyspell for the WORD.
 
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
-  (completing-read (format "Correcting '%s': " word) candidates))
+  (let* ((save "[SAVE]")
+         (accept-session "[ACCEPT (session)]")
+         (accept-buffer "[ACCEPT (buffer)]")
+         (skip "[SKIP]")
+         (result (completing-read
+                  (format "Correcting '%s': " word)
+                  (append candidates
+                          (list save accept-session accept-buffer skip)))))
+    (cond
+     ((string= result save)
+      (cons 'save word))
+     ((string= result accept-session)
+      (cons 'session word))
+     ((string= result accept-buffer)
+      (cons 'buffer word))
+     ((string= result skip)
+      (cons 'skip word))
+     (t
+      result))))
 
 ;;; On point word correction
 ;;
