@@ -21,6 +21,7 @@
   enabled (#58).
 - Allow to hook into =flyspell-correct-ivy= interface via
   =flyspell-correct-ivy-map= (fixes #58, see example in #72).
+- Add actions to =flyspell-correct-dummy= interface (see [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]]).
 
 * v0.6.1
 
