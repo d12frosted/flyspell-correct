@@ -123,8 +123,18 @@ of (command, word) to be used by `flyspell-do-correct'."
          (skip "[SKIP]")
          (result (completing-read
                   (format "Correcting '%s': " word)
-                  (append candidates
-                          (list save accept-session accept-buffer skip)))))
+                  ;; Use function with metadata to disable sorting.
+                  (lambda (input predicate action)
+                    (if (eq action 'metadata)
+                        '(metadata (display-sort-function . identity)
+                                   (cycle-sort-function . identity))
+                      (complete-with-action action
+                                            (append candidates
+                                                    (list save
+                                                          accept-session
+                                                          accept-buffer
+                                                          skip))
+                                            input predicate))))))
     (cond
      ((string= result save)
       (cons 'save word))
