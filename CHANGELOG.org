@@ -1,7 +1,7 @@
 * next-version
 
-- Add highlighting of the word being currently corrected (#52, thanks to
-  @hubisan).
+- Add highlighting of the word being currently corrected ([[https://github.com/d12frosted/flyspell-correct/issues/52][#52]], thanks to
+  [[https://github.com/hubisan][@hubisan]]).
 - Support Emacs customization interface - =customize=.
 - Fix non-breaking rapid mode with helm interface (see [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]]).
 - Fix exception when trying to remove missing =flyspell-correct-overlay=
@@ -15,12 +15,12 @@
   =flyspell-correct-move=, so there is no difference in resulting point location
   when any of these functions is called with point at misspelled word.
 - Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
-- Allow to correct and save the word in one pass (see #66, #68).
+- Allow to correct and save the word in one pass (see [[https://github.com/d12frosted/flyspell-correct/issues/66][#66]], [[https://github.com/d12frosted/flyspell-correct/issues/68][#68]]).
 - New action - =stop= allowing to leave the point at the misspelled word.
 - =skip= action now allows to correct 'next' word even if rapid mode is not
-  enabled (#58).
+  enabled ([[https://github.com/d12frosted/flyspell-correct/issues/58][#58]]).
 - Allow to hook into =flyspell-correct-ivy= interface via
-  =flyspell-correct-ivy-map= (fixes #58, see example in #72).
+  =flyspell-correct-ivy-map= (fixes [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]], see example in [[https://github.com/d12frosted/flyspell-correct/issues/72][#72]]).
 - Add actions to =flyspell-correct-dummy= interface (see [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]]).
 
 * v0.6.1
