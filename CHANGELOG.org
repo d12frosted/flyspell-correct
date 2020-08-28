@@ -1,9 +1,33 @@
-* next-version
+* Changelog
 
-- Add highlighting of the word being currently corrected ([[https://github.com/d12frosted/flyspell-correct/issues/52][#52]], thanks to
-  [[https://github.com/hubisan][@hubisan]]).
+** v1.0 (TBD)
+
+Contributors:
+
+- [[https://github.com/hubisan][@hubisan]]
+- [[https://github.com/gusbrs][@gusbrs]]
+- [[https://github.com/okamsn][@okamsn]]
+
+*** Features
+
+- [[https://github.com/d12frosted/flyspell-correct/issues/52][#52]] Add highlighting of the word being currently corrected.
 - Support Emacs customization interface - =customize=.
-- Fix non-breaking rapid mode with helm interface (see [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]]).
+- Align point movement between =flyspell-correct-at= and
+  =flyspell-correct-move=, so there is no difference in resulting point location
+  when any of these functions is called with point at misspelled word.
+- Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
+- [[https://github.com/d12frosted/flyspell-correct/issues/66][#66]], [[https://github.com/d12frosted/flyspell-correct/issues/68][#68]] Allow to correct and save the word in one pass.
+- New action - =stop= allowing to leave the point at the misspelled word.
+- [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]] =skip= action now allows to correct 'next' word even if rapid mode is not
+  enabled.
+- [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]], [[https://github.com/d12frosted/flyspell-correct/issues/72][#72]] Allow to hook into =flyspell-correct-ivy= interface via
+  =flyspell-correct-ivy-map=.
+- [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]] Add actions to =flyspell-correct-dummy= interface.
+- [[https://github.com/d12frosted/flyspell-correct/pull/79][#79]] Disable sorting in =flyspell-correct-dummy=.
+
+*** Bugfixes
+
+- [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]] Fix non-breaking rapid mode with helm interface.
 - Fix exception when trying to remove missing =flyspell-correct-overlay=
   (happens when buffer has no words to correct).
 - Fix exception when dealing with missing marks.
@@ -11,26 +35,14 @@
   =flyspell-correct-next=, =flyspell-correct-previous= and
   =flyspell-correct-wrapper= by explicitly sort overlays so misspelled word at
   point is always at the beginning of the list.
-- Align point movement between =flyspell-correct-at= and
-  =flyspell-correct-move=, so there is no difference in resulting point location
-  when any of these functions is called with point at misspelled word.
-- Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
-- Allow to correct and save the word in one pass (see [[https://github.com/d12frosted/flyspell-correct/issues/66][#66]], [[https://github.com/d12frosted/flyspell-correct/issues/68][#68]]).
-- New action - =stop= allowing to leave the point at the misspelled word.
-- =skip= action now allows to correct 'next' word even if rapid mode is not
-  enabled ([[https://github.com/d12frosted/flyspell-correct/issues/58][#58]]).
-- Allow to hook into =flyspell-correct-ivy= interface via
-  =flyspell-correct-ivy-map= (fixes [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]], see example in [[https://github.com/d12frosted/flyspell-correct/issues/72][#72]]).
-- Add actions to =flyspell-correct-dummy= interface (see [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]]).
-- Disable sorting in =flyspell-correct-dummy= (see [[https://github.com/d12frosted/flyspell-correct/pull/79][#79]]).
 
-* v0.6.1
+** v0.6.1
 
 - Remove deprecated aliases (=flyspell-correct-word-generic=,
   =flyspell-correct-previous-word-generic= and
   =flyspell-correct-next-word-generic=).
 
-* v0.6
+** v0.6
 
 - Do not move point by correction functions.
 - New interface - =avy-menu=. Thanks to @clemera.
@@ -40,7 +52,7 @@
 - Fix many warnings.
 - Start using =lexical-binding=.
 
-* v0.5
+** v0.5
 
 - Skip words that don't need to be fixed (e.g. duplicates).
 - Rename several functions (via name deprecation)
@@ -55,20 +67,20 @@
 - Add some simple tests to cover the most important use cases.
 - Fix issue when =flyspell-correct-next= doesn't correct word at point.
 
-* v0.4
+** v0.4
 
 - Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
 - Minor readme updates.
 
-* v0.3
+** v0.3
 
 - Make sure that word at point is corrected first when using
   =flyspell-correct-previous-word-generic=.
 - New =ido= interface (thanks to @jpkotta).
 - New =dummy= interface (thanks to @purcell for suggestion).
 
-* v0.2
+** v0.2
 
 - Various documentation updates.
 - =flyspell-correct-previous-word-generic= now corrects word at point if it's
@@ -77,7 +89,7 @@
 - Basic implementation of =flyspell-correct-auto-mode=.
 - Warn user when correction interface is not set.
 
-* v0.1
+** v0.1
 
 - Initial implementation.
 - Two correction functions:
