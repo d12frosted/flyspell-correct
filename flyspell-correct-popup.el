@@ -58,7 +58,9 @@ of (command, word) to be used by `flyspell-do-correct'."
      (popup-make-item (format "Accept (buffer) \"%s\"" word)
                       :value (cons 'buffer word))
      (popup-make-item (format "Skip \"%s\"" word)
-                      :value (cons 'skip word))))
+                      :value (cons 'skip word))
+     (popup-make-item "Stop"
+                      :value (cons 'stop word))))
    :margin t))
 
 (setq flyspell-correct-interface #'flyspell-correct-popup)

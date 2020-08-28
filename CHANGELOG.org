@@ -17,7 +17,7 @@ Contributors:
   when any of these functions is called with point at misspelled word.
 - Rewrite all tests using [[https://github.com/jorgenschaefer/emacs-buttercup][buttercup]] library.
 - [[https://github.com/d12frosted/flyspell-correct/issues/66][#66]], [[https://github.com/d12frosted/flyspell-correct/issues/68][#68]] Allow to correct and save the word in one pass.
-- New action - =stop= allowing to leave the point at the misspelled word.
+- [[https://github.com/d12frosted/flyspell-correct/issues/73][#73]] New action - =stop= allowing to leave the point at the misspelled word.
 - [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]] =skip= action now allows to correct 'next' word even if rapid mode is not
   enabled.
 - [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]], [[https://github.com/d12frosted/flyspell-correct/issues/72][#72]] Allow to hook into =flyspell-correct-ivy= interface via
