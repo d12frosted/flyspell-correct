@@ -22,6 +22,7 @@
 - Allow to hook into =flyspell-correct-ivy= interface via
   =flyspell-correct-ivy-map= (fixes [[https://github.com/d12frosted/flyspell-correct/issues/58][#58]], see example in [[https://github.com/d12frosted/flyspell-correct/issues/72][#72]]).
 - Add actions to =flyspell-correct-dummy= interface (see [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]]).
+- Disable sorting in =flyspell-correct-dummy= (see [[https://github.com/d12frosted/flyspell-correct/pull/79][#79]]).
 
 * v0.6.1
 
