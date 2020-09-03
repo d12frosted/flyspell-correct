@@ -359,7 +359,9 @@ until all errors in buffer have been addressed."
                              ;; don't push mark if there is no change
                              (not (memq (car-safe res) '(stop break skip)))
                              (/= (mark t) (point)))
-                        (push-mark (point) t)))))))))
+                        ;; `flyspell-correct-at-point' may move point, use
+                        ;; original `incorrect-word-pos' instead
+                        (push-mark incorrect-word-pos t)))))))))
 
       (when hard-move-point
         (when mark-opos
