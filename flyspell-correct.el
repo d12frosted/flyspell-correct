@@ -260,10 +260,6 @@ misspelled words in the buffer."
 - Three \\[universal-argument]'s changes direction of spelling
   errors search and enables rapid mode."
   (interactive)
-  (when (or (not (mark t))
-	          (/= (mark t) (point)))
-    (push-mark (point) t))
-
   (let ((forward-direction nil)
 		    (rapid nil))
     (cond
@@ -291,78 +287,87 @@ until all errors in buffer have been addressed."
   ;; idiomatically done using the opoint arg of
   ;; `flyspell-correct-word-before-point'.
   (interactive "d")
+  ;; push mark when starting
+  (when (or (not (mark t))
+            (/= (mark t) (point)))
+    (push-mark (point) t))
   (let ((original-pos (point))
         (target-pos (point))
-        (hard-move-point))
-    (save-excursion
-      (let ((incorrect-word-pos))
+        (hard-move-point)
+        (mark-opos))
+    (unwind-protect
+        (save-excursion
+          (let ((incorrect-word-pos))
 
-        ;; narrow the region
-        (overlay-recenter (point))
+            ;; narrow the region
+            (overlay-recenter (point))
 
-        (let* ((unsorted-overlay-list
-                (if forward
-                    (overlays-in (- position 1) (point-max))
-                  (overlays-in (point-min) (+ position 1))))
-               (comp (if forward #'< #'>))
-               (overlay-list (sort
-                              unsorted-overlay-list
-                              (lambda (o1 o2)
-                                (funcall comp
-                                         (overlay-start o1)
-                                         (overlay-start o2)))))
-               (overlay 'dummy-value))
-          (while overlay
-            (setq overlay (car-safe overlay-list))
-            (setq overlay-list (cdr-safe overlay-list))
-            (when (and overlay
-                       (flyspell-overlay-p overlay))
-              (setq incorrect-word-pos (overlay-start overlay))
-              (let ((scroll (> incorrect-word-pos (window-end))))
-                (goto-char incorrect-word-pos)
-                (when scroll (ignore-errors (recenter))))
+            (let* ((unsorted-overlay-list
+                    (if forward
+                        (overlays-in (- position 1) (point-max))
+                      (overlays-in (point-min) (+ position 1))))
+                   (comp (if forward #'< #'>))
+                   (overlay-list (sort
+                                  unsorted-overlay-list
+                                  (lambda (o1 o2)
+                                    (funcall comp
+                                             (overlay-start o1)
+                                             (overlay-start o2)))))
+                   (overlay 'dummy-value))
+              (while overlay
+                (setq overlay (car-safe overlay-list))
+                (setq overlay-list (cdr-safe overlay-list))
+                (when (and overlay
+                           (flyspell-overlay-p overlay))
+                  (setq incorrect-word-pos (overlay-start overlay))
+                  (let ((scroll (> incorrect-word-pos (window-end))))
+                    (goto-char incorrect-word-pos)
+                    (when scroll (ignore-errors (recenter))))
 
-              ;; Point originally was on misspelled word, so we need to restore
-              ;; it. This imitates just calling `flyspell-correct-at-point'. But
-              ;; gives all the perks of `flyspell-correct-move'.
-              ;;
-              ;; But with rapid mode, `hard-reset-pos' will be set to nil
-              ;; eventually. Which gives more predictable point location in
-              ;; general.
-              (setq hard-move-point
-                    (and (>= original-pos (overlay-start overlay))
-                         (<= original-pos (overlay-end overlay))))
+                  ;; Point originally was on misspelled word, so we need to restore
+                  ;; it. This imitates just calling `flyspell-correct-at-point'. But
+                  ;; gives all the perks of `flyspell-correct-move'.
+                  ;;
+                  ;; But with rapid mode, `hard-move-point' will be set to nil
+                  ;; eventually. Which gives more predictable point location in
+                  ;; general.
+                  (setq hard-move-point
+                        (and (>= original-pos (overlay-start overlay))
+                             (<= original-pos (overlay-end overlay))))
 
-              ;; Correct a word using `flyspell-correct-at-point'.
-              (let ((res (flyspell-correct-at-point)))
-                (when res
-                  ;; stop at misspelled word
-                  (when (eq (car-safe res) 'stop)
-                    (setq target-pos incorrect-word-pos
-                          hard-move-point t))
+                  ;; Correct a word using `flyspell-correct-at-point'.
+                  (let ((res (flyspell-correct-at-point)))
+                    (when res
+                      ;; stop at misspelled word
+                      (when (eq (car-safe res) 'stop)
+                        (setq target-pos incorrect-word-pos
+                              hard-move-point t
+                              mark-opos t))
 
-                  ;; break from rapid mode
-                  (when (or
-                         ;; treat skip as one-time rapid mode enabler
-                         (and (not (eq (car-safe res) 'skip))
-                              (not rapid))
+                      ;; break from rapid mode
+                      (when (or
+                             ;; treat skip as one-time rapid mode enabler
+                             (and (not (eq (car-safe res) 'skip))
+                                  (not rapid))
 
-                         ;; explicit rapid mode disablers
-                         (eq (car-safe res) 'break)
-                         (eq (car-safe res) 'stop))
-                    (setq overlay nil))
+                             ;; explicit rapid mode disablers
+                             (eq (car-safe res) 'break)
+                             (eq (car-safe res) 'stop))
+                        (setq overlay nil))
 
-                  ;; push mark
-                  (when (or (not (mark t))
-	                          (/= (mark t) (point)))
-                    (push-mark (point) t)))))))
+                      (when (and
+                             ;; don't push mark if there is no change
+                             (not (memq (car-safe res) '(stop break skip)))
+                             (/= (mark t) (point)))
+                        (push-mark (point) t)))))))))
 
-        (when incorrect-word-pos
-          (goto-char incorrect-word-pos)
-          (forward-word)
-          (when (= (mark t) (point)) (pop-mark)))))
-    (when hard-move-point
-      (goto-char target-pos))))
+      (when hard-move-point
+        (when mark-opos
+          (push-mark (point) t))
+        (goto-char target-pos))
+      ;; We pushed the mark when starting, but if the operation is canceled
+      ;; without any change that mark is redundant and needs to be cleaned-up.
+      (when (= (mark t) (point)) (pop-mark)))))
 
 ;;; Overlays
 
