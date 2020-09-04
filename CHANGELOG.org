@@ -24,6 +24,13 @@ Contributors:
   =flyspell-correct-ivy-map=.
 - [[https://github.com/d12frosted/flyspell-correct/pull/78][#78]] Add actions to =flyspell-correct-dummy= interface.
 - [[https://github.com/d12frosted/flyspell-correct/pull/79][#79]] Disable sorting in =flyspell-correct-dummy=.
+- [[https://github.com/d12frosted/flyspell-correct/pull/84][#84]] Polish mark setting behaviour.
+  - Make it consistent between =flyspell-correct-wrapper=,
+    =flyspell-correct-previous=, =flyspell-correct-next=.
+  - Make it more conservative and push the mark only on correction. E.g. =skip=,
+    =break= and =stop= do not modify mark.
+  - Push the original position when using =stop= to be able to quickly return
+    there.
 
 *** Bugfixes
 
