@@ -5,7 +5,7 @@
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
 ;; Version: 0.6.1
-;; Package-Requires: ((flyspell-correct "0.6.1") (ivy "0.8.0") (emacs "24.3"))
+;; Package-Requires: ((flyspell-correct "0.6.1") (ivy "0.8.0") (emacs "24.4"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -47,6 +47,21 @@
 
 See `flyspell-correct-interface' for more information.")
 
+(defun flyspell-correct-ivy--result (candidates word input)
+  "Calculate resulting string based on INPUT.
+
+It should allow to:
+
+1. Save misspelled WORD when CANDIDATES list is non-empty.
+2. Save misspelled WORD when CANDIDATES list is empty.
+3. Correct and save WORD in one pass when CANDIDATES list is non-empty.
+4. Correct and save WORD in one pass when CANDIDATES list is empty."
+  (if (or (member input candidates))
+      word
+    (if (string-empty-p input)
+        word
+      input)))
+
 ;;;###autoload
 (defun flyspell-correct-ivy (candidates word)
   "Run `ivy-read' for the given CANDIDATES.
@@ -62,23 +77,23 @@ specification."
          (action-save-word
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'save (if (member x candidates) word x)))))
+                  (cons 'save (flyspell-correct-ivy--result candidates word x)))))
          (action-accept-session
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'session (if (member x candidates) word x)))))
+                  (cons 'session (flyspell-correct-ivy--result candidates word x)))))
          (action-accept-buffer
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'buffer (if (member x candidates) word x)))))
+                  (cons 'buffer (flyspell-correct-ivy--result candidates word x)))))
          (action-skip-word
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'skip (if (member x candidates) word x)))))
+                  (cons 'skip (flyspell-correct-ivy--result candidates word x)))))
          (action-stop
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'stop (if (member x candidates) word x)))))
+                  (cons 'stop (flyspell-correct-ivy--result candidates word x)))))
          (action `(1
                    ("o" ,action-default "correct")
                    ("s" ,action-save-word "Save")

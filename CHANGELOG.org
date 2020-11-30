@@ -1,6 +1,12 @@
 * Changelog
+:PROPERTIES:
+:ID:                     bf2a9686-6da7-475e-8a3d-405786ce1244
+:END:
 
 ** v1.0 (TBD)
+:PROPERTIES:
+:ID:                     c3066bc1-b938-4478-89c9-94ba88fdf5a3
+:END:
 
 Contributors:
 
@@ -9,6 +15,9 @@ Contributors:
 - [[https://github.com/okamsn][@okamsn]]
 
 *** Features
+:PROPERTIES:
+:ID:                     f33b0d01-b7bf-47fa-9fd3-08f6ffc44449
+:END:
 
 - [[https://github.com/d12frosted/flyspell-correct/issues/52][#52]] Add highlighting of the word being currently corrected.
 - Support Emacs customization interface - =customize=.
@@ -33,6 +42,9 @@ Contributors:
     there.
 
 *** Bugfixes
+:PROPERTIES:
+:ID:                     218ade75-0c26-40cb-b090-bda7d0cfc4bc
+:END:
 
 - [[https://github.com/d12frosted/flyspell-correct/issues/60][#60]] Fix non-breaking rapid mode with helm interface.
 - Fix exception when trying to remove missing =flyspell-correct-overlay=
@@ -42,14 +54,21 @@ Contributors:
   =flyspell-correct-next=, =flyspell-correct-previous= and
   =flyspell-correct-wrapper= by explicitly sort overlays so misspelled word at
   point is always at the beginning of the list.
+- [[https://github.com/d12frosted/flyspell-correct/issues/83][#83]] Fix invalid handing of empty candidates list in =flyspell-correct-ivy=.
 
 ** v0.6.1
+:PROPERTIES:
+:ID:                     bc1146d9-56a6-459c-aebb-fc17961d0f88
+:END:
 
 - Remove deprecated aliases (=flyspell-correct-word-generic=,
   =flyspell-correct-previous-word-generic= and
   =flyspell-correct-next-word-generic=).
 
 ** v0.6
+:PROPERTIES:
+:ID:                     83f9a860-bd54-408f-b599-54e12a8d1414
+:END:
 
 - Do not move point by correction functions.
 - New interface - =avy-menu=. Thanks to @clemera.
@@ -60,6 +79,9 @@ Contributors:
 - Start using =lexical-binding=.
 
 ** v0.5
+:PROPERTIES:
+:ID:                     e0c94ca6-22ee-4382-b452-3ccab5bf2cc1
+:END:
 
 - Skip words that don't need to be fixed (e.g. duplicates).
 - Rename several functions (via name deprecation)
@@ -75,12 +97,18 @@ Contributors:
 - Fix issue when =flyspell-correct-next= doesn't correct word at point.
 
 ** v0.4
+:PROPERTIES:
+:ID:                     aad9deff-7a80-4166-9bb1-1a8aa85225fb
+:END:
 
 - Implement =flyspell-correct-next-word-generic= (thanks to @mattiasb for
   suggestion).
 - Minor readme updates.
 
 ** v0.3
+:PROPERTIES:
+:ID:                     7416bd05-a046-4411-8220-3bad8137ace8
+:END:
 
 - Make sure that word at point is corrected first when using
   =flyspell-correct-previous-word-generic=.
@@ -88,6 +116,9 @@ Contributors:
 - New =dummy= interface (thanks to @purcell for suggestion).
 
 ** v0.2
+:PROPERTIES:
+:ID:                     d2dfd5fd-a0f4-44c7-86b2-8e259a340b8d
+:END:
 
 - Various documentation updates.
 - =flyspell-correct-previous-word-generic= now corrects word at point if it's
@@ -97,6 +128,9 @@ Contributors:
 - Warn user when correction interface is not set.
 
 ** v0.1
+:PROPERTIES:
+:ID:                     2f41df52-e184-4a07-8a62-2cf93a1cf92f
+:END:
 
 - Initial implementation.
 - Two correction functions:
