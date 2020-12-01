@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:                     17829216-93a9-4f5d-b297-a903ef9ad647
+:END:
 #+begin_html
 <p align="center">
   <img max-width="512px" src="images/flyspell-correct.png" alt="Banner">
@@ -5,6 +8,9 @@
 #+end_html
 
 * flyspell-correct
+:PROPERTIES:
+:ID:                     11b3a67e-c4af-42fd-93d8-d04e8cd4f899
+:END:
 
 [[https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg][file:https://github.com/d12frosted/flyspell-correct/workflows/CI/badge.svg]]
 
@@ -48,6 +54,9 @@ additional interfaces come in separate packages:
 - [[#flyspell-correct-popup-interface][flyspell-correct-popup]]
 
 ** Table of contents                                                   :TOC:
+:PROPERTIES:
+:ID:                     e04b1e8e-7d48-486e-a292-b550f34b33c2
+:END:
 - [[#flyspell-correct][flyspell-correct]]
   - [[#rapid-mode][Rapid mode]]
   - [[#flyspell-correct-dummy-interface][=flyspell-correct-dummy= interface]]
@@ -82,6 +91,9 @@ backwards). In order to enable it, one should call =flyspell-correct-wrapper=
 with universal argument - =C-u=. For example, =C-u C-;= will enable it.
 
 ** =flyspell-correct-dummy= interface
+:PROPERTIES:
+:ID:                     3aaedcac-ef83-441c-9dcc-24b567f8b400
+:END:
 
 In order to use =flyspell-correct-dummy= interface you have to install
 =flyspell-correct= package in any preferred way and then add following snippet
@@ -107,6 +119,9 @@ flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
 
 ** =flyspell-correct-ivy= interface
+:PROPERTIES:
+:ID:                     5fc08aaa-02ac-48ac-9e7d-ca94e9abeb61
+:END:
 
 In order to use =flyspell-correct-ivy= interface you have to install
 =flyspell-correct-ivy= package in any preferred way and then add following
@@ -136,6 +151,9 @@ Note that in order to access actions in =ivy= interface you need to press ~M-o~.
 More on =ivy= mini buffer key bindings you can read in [[http://oremacs.com/swiper/#key-bindings-for-single-selection-action-then-exit-minibuffer][official documentation]].
 
 ** =flyspell-correct-avy-menu= interface
+:PROPERTIES:
+:ID:                     494754cd-9399-45ad-8c01-6fc616971911
+:END:
 
 In order to use =flyspell-correct-avy-menu= interface you have to install
 =flyspell-correct-avy-menu= package in any preferred way and then add following
@@ -162,6 +180,9 @@ flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
 
 ** =flyspell-correct-ido= interface
+:PROPERTIES:
+:ID:                     bd55cb14-df6c-485f-afd8-dabf390abe43
+:END:
 
 In order to use =flyspell-correct= interface you have to install
 =flyspell-correct-ido= package in any preferred way and then add following
@@ -189,6 +210,9 @@ flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
 
 ** =flyspell-correct-helm= interface
+:PROPERTIES:
+:ID:                     eb456982-b9a3-4c47-a6b9-9ff913d30951
+:END:
 
 In order to use =flyspell-correct-helm= interface you have to install
 =flyspell-correct-helm= package in any preferred way and then add following snippet
@@ -215,6 +239,9 @@ flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
 
 ** =flyspell-correct-popup= interface
+:PROPERTIES:
+:ID:                     6275479b-a569-4689-b51d-326aff000c1a
+:END:
 
 In order to use =flyspell-correct-popup= interface you have to install
 =flyspell-correct-popup= package in any preferred way and then add following snippet
@@ -244,7 +271,13 @@ There are some cool usability suggestions by @alphapapa shared in
 [[https://github.com/d12frosted/flyspell-correct/issues/30][d12frosted/flyspell-correct#30]] that you might want to use. Enjoy!
 
 * Deprecations
+:PROPERTIES:
+:ID:                     aa3ca72d-cf45-4c9c-93cd-c3ef1fc2e1e2
+:END:
 ** Deprecations in =v0.5=
+:PROPERTIES:
+:ID:                     8c3332b9-555d-477c-9700-36c9f65dfbdd
+:END:
 
 Unfortunately, the following functions are renamed.
 
@@ -255,6 +288,9 @@ Unfortunately, the following functions are renamed.
 Please make sure to update to new names.
 
 * Custom interfaces
+:PROPERTIES:
+:ID:                     58868d20-024a-45b4-a919-f82329c6ee22
+:END:
 
 One can easily implement custom interface for =flyspell-correct=. It has to be a
 function accepting two arguments:
@@ -281,6 +317,9 @@ of the following:
 Check any existing interface for reference.
 
 * Highlighting
+:PROPERTIES:
+:ID:                     414a109d-8553-4d36-96ee-55c664810363
+:END:
 
 The word that is being currently corrected (e.g. you are selecting the
 correction for misspelled word) is highlighted with
@@ -292,6 +331,9 @@ just set the value of =flyspell-correct-highlight= to =nil=.
 #+end_src
 
 * Auto correction mode
+:PROPERTIES:
+:ID:                     399a433a-d8db-4731-a62e-f829bf6dc544
+:END:
 
 /Take my advice and don't use this functionality unless you find
 =flyspell-correct-wrapper= function useless for your purposes. You can find more
@@ -311,6 +353,9 @@ One can also configure interface specially for
 setting value of =flyspell-correct-auto-mode-interface=.
 
 * Reasoning
+:PROPERTIES:
+:ID:                     89d09c0e-562b-48ca-9ad0-85d9834eee6d
+:END:
 
 There are already packages like =helm-flyspell= and =flyspell-popup=. So why
 would anyone create yet another similar package? The reason is simple - to
@@ -327,34 +372,58 @@ And over the time, =flyspell-correct= got some killer features (like quick
 access to misspelled words from anywhere), rapid mode and some others.
 
 * Screenshots
+:PROPERTIES:
+:ID:                     0ad131f7-f943-4e41-a78d-87068fdb04bd
+:END:
 
 ** Ivy interface
+:PROPERTIES:
+:ID:                     4680e827-475a-4686-81d3-885fd1cf92f6
+:END:
 
 [[file:images/screenshot-ivy-1.png]]
 
 [[file:images/screenshot-ivy-2.png]]
 
 ** Avy Menu interface
+:PROPERTIES:
+:ID:                     d9f7b9c4-b262-4ba4-bfc3-f3fe4e6db906
+:END:
 
 [[file:images/screenshot-avy-menu.png]]
 
 ** Popup interface
+:PROPERTIES:
+:ID:                     0125c2f1-cc51-4405-8d8e-e077d443a9ff
+:END:
 
 [[file:images/screenshot-popup.png]]
 
 ** Helm interface
+:PROPERTIES:
+:ID:                     4a072429-6425-455e-af7a-ddb428b60d9c
+:END:
 
 [[file:images/screenshot-helm.png]]
 
 ** Ido interface
+:PROPERTIES:
+:ID:                     2cb846b9-f962-46fc-9648-e9a5a8970b21
+:END:
 
 [[file:images/screenshot-ido.png]]
 
 ** Dummy interface
+:PROPERTIES:
+:ID:                     c5283357-0209-409c-bd7b-053f17d4ced3
+:END:
 
 [[file:images/screenshot-dummy.png]]
 
 * Acknowledgements
+:PROPERTIES:
+:ID:                     be7625b9-b782-4e5f-962c-bd181c3933a7
+:END:
 
 This package is available thanks to these people:
 
@@ -377,3 +446,4 @@ Additional thanks to all contributors:
 - [[https://github.com/manuel-uberti][Manuel Uberti]]
 - [[https://github.com/jpkotta][Jonathan Kotta]]
 - [[https://github.com/tpadioleau][Thomas Padioleau]]
+- [[https://github.com/gusbrs][Gustavo Barros]]
