@@ -36,6 +36,7 @@
 
 (require 'flyspell-correct)
 (require 'ivy)
+(require 'subr-x)
 
 ;; Interface implementation
 
@@ -47,7 +48,7 @@
 
 See `flyspell-correct-interface' for more information.")
 
-(defun flyspell-correct-ivy--result (candidates word input)
+(defun flyspell-correct-ivy--process-input (candidates word input)
   "Calculate resulting string based on INPUT.
 
 It should allow to:
@@ -77,23 +78,23 @@ specification."
          (action-save-word
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'save (flyspell-correct-ivy--result candidates word x)))))
+                  (cons 'save (flyspell-correct-ivy--process-input candidates word x)))))
          (action-accept-session
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'session (flyspell-correct-ivy--result candidates word x)))))
+                  (cons 'session (flyspell-correct-ivy--process-input candidates word x)))))
          (action-accept-buffer
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'buffer (flyspell-correct-ivy--result candidates word x)))))
+                  (cons 'buffer (flyspell-correct-ivy--process-input candidates word x)))))
          (action-skip-word
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'skip (flyspell-correct-ivy--result candidates word x)))))
+                  (cons 'skip (flyspell-correct-ivy--process-input candidates word x)))))
          (action-stop
           (lambda (x)
             (setq flyspell-correct-ivy--result
-                  (cons 'stop (flyspell-correct-ivy--result candidates word x)))))
+                  (cons 'stop (flyspell-correct-ivy--process-input candidates word x)))))
          (action `(1
                    ("o" ,action-default "correct")
                    ("s" ,action-save-word "Save")
