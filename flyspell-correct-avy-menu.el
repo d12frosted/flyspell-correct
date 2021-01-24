@@ -1,6 +1,6 @@
 ;;; flyspell-correct-avy-menu.el --- Correcting words with flyspell via avy-menu interface -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2016-2019 Boris Buliga;
+;; Copyright (c) 2016-2021 Boris Buliga;
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;;         Clemens Radermacher <clemera@posteo.net>
