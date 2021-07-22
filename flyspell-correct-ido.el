@@ -45,28 +45,10 @@ List of CANDIDATES is given by flyspell for the WORD.
 
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
-  (let* ((save "[SAVE]")
-         (accept-session "[ACCEPT (session)]")
-         (accept-buffer "[ACCEPT (buffer)]")
-         (skip "[SKIP]")
-         (stop "[STOP]")
-         (result (ido-completing-read
-                  (format "Correcting '%s': " word)
-                  (append candidates
-                          (list save accept-session accept-buffer skip stop)))))
-    (cond
-     ((string= result save)
-      (cons 'save word))
-     ((string= result accept-session)
-      (cons 'session word))
-     ((string= result accept-buffer)
-      (cons 'buffer word))
-     ((string= result skip)
-      (cons 'skip word))
-     ((string= result stop)
-      (cons 'stop word))
-     (t
-      result))))
+  (let ((completing-read-function
+         (lambda (prompt collection &rest _)
+           (ido-completing-read prompt (all-completions "" collection)))))
+    (flyspell-correct-completing-read candidates word)))
 
 (setq flyspell-correct-interface #'flyspell-correct-ido)
 
