@@ -40,7 +40,8 @@
 ;; `flyspell-correct-helm' and `flyspell-correct-popup'.
 ;;
 ;; In order to use `flyspell-correct-ido' interface instead of default
-;; `flyspell-correct-dummy', place following snippet in your 'init.el' file.
+;; `flyspell-correct-completing-read', place following snippet in your
+;; 'init.el' file.
 ;;
 ;;   (require 'flyspell-correct-ido)
 ;;
@@ -59,7 +60,7 @@
 
 ;; Variables
 
-(defcustom flyspell-correct-interface #'flyspell-correct-dummy
+(defcustom flyspell-correct-interface #'flyspell-correct-completing-read
   "Interface for `flyspell-correct-at-point'.
 
 `flyspell-correct-interface' is a function accepting two arguments:
@@ -107,45 +108,63 @@ highlighting."
 
 (defvar flyspell-correct-overlay nil)
 
-;;; Default interface
+;;; Default interface using `completing-read'
 ;;
 
-(defun flyspell-correct-dummy (candidates word)
+(defun flyspell-correct--action (name key label)
+  "Format action string.
+NAME is the action name.
+KEY is the shortcut key.
+LABEL is the action label."
+  (setq key (char-to-string key))
+  (cons (concat (propertize (format "@%s " key) 'invisible t)
+                (replace-regexp-in-string key
+                                          (propertize key 'face '(bold minibuffer-prompt))
+                                          (propertize (format "[%s]" label) 'face 'minibuffer-prompt)))
+        name))
+
+(defun flyspell-correct-completing-read (candidates word)
   "Run `completing-read' for the given CANDIDATES.
 
 List of CANDIDATES is given by flyspell for the WORD.
 
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
-  (let* ((save "[SAVE]")
-         (accept-session "[ACCEPT (session)]")
-         (accept-buffer "[ACCEPT (buffer)]")
-         (skip "[SKIP]")
+  (let* ((actions (list (flyspell-correct--action 'save ?s "Save")
+                        (flyspell-correct--action 'session ?a "Accept (session)")
+                        (flyspell-correct--action 'buffer ?b "Accept (buffer)")
+                        (flyspell-correct--action 'skip ?k "Skip")
+                        (flyspell-correct--action 'stop ?p "Stop")))
+         (title (format "Suggestions (Dictionary \"%s\")"
+                        (or ispell-local-dictionary
+                            ispell-dictionary
+                            "default")))
+         (metadata `(metadata
+                     (display-sort-function . ,#'identity)
+                     (cycle-sort-function . ,#'identity)
+                     (group-function
+                      . ,(lambda (cand transform)
+                           (cond
+                            (transform cand)
+                            ((string-prefix-p "@" cand) "Actions (Shortcut key @)")
+                            (t title))))))
+         (candidates (append candidates (mapcar #'car actions)))
          (result (completing-read
-                  (format "Correcting '%s': " word)
+                  (format "Suggestions for \"%s\": " word)
                   ;; Use function with metadata to disable sorting.
                   (lambda (input predicate action)
                     (if (eq action 'metadata)
-                        '(metadata (display-sort-function . identity)
-                                   (cycle-sort-function . identity))
-                      (complete-with-action action
-                                            (append candidates
-                                                    (list save
-                                                          accept-session
-                                                          accept-buffer
-                                                          skip))
-                                            input predicate))))))
-    (cond
-     ((string= result save)
-      (cons 'save word))
-     ((string= result accept-session)
-      (cons 'session word))
-     ((string= result accept-buffer)
-      (cons 'buffer word))
-     ((string= result skip)
-      (cons 'skip word))
-     (t
-      result))))
+                        metadata
+                      (complete-with-action action candidates input predicate)))
+                  nil
+                  'confirm))
+         (action (cdr (assoc result actions))))
+    (if action (cons action word) result)))
+
+(define-obsolete-function-alias
+  'flyspell-correct-dummy
+  'flyspell-correct-completing-read
+  "0.6.1")
 
 ;;; On point word correction
 ;;

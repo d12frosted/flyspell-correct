@@ -44,9 +44,10 @@ Most interfaces also allow you to save the new word to your dictionary, accept
 this spelling in current buffer or for a whole session, or even skip this word
 (useful in a rapid flow).
 
-=flyspell-correct= comes with default interface, which uses =completing-read=,
-but most probably you would enjoy using more sophisticated interface. All
-additional interfaces come in separate packages:
+=flyspell-correct= comes with default interface, which uses =completing-read=. If
+you use Ivy, Helm or Ido as completion system you probably want to replace the
+default interface with the specialized interface. All additional interfaces come
+in separate packages:
 
 - [[#flyspell-correct-ivy-interface][flyspell-correct-ivy]]
 - [[#flyspell-correct-avy-menu-interface][flyspell-correct-avy-menu]]
@@ -59,7 +60,7 @@ additional interfaces come in separate packages:
 :END:
 - [[#flyspell-correct][flyspell-correct]]
   - [[#rapid-mode][Rapid mode]]
-  - [[#flyspell-correct-dummy-interface][=flyspell-correct-dummy= interface]]
+  - [[#flyspell-correct-completing-read-interface][=flyspell-correct-completing-read= interface]]
   - [[#flyspell-correct-ivy-interface][=flyspell-correct-ivy= interface]]
   - [[#flyspell-correct-avy-menu-interface][=flyspell-correct-avy-menu= interface]]
   - [[#flyspell-correct-ido-interface][=flyspell-correct-ido= interface]]
@@ -77,7 +78,7 @@ additional interfaces come in separate packages:
   - [[#popup-interface][Popup interface]]
   - [[#helm-interface][Helm interface]]
   - [[#ido-interface][Ido interface]]
-  - [[#dummy-interface][Dummy interface]]
+  - [[#completing-read-interface][completing-read interface]]
 - [[#acknowledgements][Acknowledgements]]
 
 ** Rapid mode
@@ -90,12 +91,12 @@ invocation of =flyspell-correct-wrapper= following current direction (usually,
 backwards). In order to enable it, one should call =flyspell-correct-wrapper=
 with universal argument - =C-u=. For example, =C-u C-;= will enable it.
 
-** =flyspell-correct-dummy= interface
+** =flyspell-correct-completing-read= interface
 :PROPERTIES:
 :ID:                     3aaedcac-ef83-441c-9dcc-24b567f8b400
 :END:
 
-In order to use =flyspell-correct-dummy= interface you have to install
+In order to use =flyspell-correct-completing-read= interface you have to install
 =flyspell-correct= package in any preferred way and then add following snippet
 to relevant part of your =init.el= file.
 
@@ -103,8 +104,6 @@ to relevant part of your =init.el= file.
   (require 'flyspell-correct)
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-wrapper)
 #+END_SRC
-
-This interface does not allow to save or accept current spelling.
 
 Or via =use-package=.
 
@@ -117,6 +116,9 @@ Or via =use-package=.
 If you do not want any binding, just replace =:bind (:map
 flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
+
+In order to select the (s)ave, (a)ccept, sto(p) or s(k)ip actions, you can
+enter the shortcut key @s, @a, @p or @k.
 
 ** =flyspell-correct-ivy= interface
 :PROPERTIES:
@@ -413,12 +415,12 @@ access to misspelled words from anywhere), rapid mode and some others.
 
 [[file:images/screenshot-ido.png]]
 
-** Dummy interface
+** completing-read interface
 :PROPERTIES:
 :ID:                     c5283357-0209-409c-bd7b-053f17d4ced3
 :END:
 
-[[file:images/screenshot-dummy.png]]
+[[file:images/screenshot-completing-read.png]]
 
 * Acknowledgements
 :PROPERTIES:
