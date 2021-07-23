@@ -47,7 +47,8 @@ Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
   (let ((completing-read-function
          (lambda (prompt collection &rest _)
-           (ido-completing-read prompt (all-completions "" collection)))))
+           (ido-completing-read prompt (all-completions "" collection)
+                                nil nil nil nil word))))
     (flyspell-correct-completing-read candidates word)))
 
 (setq flyspell-correct-interface #'flyspell-correct-ido)
