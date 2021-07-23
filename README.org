@@ -449,3 +449,4 @@ Additional thanks to all contributors:
 - [[https://github.com/jpkotta][Jonathan Kotta]]
 - [[https://github.com/tpadioleau][Thomas Padioleau]]
 - [[https://github.com/gusbrs][Gustavo Barros]]
+- [[https://github.com/minad][Daniel Mendler]]
