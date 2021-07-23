@@ -111,17 +111,26 @@ highlighting."
 ;;; Default interface using `completing-read'
 ;;
 
-(defun flyspell-correct--action (name key label)
-  "Format action string.
-NAME is the action name.
-KEY is the shortcut key.
-LABEL is the action label."
-  (setq key (char-to-string key))
-  (cons (concat (propertize (format "@%s " key) 'invisible t)
-                (replace-regexp-in-string key
-                                          (propertize key 'face '(bold minibuffer-prompt))
-                                          (propertize (format "[%s]" label) 'face 'minibuffer-prompt)))
-        name))
+(defvar flyspell-correct--cr-key "@"
+  "Shortcut key used by `flyspell-correct-completing-read'.")
+
+(defvar flyspell-correct--cr-actions
+  '((save ?s "[Save]")
+    (session ?a "[Accept (session)]")
+    (buffer ?b "[Accept (buffer)]")
+    (skip ?k "[Skip]")
+    (stop ?p "[Stop]"))
+  "Actions used by `flyspell-correct-completing-read'.")
+
+(defun flyspell-correct--cr-index (n)
+  "Generate a short unique index string for N."
+  (let ((str (char-to-string (+ ?1 (mod n 5)))))
+    (when (>= n 5)
+      (setq n (/ (- n 5) 5))
+      (while (>= n 0)
+        (setq str (format "%c%s" (aref "67890" (mod n 5)) str)
+              n (1- (/ n 5)))))
+    str))
 
 (defun flyspell-correct-completing-read (candidates word)
   "Run `completing-read' for the given CANDIDATES.
@@ -130,15 +139,31 @@ List of CANDIDATES is given by flyspell for the WORD.
 
 Return a selected word to use as a replacement or a tuple
 of (command, word) to be used by `flyspell-do-correct'."
-  (let* ((actions (list (flyspell-correct--action 'save ?s "Save")
-                        (flyspell-correct--action 'session ?a "Accept (session)")
-                        (flyspell-correct--action 'buffer ?b "Accept (buffer)")
-                        (flyspell-correct--action 'skip ?k "Skip")
-                        (flyspell-correct--action 'stop ?p "Stop")))
-         (title (format "Suggestions (Dictionary \"%s\")"
-                        (or ispell-local-dictionary
-                            ispell-dictionary
-                            "default")))
+  (let* ((idx 0)
+         (candidates-alist
+          (append
+           (mapcar (lambda (cand)
+                     (prog1
+                         (cons (concat
+                                (propertize (flyspell-correct--cr-index idx) 'face 'minibuffer-prompt)
+                                " " cand)
+                               cand)
+                         (setq idx (1+ idx))))
+                   candidates)
+           (mapcar
+            (pcase-lambda (`(,name ,key ,label))
+              (setq key (char-to-string key))
+              (cons (concat (propertize (format "%s%s " flyspell-correct--cr-key key) 'invisible t)
+                            (replace-regexp-in-string
+                             key (propertize key 'face '(bold minibuffer-prompt))
+                             (propertize label 'face 'minibuffer-prompt)))
+                    (cons name word)))
+            flyspell-correct--cr-actions)))
+         (suggestions-title (format "Suggestions (Dictionary \"%s\")"
+                                    (or ispell-local-dictionary
+                                        ispell-dictionary
+                                        "default")))
+         (actions-title (format "Actions (Shortcut key %s)" flyspell-correct--cr-key))
          (metadata `(metadata
                      (display-sort-function . ,#'identity)
                      (cycle-sort-function . ,#'identity)
@@ -146,20 +171,35 @@ of (command, word) to be used by `flyspell-do-correct'."
                       . ,(lambda (cand transform)
                            (cond
                             (transform cand)
-                            ((string-prefix-p "@" cand) "Actions (Shortcut key @)")
-                            (t title))))))
-         (candidates (append candidates (mapcar #'car actions)))
-         (result (completing-read
-                  (format "Suggestions for \"%s\": " word)
-                  ;; Use function with metadata to disable sorting.
-                  (lambda (input predicate action)
-                    (if (eq action 'metadata)
-                        metadata
-                      (complete-with-action action candidates input predicate)))
-                  nil
-                  'confirm))
-         (action (cdr (assoc result actions))))
-    (if action (cons action word) result)))
+                            ((string-prefix-p flyspell-correct--cr-key cand) actions-title)
+                            (t suggestions-title))))))
+         (quick-result)
+         (result
+          (minibuffer-with-setup-hook
+              (lambda ()
+                (add-hook 'post-command-hook
+                          (lambda ()
+                            ;; Exit directly if a quick key is pressed
+                            (let ((prefix (concat (minibuffer-contents-no-properties) " ")))
+                              (mapc (lambda (cand)
+                                      (when (string-prefix-p prefix (car cand))
+                                        (setq quick-result (car cand))
+                                        (exit-minibuffer)))
+                                    candidates-alist)))
+                          -1 'local))
+            (completing-read
+             (format "Suggestions for \"%s\": " word)
+             ;; Use function with metadata to disable add a group function
+             ;; and in order to disable sorting.
+             (lambda (input predicate action)
+               (if (eq action 'metadata)
+                   metadata
+                 (complete-with-action action candidates-alist input predicate)))
+             ;; Require confirmation, if the input does not match a suggestion
+             nil 'confirm nil nil
+             ;; Pass the word as default value (effectively skipping)
+             word))))
+    (or (cdr (assoc (or quick-result result) candidates-alist)) result)))
 
 (define-obsolete-function-alias
   'flyspell-correct-dummy
