@@ -122,8 +122,8 @@ the shortcut key =@s=, =@a=, =@p= or =@k=. The actions will be automatically sub
 Furthermore suggestions can be quickly submitted by entering the numeric index
 in front of the suggestion. Besides the quick keys the usual ~completing-read~
 interface is available, which may be enhanced and allow scrolling through
-candidates if you have a completion UI like Icomplete-vertical, Selectrum or
-Vertico installed.
+candidates if you have a completion UI like [[https://github.com/oantolin/icomplete-vertical][Icomplete-vertical]], [[https://github.com/raxod502/selectrum][Selectrum]] or
+[[https://github.com/minad/vertico][Vertico]] installed.
 
 ** =flyspell-correct-ivy= interface
 :PROPERTIES:
