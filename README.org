@@ -117,8 +117,13 @@ If you do not want any binding, just replace =:bind (:map
 flyspell-mode-map ("C-;" . flyspell-correct-wrapper))= with =:defer t=
 to use lazy loading.
 
-In order to select the (s)ave, (a)ccept, sto(p) or s(k)ip actions, you can
-enter the shortcut key @s, @a, @p or @k.
+In order to select the (s)ave, (a)ccept, sto(p) or s(k)ip actions, you can enter
+the shortcut key =@s=, =@a=, =@p= or =@k=. The actions will be automatically submitted.
+Furthermore suggestions can be quickly submitted by entering the numeric index
+in front of the suggestion. Besides the quick keys the usual ~completing-read~
+interface is available, which may be enhanced and allow scrolling through
+candidates if you have a completion UI like Icomplete-vertical, Selectrum or
+Vertico installed.
 
 ** =flyspell-correct-ivy= interface
 :PROPERTIES:

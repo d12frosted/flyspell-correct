@@ -123,7 +123,13 @@ highlighting."
   "Actions used by `flyspell-correct-completing-read'.")
 
 (defun flyspell-correct--cr-index (n)
-  "Generate a short unique index string for N."
+  "Generate a short unique index string for N.
+
+The index string is used to prefix suggestion candidates. The digits 12345
+encode (mod n 5) and occur as suffix of the index string. If one of the keys
+12345 is pressed, the selected candidate is automatically submitted. The
+remaining value (/ n 5) is encoded using the digits 67890, which occur in the
+prefix of the index string."
   (let ((str (char-to-string (+ ?1 (mod n 5)))))
     (when (>= n 5)
       (setq n (/ (- n 5) 5))
