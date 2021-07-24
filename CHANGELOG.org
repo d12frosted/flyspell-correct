@@ -41,6 +41,8 @@ Contributors:
   - Push the original position when using =stop= to be able to quickly return
     there.
 - [[https://github.com/d12frosted/flyspell-correct/pull/92][#92]] Polish =flyspell-correct-completing-read= interface.
+- [[https://github.com/d12frosted/flyspell-correct/pull/94][#94]] Implement avy-like quick keys for
+  =flyspell-correct-completing-read= interface.
 
 *** Bugfixes
 :PROPERTIES:
