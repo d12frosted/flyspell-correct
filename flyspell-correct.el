@@ -60,6 +60,11 @@
 
 ;; Variables
 
+(defgroup flyspell-correct nil
+  "Correcting words with flyspell via a custom interface."
+  :prefix "flyspell-correct-"
+  :group 'flyspell)
+
 (defcustom flyspell-correct-interface #'flyspell-correct-completing-read
   "Interface for `flyspell-correct-at-point'.
 
