@@ -171,6 +171,7 @@ of (command, word) to be used by `flyspell-do-correct'."
                                         "default")))
          (actions-title (format "Actions (Shortcut key %s)" flyspell-correct--cr-key))
          (metadata `(metadata
+                     (category . flyspell)
                      (display-sort-function . ,#'identity)
                      (cycle-sort-function . ,#'identity)
                      (group-function
