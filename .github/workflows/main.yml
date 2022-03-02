@@ -24,7 +24,7 @@ jobs:
         with:
           version: ${{ matrix.emacs_version }}
 
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Install extra dependencies
         run: |
