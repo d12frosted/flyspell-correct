@@ -353,14 +353,14 @@ until all errors in buffer have been addressed."
   ;; idiomatically done using the opoint arg of
   ;; `flyspell-correct-word-before-point'.
   (interactive "d")
-  ;; push mark when starting
-  (when (or (not (mark t))
-            (/= (mark t) (point)))
-    (push-mark (point) t))
   (let ((original-pos (point))
         (target-pos (point))
         (hard-move-point)
-        (mark-opos))
+        (original-mark-ring mark-ring)
+        (preserve-mark))
+    (when (or (not (mark t))
+              (/= (mark t) (point)))
+      (push-mark (point) t))
     (unwind-protect
         (save-excursion
           (let ((incorrect-word-pos))
@@ -406,9 +406,9 @@ until all errors in buffer have been addressed."
                     (when res
                       ;; stop at misspelled word
                       (when (eq (car-safe res) 'stop)
-                        (setq target-pos incorrect-word-pos
-                              hard-move-point t
-                              mark-opos t))
+                        (setq target-pos incorrect-word-pos)
+                        (setq hard-move-point t)
+                        (setq preserve-mark t))
 
                       ;; break from rapid mode
                       (when (or
@@ -419,23 +419,15 @@ until all errors in buffer have been addressed."
                              ;; explicit rapid mode disablers
                              (eq (car-safe res) 'break)
                              (eq (car-safe res) 'stop))
-                        (setq overlay nil))
+                        (setq overlay nil)))))))))
 
-                      (when (and
-                             ;; don't push mark if there is no change
-                             (not (memq (car-safe res) '(stop break skip)))
-                             (/= (mark t) (point)))
-                        ;; `flyspell-correct-at-point' may move point, use
-                        ;; original `incorrect-word-pos' instead
-                        (push-mark incorrect-word-pos t)))))))))
-
-      (when hard-move-point
-        (when mark-opos
-          (push-mark (point) t))
-        (goto-char target-pos))
+      (if hard-move-point
+          (goto-char target-pos)
+        (goto-char (mark t)))
       ;; We pushed the mark when starting, but if the operation is canceled
       ;; without any change that mark is redundant and needs to be cleaned-up.
-      (when (= (mark t) (point)) (pop-mark)))))
+      (unless preserve-mark
+        (setq mark-ring original-mark-ring)))))
 
 ;;; Overlays
 
