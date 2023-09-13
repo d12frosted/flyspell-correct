@@ -60,6 +60,12 @@
 
 ;; Variables
 
+(defcustom flyspell-default-direction 'backward
+  "Default direction to work in.  'forward starts correcting after point
+  and 'backward starts correcting before point."
+  :group 'flyspell-correct
+  :type  'symbol)
+
 (defcustom flyspell-correct-interface #'flyspell-correct-completing-read
   "Interface for `flyspell-correct-at-point'.
 
@@ -326,16 +332,16 @@ misspelled words in the buffer."
 - Three \\[universal-argument]'s changes direction of spelling
   errors search and enables rapid mode."
   (interactive)
-  (let ((forward-direction nil)
-		    (rapid nil))
+  (let ((forward-direction (equal flyspell-default-direction 'forward))
+		(rapid nil))
     (cond
      ((equal current-prefix-arg '(4))  ; C-u = rapid
 	    (setq rapid t))
      ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
-      (setq forward-direction t))
+        (setq forward-direction (not forward-direction)))
      ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
 	    (setq rapid t)
-	    (setq forward-direction t)))
+	    (setq forward-direction (not forward-direction))))
 
     (flyspell-correct-move (point) forward-direction rapid)))
 
