@@ -1,0 +1,22 @@
+;;; -*- mode: emacs-lisp; lexical-binding: t -*-
+
+;; Eldev configuration for flyspell-correct
+;; See https://github.com/doublep/eldev
+
+;; Use GNU ELPA and MELPA for dependencies
+(eldev-use-package-archive 'gnu-elpa)
+(eldev-use-package-archive 'melpa)
+
+;; Main package is flyspell-correct.el
+(setf eldev-project-main-file "flyspell-correct.el")
+
+;; Install optional dependencies for subpackages
+(eldev-add-extra-dependencies 'build 'helm 'ivy 'popup 'avy-menu)
+
+;; Use Buttercup for testing
+(setf eldev-test-framework 'buttercup)
+
+;; Only lint the main file - subpackages are separate MELPA packages
+;; with their own Package-Requires headers
+(setf eldev-lint-default '(package))
+(setf eldev-lint-file-patterns '("flyspell-correct.el"))

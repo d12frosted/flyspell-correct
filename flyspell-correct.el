@@ -5,7 +5,7 @@
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
 ;; Version: 0.6.1
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "25.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -280,7 +280,8 @@ Adapted from `flyspell-correct-word-before-point'."
   "Correct the first misspelled word that occurs before POSITION.
 But don't look beyond what's visible on the screen.
 Uses `flyspell-correct-at-point' function for correction.
-With a prefix argument, automatically continues to all prior misspelled words in the buffer."
+With a prefix argument, automatically continues to all prior
+misspelled words in the buffer."
   (interactive "d")
   (flyspell-correct-move position nil current-prefix-arg))
 
