@@ -343,6 +343,44 @@ The default direction is controlled by `flyspell-correct-default-direction'."
     (flyspell-correct-move (point) forward-direction rapid)))
 
 ;;;###autoload
+(defun flyspell-correct-region (beg end)
+  "Correct all misspelled words in region between BEG and END.
+Runs `flyspell-region' first to find misspelled words, then
+corrects them one by one using `flyspell-correct-at-point'.
+
+This is useful for spell-checking a specific portion of the buffer
+without affecting the rest."
+  (interactive "r")
+  (flyspell-region beg end)
+  (let ((overlay-list (seq-filter
+                       #'flyspell-overlay-p
+                       (overlays-in beg end))))
+    ;; Sort by position
+    (setq overlay-list (sort overlay-list
+                             (lambda (o1 o2)
+                               (< (overlay-start o1)
+                                  (overlay-start o2)))))
+    (when (or (not (mark t))
+              (/= (mark t) (point)))
+      (push-mark (point) t))
+    (unwind-protect
+        (save-excursion
+          (catch 'break
+            (dolist (overlay overlay-list)
+              (when (flyspell-overlay-p overlay)  ; Check again, might be deleted
+                (goto-char (overlay-start overlay))
+                (let ((scroll (> (point) (window-end))))
+                  (when scroll (ignore-errors (recenter))))
+                (let ((res (condition-case nil
+                               (flyspell-correct-at-point)
+                             (quit 'break))))
+                  (when (or (eq res 'break)
+                            (eq (car-safe res) 'break)
+                            (eq (car-safe res) 'stop))
+                    (throw 'break nil)))))))
+      (goto-char (mark t)))))
+
+;;;###autoload
 (defun flyspell-correct-move (position &optional forward rapid)
   "Correct the first misspelled word that occurs before POSITION.
 Uses `flyspell-correct-at-point' function for correction.

@@ -18,6 +18,9 @@
   direction (forward or backward) for =flyspell-correct-wrapper=.
 - [[https://github.com/d12frosted/flyspell-correct/issues/80][#80]] New option =flyspell-correct-abort-on-quit= to configure C-g behavior. When
   set to nil, quitting correction leaves point at the misspelled word.
+- [[https://github.com/d12frosted/flyspell-correct/issues/103][#103]] New command =flyspell-correct-region= to correct all misspelled words in
+  the selected region.
+- [[https://github.com/d12frosted/flyspell-correct/issues/106][#106]] =flyspell-correct-at-point= now works without =flyspell-mode= enabled.
 
 Contributors:
 

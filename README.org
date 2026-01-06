@@ -91,6 +91,22 @@ invocation of =flyspell-correct-wrapper= following current direction (usually,
 backwards). In order to enable it, one should call =flyspell-correct-wrapper=
 with universal argument - =C-u=. For example, =C-u C-;= will enable it.
 
+** Region correction
+:PROPERTIES:
+:ID:                     c3d4e5f6-a7b8-9012-cdef-345678901234
+:END:
+
+Use =flyspell-correct-region= to correct all misspelled words in the selected
+region. This command first runs =flyspell-region= to identify misspelled words,
+then lets you correct them one by one.
+
+#+begin_src emacs-lisp
+  (define-key flyspell-mode-map (kbd "C-c r") #'flyspell-correct-region)
+#+end_src
+
+This is useful for spell-checking a specific portion of the buffer (e.g., a
+paragraph or code comment) without being prompted about errors elsewhere.
+
 ** =flyspell-correct-completing-read= interface
 :PROPERTIES:
 :ID:                     3aaedcac-ef83-441c-9dcc-24b567f8b400
