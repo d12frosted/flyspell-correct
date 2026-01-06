@@ -348,7 +348,7 @@ info in [[https://github.com/syl20bnr/spacemacs/issues/6209#issuecomment-2743203
 
 This package also provides auto correction minor mode called
 =flyspell-correct-auto-mode=. When enabled it will automatically invoke
-=flyspell-correct-previous-word-generic= after certain delay configured by
+=flyspell-correct-previous= after certain delay configured by
 =flyspell-correct-auto-delay= when there is at least one incorrect word.
 
 #+BEGIN_SRC
@@ -356,7 +356,7 @@ This package also provides auto correction minor mode called
 #+END_SRC
 
 One can also configure interface specially for
-=flyspell-correct-previous-word-generic= called by =flyspell-correct-auto-mode= by
+=flyspell-correct-previous= called by =flyspell-correct-auto-mode= by
 setting value of =flyspell-correct-auto-mode-interface=.
 
 * Reasoning

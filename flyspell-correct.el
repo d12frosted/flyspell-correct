@@ -4,8 +4,8 @@
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
-;; Version: 0.6.1
-;; Package-Requires: ((emacs "25.1"))
+;; Version: 1.0.0
+;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -88,6 +88,22 @@ of the following:
   "When non-nil highlight the word while correcting.
 The face `flyspell-correct-highlight-face' is used for
 highlighting."
+  :group 'flyspell-correct
+  :type 'boolean)
+
+(defcustom flyspell-correct-default-direction 'backward
+  "Default direction for `flyspell-correct-wrapper'.
+When set to `backward' (the default), search for misspelled words
+before point.  When set to `forward', search for misspelled words
+after point."
+  :group 'flyspell-correct
+  :type '(choice (const :tag "Backward" backward)
+                 (const :tag "Forward" forward)))
+
+(defcustom flyspell-correct-abort-on-quit t
+  "When non-nil, restore point when quitting correction.
+When set to nil, leave point at the misspelled word when quitting
+with \\[keyboard-quit] (similar to the `stop' action)."
   :group 'flyspell-correct
   :type 'boolean)
 
@@ -198,7 +214,7 @@ of (command, word) to be used by `flyspell-do-correct'."
 (define-obsolete-function-alias
   'flyspell-correct-dummy
   'flyspell-correct-completing-read
-  "0.6.1")
+  "1.0.0")
 
 ;;; On point word correction
 ;;
@@ -307,18 +323,20 @@ misspelled words in the buffer."
 - Two \\[universal-argument]'s changes direction of spelling
   errors search.
 - Three \\[universal-argument]'s changes direction of spelling
-  errors search and enables rapid mode."
+  errors search and enables rapid mode.
+
+The default direction is controlled by `flyspell-correct-default-direction'."
   (interactive)
-  (let ((forward-direction nil)
-		    (rapid nil))
+  (let ((forward-direction (eq flyspell-correct-default-direction 'forward))
+        (rapid nil))
     (cond
      ((equal current-prefix-arg '(4))  ; C-u = rapid
-	    (setq rapid t))
+      (setq rapid t))
      ((equal current-prefix-arg '(16)) ; C-u C-u = change direction
-      (setq forward-direction t))
+      (setq forward-direction (not forward-direction)))
      ((equal current-prefix-arg '(64)) ; C-u C-u C-u = do both
-	    (setq rapid t)
-	    (setq forward-direction t)))
+      (setq rapid t)
+      (setq forward-direction (not forward-direction))))
 
     (flyspell-correct-move (point) forward-direction rapid)))
 
@@ -382,7 +400,13 @@ until all errors in buffer have been addressed."
                              (<= original-pos (overlay-end overlay))))
 
                   ;; Correct a word using `flyspell-correct-at-point'.
-                  (let ((res (flyspell-correct-at-point)))
+                  (let ((res (condition-case nil
+                                 (flyspell-correct-at-point)
+                               (quit
+                                ;; Handle C-g based on configuration
+                                (if flyspell-correct-abort-on-quit
+                                    'break
+                                  'stop)))))
                     (when res
                       ;; stop at misspelled word
                       (when (eq (car-safe res) 'stop)
@@ -458,12 +482,11 @@ Use floating point numbers to express fractions of seconds."
   "Interface to use in `flyspell-correct-auto-mode'.
 When set to nil `flyspell-correct-interface' is used.")
 
-(defvar flyspell-correct--auto-timer nil
+(defvar-local flyspell-correct--auto-timer nil
   "Timer to automatically call `flyspell-correct-previous'.")
-(make-variable-buffer-local 'flyspell-correct--auto-timer)
 
-(defvar flyspell-correct--auto-active-p nil)
-(make-variable-buffer-local 'flyspell-correct--auto-active-p)
+(defvar-local flyspell-correct--auto-active-p nil
+  "Non-nil when auto-correction is active.")
 
 (defun flyspell-correct-auto-cancel-timer ()
   "Cancel auto correct timer."

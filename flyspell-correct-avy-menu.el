@@ -5,8 +5,8 @@
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;;         Clemens Radermacher <clemera@posteo.net>
 ;; URL: https://github.com/d12frosted/flyspell-correct
-;; Version: 0.6.1
-;; Package-Requires: ((flyspell-correct "0.6.1") (avy-menu "0.1.1") (emacs "24"))
+;; Version: 1.0.0
+;; Package-Requires: ((flyspell-correct "1.0.0") (avy-menu "0.1.1") (emacs "29.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;

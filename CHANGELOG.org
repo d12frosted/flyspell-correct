@@ -3,10 +3,21 @@
 :ID:                     bf2a9686-6da7-475e-8a3d-405786ce1244
 :END:
 
-** v1.0 (TBD)
+** v1.0.0 (2026-01-06)
 :PROPERTIES:
 :ID:                     c3066bc1-b938-4478-89c9-94ba88fdf5a3
 :END:
+
+*Breaking changes*:
+
+- Minimum Emacs version is now 29.1.
+
+*New configuration options*:
+
+- [[https://github.com/d12frosted/flyspell-correct/issues/81][#81]] New option =flyspell-correct-default-direction= to configure the default
+  direction (forward or backward) for =flyspell-correct-wrapper=.
+- [[https://github.com/d12frosted/flyspell-correct/issues/80][#80]] New option =flyspell-correct-abort-on-quit= to configure C-g behavior. When
+  set to nil, quitting correction leaves point at the misspelled word.
 
 Contributors:
 

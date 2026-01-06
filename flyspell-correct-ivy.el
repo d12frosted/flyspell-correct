@@ -4,8 +4,8 @@
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct
-;; Version: 0.6.1
-;; Package-Requires: ((flyspell-correct "0.6.1") (ivy "0.8.0") (emacs "24.4"))
+;; Version: 1.0.0
+;; Package-Requires: ((flyspell-correct "1.0.0") (ivy "0.8.0") (emacs "29.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
