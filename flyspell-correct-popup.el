@@ -1,6 +1,6 @@
 ;;; flyspell-correct-popup.el --- Correcting words with flyspell via popup interface -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2016-2022 Boris Buliga
+;; Copyright (c) 2016-2026 Boris Buliga
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; URL: https://github.com/d12frosted/flyspell-correct

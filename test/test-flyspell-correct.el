@@ -1,6 +1,6 @@
 ;;; test-flyspell-correct.el --- flyspell-correct tests -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2016-2022 Boris Buliga
+;; Copyright (c) 2016-2026 Boris Buliga
 ;;
 ;; Author: Boris Buliga <boris@d12frosted.io>
 ;; Maintainer: Boris Buliga <boris@d12frosted.io>
