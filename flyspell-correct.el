@@ -227,7 +227,9 @@ Adapted from `flyspell-correct-word-before-point'."
   (unless flyspell-correct-interface
     (error "Could not correct word because `flyspell-correct-interface' is not set"))
   (let ((res))
-    ;; use the correct dictionary
+    ;; Initialize spell checker and use the correct dictionary.
+    ;; This allows flyspell-correct-at-point to work without flyspell-mode.
+    (ispell-set-spellchecker-params)
     (flyspell-accept-buffer-local-defs)
     (flyspell-correct--highlight-add)
     (unwind-protect
