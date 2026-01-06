@@ -337,6 +337,65 @@ just set the value of =flyspell-correct-highlight= to =nil=.
   (setq flyspell-correct-highlight nil)
 #+end_src
 
+* Configuration
+:PROPERTIES:
+:ID:                     a1b2c3d4-e5f6-7890-abcd-ef1234567890
+:END:
+
+** Default direction
+
+By default, =flyspell-correct-wrapper= searches for misspelled words backward
+from point. You can change this by setting =flyspell-correct-default-direction=
+to =forward=.
+
+#+begin_src emacs-lisp
+  (setq flyspell-correct-default-direction 'forward)
+#+end_src
+
+Note that =C-u C-u= prefix still toggles the direction regardless of this
+setting.
+
+** Quit behavior
+
+By default, pressing =C-g= during correction restores point to its original
+position. If you prefer to stay at the misspelled word when quitting (similar to
+the =stop= action), set =flyspell-correct-abort-on-quit= to =nil=.
+
+#+begin_src emacs-lisp
+  (setq flyspell-correct-abort-on-quit nil)
+#+end_src
+
+* Hydra integration
+:PROPERTIES:
+:ID:                     b2c3d4e5-f6a7-8901-bcde-f23456789012
+:END:
+
+For users who prefer a hydra-based workflow for spell checking, here is an
+example configuration. This hydra allows you to navigate between misspelled
+words and correct them on demand, which is useful for reviewing an entire buffer.
+
+#+begin_src emacs-lisp
+  (defhydra flyspell-correct-hydra (:color pink :hint nil)
+    "
+  Spell check:
+  _n_: next error    _c_: correct      _b_: check buffer
+  _p_: prev error    _a_: accept       _q_: quit
+  "
+    ("n" flyspell-goto-next-error)
+    ("p" (flyspell-check-previous-highlighted-word t))
+    ("c" flyspell-correct-at-point)
+    ("a" ispell-word)
+    ("b" flyspell-buffer)
+    ("q" nil :color blue))
+
+  ;; Bind the hydra to a key
+  (define-key flyspell-mode-map (kbd "C-c $") #'flyspell-correct-hydra/body)
+#+end_src
+
+This approach differs from =flyspell-correct-wrapper= in that you explicitly
+navigate to each misspelled word and decide whether to correct it, rather than
+being prompted automatically for each error.
+
 * Auto correction mode
 :PROPERTIES:
 :ID:                     399a433a-d8db-4731-a62e-f829bf6dc544
