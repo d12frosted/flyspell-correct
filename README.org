@@ -7,6 +7,13 @@
 </p>
 #+end_html
 
+#+begin_html
+<p align="center">
+  <a href="https://github.com/sponsors/d12frosted"><img alt="Sponsor" src="https://img.shields.io/badge/Sponsor-d12frosted-pink?logo=githubsponsors&logoColor=white"/></a>
+</p>
+#+end_html
+
+
 * flyspell-correct
 :PROPERTIES:
 :ID:                     11b3a67e-c4af-42fd-93d8-d04e8cd4f899
@@ -530,3 +537,7 @@ Additional thanks to all contributors:
 - [[https://github.com/tpadioleau][Thomas Padioleau]]
 - [[https://github.com/gusbrs][Gustavo Barros]]
 - [[https://github.com/minad][Daniel Mendler]]
+
+* Support
+
+If you enjoy this project, you can support its development via [[https://github.com/sponsors/d12frosted][GitHub Sponsors]] or [[https://www.patreon.com/d12frosted][Patreon]].
