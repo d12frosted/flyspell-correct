@@ -20,7 +20,7 @@ jobs:
           - snapshot
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Emacs
         uses: purcell/setup-emacs@master
